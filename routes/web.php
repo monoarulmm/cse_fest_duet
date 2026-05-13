@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\PaymentTestController;
 
 Route::get('/', function () {
     return view('users.home');
@@ -69,6 +70,13 @@ Route::get('password/reset/{token}', function ($token) {
 Route::get('/dashboard', function () {
     return view('users.home');
 })->middleware('auth')->name('dashboard');
+
+
+
+
+Route::get('/test_payment', [PaymentTestController::class, 'create'])->name('paymentCreate');
+Route::post('/shurjopay', [PaymentTestController::class, 'send_payment_request_to_shurjopay'])-> name('shurjopay.lara');
+Route::get('/paymentUpdate', [PaymentTestController::class, 'verify_payment']);
 
 
 
