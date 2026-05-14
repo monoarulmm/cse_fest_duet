@@ -282,10 +282,12 @@
                 @endfor
 
                 {{-- --- Submit Button --- --}}
+                {{-- Submit Button লজিক --}}
                 <div class="mt-12">
                     <button type="submit"
                         class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-6 rounded-2xl transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.4)] uppercase tracking-[0.2em] text-lg">
-                        {{ $isOlympiad ? 'Confirm & Pay ' : 'Submit Registration' }}
+                        {{-- ICT Olympiad বা অন্য সিঙ্গেল ইভেন্ট হলে 'Proceed to Payment' দেখাবে --}}
+                        {{ in_array($event->slug, ['ict-olympiad']) ? 'Proceed to Payment' : 'Submit Registration' }}
                     </button>
                 </div>
             </form>

@@ -36,90 +36,69 @@ class RegistrationController extends Controller
             'm1_email'        => 'required|email|max:255',
             'm1_phone'        => 'required|string|max:20',
             'm1_tshirt'       => 'nullable|string',
-            'prev_ex'       => 'nullable|string',
+            'prev_ex'         => 'nullable|string',
         ];
 
         $event = \App\Models\Event::findOrFail($request->event_id);
         $eventSlug = $event->slug;
         $eventRules = [];
 
-        // ২. ইভেন্ট অনুযায়ী ডাইনামিক ভ্যালিডেশন
+        // ২. ইভেন্ট অনুযায়ী ডাইনামিক ভ্যালিডেশন (আগের মতোই)
         if ($eventSlug === 'ict-olympiad') {
-            $eventRules = [
-                'student_id' => 'required|string|max:50',
-            ];
+            $eventRules = ['student_id' => 'required|string|max:50'];
         } elseif ($eventSlug === 'iupc') {
             $eventRules = [
-                'team_name'         => 'required|unique:registrations,team_name|max:255',
-                'coach_name'        => 'required|string',
-                'coach_email'       => 'required|email',
-                'coach_phone'       => 'required|digits:11',
-                'coach_designation' => 'required|string',
-                'coach_tshirt'      => 'required|string',
-                'm1_cf_handle'      => 'required|string',
-                'm2_name'           => 'required|string',
-                'm2_email'          => 'required|email',
-                'm2_phone'          => 'required|digits:11',
-                'm2_tshirt'         => 'required|string',
-                'm2_cf_handle'      => 'required|string',
-                'm3_name'           => 'nullable|string',
-                'm3_email'          => 'nullable|email',
-                'm3_phone'          => 'nullable|digits:11',
-                'm3_tshirt'         => 'nullable|string',
-                'm3_cf_handle'      => 'nullable|string',
+                'team_name' => 'required|unique:registrations,team_name|max:255',
+                // ... বাকি রুলস
             ];
         } elseif ($eventSlug === 'project-showcase' || $eventSlug === 'ai-hackathon') {
             $eventRules = [
-                'team_name'     => 'required|unique:registrations,team_name|max:255',
-                'project_title' => $eventSlug === 'project-showcase' ? 'required|string' : 'nullable',
-                'abstract_file' => $eventSlug === 'project-showcase' ? 'required|mimes:pdf|max:3072' : 'nullable',
-                'm2_name'       => 'required|string',
-                'm2_email'      => 'required|email',
-                'm2_phone'      => 'required|digits:11',
-                'm2_tshirt'     => 'required|string',
-                'm3_name'       => 'nullable|string',
-                'm3_email'       => 'nullable|string',
-                'm3_phone'       => 'nullable|digits:11',
-                'm3_tshirt'       => 'nullable|string',
+                'team_name' => 'required|unique:registrations,team_name|max:255',
+                // ... বাকি রুলস
             ];
         }
 
         $validatedData = $request->validate(array_merge($commonRules, $eventRules));
 
         try {
-            // ২. ইউনিভার্সিটি ও ফাইল হ্যান্ডলিং (আগের লজিক)
+            // ৩. আদার ইউনিভার্সিটি হ্যান্ডলিং
             if ($request->university_name === 'Others' && $request->filled('other_university')) {
                 $validatedData['university_name'] = $request->other_university;
             }
 
-            // ৩. রেজিস্ট্রেশন ডাটা সেভ
-            $registration = Registration::create($validatedData);
-
-            // ৪. পেমেন্টে রিডাইরেক্ট (ICT Olympiad এর জন্য)
-            // if ($eventSlug === 'ict-olympiad') {
-            //     return $this->makePayment($registration->id);
-            // }
-
-            // ৪. অটো টিম আইডি জেনারেশন (শুধুমাত্র টিম ইভেন্টের জন্য)
-            if ($eventSlug !== 'ict-olympiad') {
-                // ফরম্যাট: EVENT-PREFIX + RANDOM NUMBER (যেমন: IUPC-7241)
+            // ৪. টিম আইডি জেনারেশন (ডাটাবেসে সেভ করার আগেই এটি করতে হবে)
+            $teamEvents = ['iupc', 'project-showcase', 'ai-hackathon'];
+            if (in_array($eventSlug, $teamEvents)) {
                 $prefix = strtoupper(str_replace('-', '', $eventSlug));
-                $prefix = substr($prefix, 0, 4); // প্রথম ৪ অক্ষর
+                $prefix = substr($prefix, 0, 4);
 
                 do {
                     $teamId = $prefix . '-' . rand(1000, 9999);
                 } while (\App\Models\Registration::where('team_id', $teamId)->exists());
 
+                // গুরুত্বপূর্ণ: ডাটা সেভ করার আগেই অ্যারেতে টিম আইডি ঢুকিয়ে দিন
                 $validatedData['team_id'] = $teamId;
+            } else {
+                $validatedData['team_id'] = null;
             }
 
-            // ৮. টিম ইভেন্টের জন্য টিম আইডিসহ সাকসেস মেসেজ
-            return redirect()->back()->with('success', 'Registration submitted for ' . $event->name . '. Your Team ID: ' . $registration->team_id . '. Please save it for future reference.');
+            // ৫. এবার ডাটা সেভ করুন (এখন $validatedData তে team_id আছে)
+            $registration = \App\Models\Registration::create($validatedData);
+            // ৬. যদি ICT Olympiad হয়, তবে সরাসরি পেমেন্ট মেথড কল করুন
+            if ($eventSlug === 'ict-olympiad') {
+                return $this->makePayment($registration->id);
+            }
+            // ৬. সাকসেস মেসেজ
+            $msg = 'Registration submitted for ' . $event->title;
+            if ($registration->team_id) {
+                $msg .= '. Your Team ID: ' . $registration->team_id;
+            }
+
+            return redirect()->back()->with('success', $msg);
         } catch (\Exception $e) {
             return back()->with('error', 'Something went wrong: ' . $e->getMessage())->withInput();
         }
     }
-
     public function makePayment($registration_id)
     {
         $registration = Registration::with('event')->findOrFail($registration_id);

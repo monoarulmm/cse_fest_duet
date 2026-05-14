@@ -482,15 +482,7 @@
         @endif
     </script>
     <main class="pt-24 md:pt-32">
-        {{-- Floating Back Button (Top Left Corner) --}}
-        <div class="fixed top-6 left-6 z-50">
-            <a href="javascript:history.back()"
-                class="flex flex-col items-center justify-center w-14 h-14 bg-slate-900/80 backdrop-blur-md text-cyan-400 border border-cyan-500/30 rounded-2xl shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:bg-cyan-500 hover:text-slate-900 hover:scale-105 transition-all duration-300 group"
-                title="Go Back">
-                <i class="fa-solid fa-chevron-left text-xl group-hover:-translate-x-1 transition-transform"></i>
-                <span class="text-[7px] font-black uppercase mt-1 tracking-tighter">Back</span>
-            </a>
-        </div>
+
         @yield('content')
     </main>
     <footer class="relative border-t border-cyan-500/10 pt-16 pb-32 md:pb-12 overflow-hidden">
