@@ -48,8 +48,7 @@ return new class extends Migration
             $table->string('m1_cf_handle')->nullable();
             $table->string('m2_cf_handle')->nullable();
             $table->string('m3_cf_handle')->nullable();
-            $table->string('coupon_code')->nullable();
-
+            $table->enum('prev_ex', ['YES', 'NO'])->default('NO');
             // --- PROJECT SHOWCASE SPECIFIC ---
             $table->string('project_title')->nullable(); // Nullable করতে হবে কারণ IUPC তে এটা লাগবে না
             $table->string('domain')->nullable(); // AI, IoT, etc.

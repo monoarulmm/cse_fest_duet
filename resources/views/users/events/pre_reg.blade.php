@@ -54,7 +54,7 @@
                             <th class="p-6 text-right">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="text-slate-300 text-sm">
+                    {{-- <tbody class="text-slate-300 text-sm">
                         @forelse ($teams as $team)
                             <tr class="border-b border-cyan-500/10 hover:bg-cyan-500/5 transition duration-300">
                                 <td class="p-6 font-bold text-white">
@@ -78,6 +78,55 @@
                                             class="bg-cyan-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 hover:shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all">
                                             Finalize Reg
                                         </button>
+                                    @elseif($team->status == 'verified')
+                                        <span
+                                            class="text-green-500 text-[10px] font-bold uppercase tracking-tighter italic">
+                                            <i class="fa-solid fa-circle-check"></i> Confirmed
+                                        </span>
+                                    @else
+                                        <span class="text-slate-500 text-[10px] italic">In Review</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="p-10 text-center text-slate-500 italic">
+                                    No records found matching your criteria.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody> --}}
+
+                    <tbody class="text-slate-300 text-sm">
+                        @forelse ($teams as $team)
+                            <tr class="border-b border-cyan-500/10 hover:bg-cyan-500/5 transition duration-300">
+                                <td class="p-6 font-bold text-white">
+                                    {{ $team->team_name ?? $team->m1_name }}
+                                </td>
+                                <td class="p-6">{{ $team->university_name }}</td>
+                                <td class="p-6">
+                                    <span
+                                        class="px-3 py-1 rounded-full text-[10px] uppercase font-black 
+                    {{ $team->status == 'verified'
+                        ? 'bg-green-500/20 text-green-400'
+                        : ($team->status == 'selected' || $team->status == 'pre-registered'
+                            ? 'bg-purple-500/20 text-purple-400'
+                            : 'bg-yellow-500/20 text-yellow-400') }}">
+                                        {{ $team->status }}
+                                    </span>
+                                </td>
+                                <td class="p-6 text-right">
+                                    {{-- এখানে পরিবর্তন: selected অথবা pre-registered দুই ক্ষেত্রেই বাটন দেখাবে --}}
+                                    @if ($team->status == 'selected' || $team->status == 'pre-registered')
+                                        {{-- <a href="{{ route('iupc.final.reg.form', ['team_id' => $team->id]) }}"
+                                            class="inline-block bg-cyan-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 hover:shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all">
+                                            <i class="fa-solid fa-pen-to-square mr-1"></i> Finalize Reg
+                                        </a> --}}
+
+                                        <a href="{{ route('iupc.final.reg.form', $team->id) }}"
+                                            class="inline-block bg-cyan-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 hover:shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all">
+                                            <i class="fa-solid fa-pen-to-square mr-1"></i> Finalize Reg
+                                        </a>
                                     @elseif($team->status == 'verified')
                                         <span
                                             class="text-green-500 text-[10px] font-bold uppercase tracking-tighter italic">

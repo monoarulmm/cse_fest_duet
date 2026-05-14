@@ -12,8 +12,10 @@ use App\Mail\ProjectSelectionMail;
 use App\Mail\AIHackathonContestLinkMai;
 use App\Mail\AIRegistrationStatusMail;
 use App\Exports\RegistrationExport;
+use App\Exports\TeamsExport;
 use App\Exports\ResultTemplateExport;
 use App\Imports\ResultsImport;
+use App\Imports\CouponImport;
 use Maatwebsite\Excel\Facades\Excel;
 use DB;
 use App\Imports\UniversitySlotImport;
@@ -21,6 +23,23 @@ use App\Imports\UniversitySlotImport;
 class AdminController extends Controller
 {
 
+
+    public function downloadExcel()
+    {
+        return Excel::download(new TeamsExport, 'teams_slot_entry.xlsx');
+    }
+
+    // app/Http/Controllers/Admin/CouponController.php
+    public function import(Request $request, $eventId)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new CouponImport($eventId), $request->file('excel_file'));
+
+        return back()->with('success', 'Coupons generated and emails sent successfully!');
+    }
 
     public function downloadResultTemplate($eventId)
     {
@@ -36,19 +55,56 @@ class AdminController extends Controller
 
         return Excel::download(new RegistrationExport($eventId), $fileName);
     }
+
+    // public function dashboard(Request $request)
+    // {
+    //     // ১. সব ইভেন্ট নিয়ে আসা (ট্যাব দেখানোর জন্য)
+    //     $events = Event::all();
+
+    //     // ২. বর্তমানে কোন ইভেন্ট দেখা হচ্ছে সেটি নির্ধারণ করা (ডিফল্ট প্রথমটি)
+    //     $selectedEventId = $request->get('event_id', $events->first()?->id);
+    //     $selectedEvent = Event::find($selectedEventId);
+
+    //     // ৩. কুয়েরি শুরু করা (শুধুমাত্র সিলেক্টেড ইভেন্টের ডাটা)
+    //     $query = Registration::where('event_id', $selectedEventId);
+
+    //     // ৪. সার্চ ফিল্টার (টিম নাম, ইউনিভার্সিটি বা লিডারের নাম অনুযায়ী)
+    //     if ($request->filled('search')) {
+    //         $searchTerm = $request->search;
+    //         $query->where(function ($q) use ($searchTerm) {
+    //             $q->where('university_name', 'LIKE', '%' . $searchTerm . '%')
+    //                 ->orWhere('team_name', 'LIKE', '%' . $searchTerm . '%')
+    //                 ->orWhere('m1_name', 'LIKE', '%' . $searchTerm . '%');
+    //         });
+    //     }
+
+    //     // ৫. ডাটা নিয়ে আসা (Pagination সহ)
+    //     $teams = $query->latest()->paginate(20)->appends(['event_id' => $selectedEventId, 'search' => $request->search]);
+
+    //     // ৬. স্ট্যাটিস্টিকস (সিলেক্টেড ইভেন্টের জন্য কোন ইউনিভার্সিটির কয়টি রেজিস্ট্রেশন)
+    //     $stats = Registration::where('event_id', $selectedEventId)
+    //         ->select('university_name', DB::raw('count(*) as total'))
+    //         ->groupBy('university_name')
+    //         ->orderBy('total', 'desc')
+    //         ->get();
+
+    //     return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent'));
+    // }
+
+
     public function dashboard(Request $request)
     {
-        // ১. সব ইভেন্ট নিয়ে আসা (ট্যাব দেখানোর জন্য)
+        // ১. সব ইভেন্ট নিয়ে আসা (ট্যাব দেখানোর জন্য)
         $events = Event::all();
 
-        // ২. বর্তমানে কোন ইভেন্ট দেখা হচ্ছে সেটি নির্ধারণ করা (ডিফল্ট প্রথমটি)
+        // ২. বর্তমানে কোন ইভেন্ট দেখা হচ্ছে সেটি নির্ধারণ করা
         $selectedEventId = $request->get('event_id', $events->first()?->id);
         $selectedEvent = Event::find($selectedEventId);
 
-        // ৩. কুয়েরি শুরু করা (শুধুমাত্র সিলেক্টেড ইভেন্টের ডাটা)
+        // ৩. কুয়েরি শুরু করা (শুধুমাত্র সিলেক্টেড ইভেন্টের ডাটা)
         $query = Registration::where('event_id', $selectedEventId);
 
-        // ৪. সার্চ ফিল্টার (টিম নাম, ইউনিভার্সিটি বা লিডারের নাম অনুযায়ী)
+        // ৪. সার্চ ফিল্টার
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
@@ -58,19 +114,27 @@ class AdminController extends Controller
             });
         }
 
-        // ৫. ডাটা নিয়ে আসা (Pagination সহ)
-        $teams = $query->latest()->paginate(20)->appends(['event_id' => $selectedEventId, 'search' => $request->search]);
+        // ৫. ডাটা নিয়ে আসা (Pagination সহ)
+        $teams = $query->latest()->paginate(20)->appends([
+            'event_id' => $selectedEventId,
+            'search' => $request->search
+        ]);
 
-        // ৬. স্ট্যাটিস্টিকস (সিলেক্টেড ইভেন্টের জন্য কোন ইউনিভার্সিটির কয়টি রেজিস্ট্রেশন)
+        // ৬. স্ট্যাটিস্টিকস
         $stats = Registration::where('event_id', $selectedEventId)
-            ->select('university_name', DB::raw('count(*) as total'))
+            ->select('university_name', \DB::raw('count(*) as total'))
             ->groupBy('university_name')
             ->orderBy('total', 'desc')
             ->get();
 
-        return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent'));
-    }
+        // --- নতুন অংশ: কুপন ডাটা হ্যান্ডলিং ---
+        // যদি সিলেক্টেড ইভেন্ট IUPC হয়, তবে কুপন নিয়ে আসবে, নাহলে খালি কালেকশন পাঠাবে
+        $coupons = ($selectedEvent && $selectedEvent->slug == 'iupc')
+            ? \App\Models\Coupon::where('event_id', $selectedEventId)->latest()->get()
+            : collect();
 
+        return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent', 'coupons'));
+    }
     // কুপন পাঠানো এবং ইমেইল হ্যান্ডলিং
     public function sendCoupon($id)
     {

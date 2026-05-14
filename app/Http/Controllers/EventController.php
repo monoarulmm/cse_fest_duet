@@ -200,27 +200,78 @@ class EventController extends Controller
     }
 
     //  USer Even Controlelr 
+    // public function showDashboard($slug)
+    // {
+    //     $event = Event::where('slug', $slug)->firstOrFail();
+
+    //     // ইভেন্ট আইডি অনুযায়ী আলাদা আলাদা কাউন্ট
+    //     $counts = [
+    //         'pre-registered'  => Registration::where('event_id', $event->id)->where('status', 'pre-registered')->count(),
+    //         'selected' => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
+    //         'verified' => Registration::where('event_id', $event->id)->where('status', 'verified')->count(),
+    //         'institutes' => Registration::where('event_id', $event->id)
+    //             ->whereNotNull('university_name')
+    //             ->count(),
+    //     ];
+
+    //     $totalRegistered = Registration::where('event_id', $event->id)
+    //         ->whereIn('status', ['pre-registered', 'selected', 'verified'])
+    //         ->count();
+    //     return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered'));
+    // }
+
+    // public function showDashboard($slug)
+    // {
+    //     $event = Event::where('slug', $slug)->firstOrFail();
+
+    //     // JSON থেকে ইমেজ অ্যারে ডিকোড করা (যদি ডাটাবেসে JSON আকারে থাকে)
+    //     $judges = json_decode($event->judges, true) ?? [];
+
+    //     $counts = [
+    //         'pre-registered' => Registration::where('event_id', $event->id)->where('status', 'pre-registered')->count(),
+    //         'selected'       => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
+    //         'verified'       => Registration::where('event_id', $event->id)->where('status', 'verified')->count(),
+    //         'institutes'     => Registration::where('event_id', $event->id)->whereNotNull('university_name')->distinct('university_name')->count(),
+    //     ];
+
+    //     $totalRegistered = Registration::where('event_id', $event->id)->whereIn('status', ['pre-registered', 'selected', 'verified'])->count();
+
+    //     return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered', 'judges'));
+    // }
+
     public function showDashboard($slug)
     {
         $event = Event::where('slug', $slug)->firstOrFail();
 
-        // ইভেন্ট আইডি অনুযায়ী আলাদা আলাদা কাউন্ট
+        // বর্তমান লগইন করা ইউজারের এই ইভেন্টের রেজিস্ট্রেশন ডাটা খুঁজে বের করা
+        $team = Registration::where('event_id', $event->id)
+            ->first();
+
+        $judges = json_decode($event->judges, true) ?? [];
+
         $counts = [
-            'pre-registered'  => Registration::where('event_id', $event->id)->where('status', 'pre-registered')->count(),
-            'selected' => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
-            'verified' => Registration::where('event_id', $event->id)->where('status', 'verified')->count(),
-            'institutes' => Registration::where('event_id', $event->id)
-                ->whereNotNull('university_name')
-                ->count(),
+            'pre-registered' => Registration::where('event_id', $event->id)->where('status', 'pre-registered')->count(),
+            'selected'       => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
+            'verified'       => Registration::where('event_id', $event->id)->where('status', 'verified')->count(),
+            'institutes'     => Registration::where('event_id', $event->id)->whereNotNull('university_name')->distinct('university_name')->count(),
         ];
 
-        $totalRegistered = Registration::where('event_id', $event->id)
-            ->whereIn('status', ['pre-registered', 'selected', 'verified'])
-            ->count();
-        return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered'));
+        $totalRegistered = Registration::where('event_id', $event->id)->whereIn('status', ['pre-registered', 'selected', 'verified'])->count();
+
+        // compact-এ 'team' ভেরিয়েবলটি যুক্ত করুন
+        return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered', 'judges', 'team'));
     }
 
+    public function showFinalRegForm($team_id)
+    {
+        // টিম এবং ইভেন্ট ডাটা লোড করা
+        $team = Registration::with('event')->findOrFail($team_id);
 
+        // ইভেন্টের রেগুলার ফি
+        $finalAmount = $team->event->reg_fee;
+
+        return view('users.events.final_reg_form', compact('team', 'finalAmount'));
+    }
     /**
      * Pre-registered টিমের লিস্ট (সার্চ সুবিধাসহ)
      */

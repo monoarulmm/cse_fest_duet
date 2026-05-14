@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Controllers\PaymentTestController;
 
 Route::get('/', function () {
     return view('users.home');
@@ -32,6 +31,7 @@ Route::get('/schedule', function () {
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\PaymentTestController;
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
@@ -70,13 +70,6 @@ Route::get('password/reset/{token}', function ($token) {
 Route::get('/dashboard', function () {
     return view('users.home');
 })->middleware('auth')->name('dashboard');
-
-
-
-
-Route::get('/test_payment', [PaymentTestController::class, 'create'])->name('paymentCreate');
-Route::post('/shurjopay', [PaymentTestController::class, 'send_payment_request_to_shurjopay'])-> name('shurjopay.lara');
-Route::get('/paymentUpdate', [PaymentTestController::class, 'verify_payment']);
 
 
 
@@ -130,7 +123,10 @@ use App\Http\Controllers\PaymentController;
 
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::post('/upload-results', [AdminController::class, 'uploadExcel'])->name('admin.upload.result'); // Admin only
+    Route::post('/upload-results', [AdminController::class, 'uploadExcel'])->name('admin.upload.result'); // Admin 
+    Route::get('/teams/export', [AdminController::class, 'downloadExcel'])->name('admin.teams.export');
+    // routes/web.php
+    Route::post('/admin/event/{id}/import-coupons', [AdminController::class, 'import'])->name('admin.coupons.import');
 
 
     // অ্যাডমিন প্রোটেক্টেড গ্রুপের ভেতরে রাখা ভালো
@@ -203,13 +199,25 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
 //     // অ্যাডমিট কার্ড (ICT Olympiad এর জন্য)
 //     Route::get('/admit-download/{id}', [EventController::class, 'downloadAdmit'])->name('event.admit_download');
 // });
+
+
+Route::prefix('iupc')->name('iupc.')->group(function () {
+    // কুপন ভেরিফিকেশন পেজ দেখার জন্য
+
+
+    // কুপন ভেরিফাই করার প্রসেস (POST মেথড)
+    Route::post('/verify-coupon', [PaymentController::class, 'iupc_updateAndPay'])->name('verify.process');
+});
+
+// Route::get('/event/{slug}/final-registration', [EventController::class, 'showFinalRegForm'])->name('iupc.final.reg.form');
+Route::get('/finalize-registration/{id}', [EventController::class, 'showFinalRegForm'])->name('iupc.final.reg.form');
 Route::prefix('event/{slug}')->group(function () {
     // মেইন পোর্টাল/ড্যাশবোর্ড
     Route::get('/', [EventController::class, 'showDashboard'])->name('event.dashboard');
 
     // মেম্বার লিস্ট
     Route::get('/pre-registered', [EventController::class, 'preRegistered'])->name('event.pre_registered');
-
+    // Route::get('final-registration', [EventController::class, 'showFinalRegForm'])->name('iupc.final.reg.form');
     // সিলেকশন পেজ (এই নামটিই ড্যাশবোর্ড ও ট্যাবে ব্যবহার করুন)
     Route::get('/selected-teams', [EventController::class, 'selectedTeams'])->name('event.select_registered');
     // Route::post('/verify-coupon', [EventController::class, 'verifyCoupon'])->name('event.verify_coupon');
@@ -261,7 +269,7 @@ Route::match(['get', 'post'], '/iupc-payment/callback', [PaymentController::clas
 // IUPC Coupon Verification
 
 // Direct Final Registration for other events
-Route::get('event/{slug}/final-reg/{id}', [PaymentController::class, 'finalRegDirect'])->name('event.final_reg_direct');
+Route::get('event/{slug}/final-reg/{id}', [PaymentController::class, 'finalRegDirectPay'])->name('event.final_reg_direct');
 
 
 Route::post('/check-result', [EventController::class, 'checkResult'])->name('check.result');
@@ -271,3 +279,11 @@ Route::get('/shurjopay/callback', [PaymentController::class, 'callback']);
 
 
 Route::get('/event/{slug}/slots', [EventController::class, 'slot_list'])->name('event.slot_list');
+
+
+
+
+
+Route::get('/test_payment', [PaymentTestController::class, 'create'])->name('paymentCreate');
+Route::post('/shurjopay', [PaymentTestController::class, 'send_payment_request_to_shurjopay'])->name('shurjopay.lara');
+Route::get('/paymentUpdate', [PaymentTestController::class, 'verify_payment']);

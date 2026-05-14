@@ -124,6 +124,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    {{-- ইউনিভার্সিটি সিলেকশন --}}
                     <div class="space-y-2">
                         <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">
                             Institution*
@@ -134,14 +135,20 @@
                         </select>
                     </div>
 
-                    <div id="other_uni_container" class="space-y-2 hidden">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Specify
-                            Institution*</label>
-                        <input type="text" name="other_university" id="other_uni_input"
-                            class="input-field w-full rounded-xl px-4 py-4">
+                    {{-- নতুন ফিল্ড: Previous Experience --}}
+                    <div class="space-y-2">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">
+                            Previous Experience in CSE FEST?*
+                        </label>
+                        <select name="prev_ex" required class="input-field w-full rounded-xl px-4 py-4">
+                            <option value="NO" {{ old('prev_ex') == 'NO' ? 'selected' : '' }}>NO</option>
+                            <option value="YES" {{ old('prev_ex') == 'YES' ? 'selected' : '' }}>YES</option>
+                        </select>
                     </div>
 
-                    @if ($event->slug !== 'ict-olympiad')
+                    {{-- টিম নেম ফিল্ড: শুধুমাত্র IUPC এবং Project Showcase এর জন্য দেখাবে --}}
+                    {{-- অন্য সব ইভেন্ট (ICT Olympiad, AI Hackathon ইত্যাদি) এর জন্য এটা হাইড থাকবে --}}
+                    @if (in_array($event->slug, ['iupc', 'project-showcase']))
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Team
                                 Name*</label>
@@ -150,6 +157,7 @@
                         </div>
                     @endif
 
+                    {{-- Project Showcase এর জন্য অতিরিক্ত ফিল্ডসমূহ --}}
                     @if ($event->slug === 'project-showcase')
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Project
@@ -159,17 +167,17 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="block text-[10px] font-bold uppercase tracking-widest"
-                                style="color: var(--label-color)">Domain*</label>
+                            <label
+                                class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Domain*</label>
                             <select name="domain" required class="input-field w-full rounded-xl px-4 py-4">
                                 <option value="">Select Domain</option>
                                 <option value="AI & Data Science">AI & Data Science</option>
                                 <option value="IoT">IoT & Embedded Intelligence</option>
                                 <option value="Software">Software & Digital Platforms</option>
-                                <option value="Smart">Smart Solutions
-                                </option>
+                                <option value="Smart">Smart Solutions</option>
                             </select>
                         </div>
+
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Abstract
                                 (PDF)*</label>
@@ -206,57 +214,69 @@
 
                 {{-- --- Step 3: Participant Details --- --}}
                 @php
-                    $isOlympiad = $event->slug === 'ict-olympiad';
-                    $maxMembers = $isOlympiad ? 1 : 3;
-                    $minRequired = $isOlympiad ? 1 : 2; // IUPC/Project এ অন্তত ২ জন লাগে
+                    $slug = $event->slug;
+                    $isOlympiad = $slug === 'ict-olympiad';
+
+                    // চেক করা হচ্ছে এটা IUPC, ICT Olympiad বা Project Showcase কি না
+                    $isSpecialEvent = in_array($slug, ['iupc', 'ict-olympiad', 'project-showcase']);
+
+                    // যদি স্পেশাল ইভেন্ট না হয়, তবে মেম্বার সংখ্যা ১ হবে
+                    $maxMembers = $isSpecialEvent ? ($isOlympiad ? 1 : 3) : 1;
+                    $minRequired = $isSpecialEvent ? ($isOlympiad ? 1 : 2) : 1;
                 @endphp
 
                 @for ($i = 1; $i <= $maxMembers; $i++)
                     <div class="mb-12">
                         <div class="section-divider">
                             <h3 class="heading-font text-lg font-bold uppercase text-white">
-                                {{ $isOlympiad ? 'Participant Info' : 'Member ' . $i }}
+                                {{ $maxMembers == 1 ? 'Participant Info' : 'Member ' . $i }}
                                 {!! $i > $minRequired ? '<span class="text-xs lowercase opacity-50">(Optional)</span>' : '' !!}
                             </h3>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {{-- ১. নাম --}}
                             <input type="text" name="m{{ $i }}_name"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Full Name"
                                 class="input-field rounded-xl px-4 py-4">
+
+                            {{-- ২. ইমেইল --}}
                             <input type="email" name="m{{ $i }}_email"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Email"
                                 class="input-field rounded-xl px-4 py-4">
+
+                            {{-- ৩. ফোন --}}
                             <input type="text" name="m{{ $i }}_phone"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Phone"
                                 class="input-field rounded-xl px-4 py-4">
 
-                            @if ($isOlympiad)
+                            {{-- ৪. স্পেশাল ফিল্ড অথবা স্টুডেন্ট আইডি --}}
+                            @if ($slug === 'iupc')
+                                <input type="text" name="m{{ $i }}_cf_handle" required
+                                    placeholder="Codeforces Handle" class="input-field rounded-xl px-4 py-4">
+                            @elseif ($slug === 'ai-hackathon')
+                                <input type="text" name="m{{ $i }}_cf_handle" required
+                                    placeholder="Kaggle Account Link" class="input-field rounded-xl px-4 py-4">
+                            @else
+                                {{-- অন্য সব ইভেন্টের জন্য স্টুডেন্ট আইডি/রোল --}}
                                 <input type="text" name="student_id" required placeholder="Student ID/Roll"
                                     class="input-field rounded-xl px-4 py-4">
                             @endif
 
-                            @if ($event->slug === 'iupc')
-                                <input type="text" name="m{{ $i }}_cf_handle"
-                                    {{ $i <= $minRequired ? 'required' : '' }} placeholder="Codeforces Handle"
-                                    class="input-field rounded-xl px-4 py-4">
+                            {{-- টি-শার্ট ফিল্ড: শুধুমাত্র স্পেশাল ইভেন্টগুলোর জন্য দেখানো হবে --}}
+                            @if ($isSpecialEvent)
+                                <div class="md:col-span-2 lg:col-span-1">
+                                    <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
+                                        class="input-field w-full rounded-xl px-4 py-4">
+                                        <option value="">T-Shirt Size</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                        <option value="XXXL">XXXL</option>
+                                    </select>
+                                </div>
                             @endif
-                            @if ($event->slug === 'ai-hackathon')
-                                <input type="text" name="m{{ $i }}_cf_handle"
-                                    {{ $i <= $minRequired ? 'required' : '' }} placeholder="Kaggle Account Link"
-                                    class="input-field rounded-xl px-4 py-4">
-                            @endif
-
-                            <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
-                                class="input-field rounded-xl px-4 py-4">
-                                <option value="">T-Shirt Size</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                                <option value="XXXL">XXXL</option>
-
-                            </select>
                         </div>
                     </div>
                 @endfor

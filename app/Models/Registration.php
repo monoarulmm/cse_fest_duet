@@ -98,7 +98,8 @@ class Registration extends Model
 
         'participant_id',
         'payment_status',
-        'status'
+        'status',
+        'prev_ex'
     ];
     public function event()
     {

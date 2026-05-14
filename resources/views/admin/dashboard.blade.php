@@ -45,10 +45,15 @@
     <div class="container mx-auto px-4 py-8">
 
         <div class="flex justify-end mb-4 gap-3">
+
+            <a href="{{ route('admin.teams.export') }}" class="btn btn-primary">
+                Download Entry Sheet
+            </a>
             <!-- রেজাল্ট টেমপ্লেট ডাউনলোড বাটন -->
             <a href="{{ route('admin.export.result.template', ['event' => $selectedEvent->id]) }}"
                 class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase flex items-center gap-2 transition shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -107,6 +112,112 @@
             </div>
         </div>
 
+        {{-- শুধুমাত্র IUPC ইভেন্টের জন্য স্লট এবং কুপন সেকশন দেখা যাবে --}}
+        @if ($selectedEvent->slug == 'iupc')
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+
+                {{-- ১. ইউনিভার্সিটি স্লট আপডেট (Excel) --}}
+                <div class="p-6 bg-slate-900 border border-slate-800 rounded-3xl">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-university text-cyan-500"></i>
+                        Upload University Slots (Excel)
+                    </h3>
+
+                    <form action="{{ route('admin.slots.upload') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="flex items-center gap-4">
+                            <input type="file" name="file" required
+                                class="bg-slate-950 text-slate-400 border border-slate-800 p-2 rounded-xl text-xs flex-1">
+                            <button type="submit"
+                                class="bg-cyan-500 text-slate-950 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all">
+                                Update Slots
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-2">Required Columns:
+                        </p>
+                        <div class="flex gap-2 text-[9px] font-mono text-cyan-500/80">
+                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">university_name</span>
+                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">max_slots</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ২. কোচ ভিত্তিক কুপন জেনারেশন --}}
+                <div class="p-6 bg-slate-900 border border-slate-800 rounded-3xl">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-ticket text-cyan-500"></i>
+                        Import IUPC Coach Slots & Mail
+                    </h3>
+
+                    <form action="{{ route('admin.coupons.import', $selectedEvent->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="flex items-center gap-4">
+                            <input type="file" name="excel_file" required
+                                class="bg-slate-950 text-slate-400 border border-slate-800 p-2 rounded-xl text-xs flex-1">
+                            <button type="submit"
+                                class="bg-green-500 text-slate-950 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-green-400 transition-all">
+                                Generate & Mail
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-2">Required Columns:
+                        </p>
+                        <div class="flex gap-2 text-[9px] font-mono text-green-500/80">
+                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">university</span>
+                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">coach_email</span>
+                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">slots</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ৩. কুপন স্ট্যাটাস টেবিল (শুধুমাত্র IUPC এর জন্য) --}}
+            <div class="p-8 bg-slate-900/50 border border-slate-800 rounded-[2rem] mb-8">
+                <h2 class="text-xl font-black text-cyan-400 mb-6 uppercase flex items-center gap-2">
+                    <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
+                    Coupon Status Tracker
+                </h2>
+                <div class="max-h-64 overflow-y-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="text-slate-500 border-b border-slate-800 uppercase">
+                                <th class="py-3 px-2">University</th>
+                                <th class="py-3 px-2">Coach</th>
+                                <th class="py-3 px-2">Code</th>
+                                <th class="py-3 px-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-400">
+                            @forelse ($coupons as $coupon)
+                                <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                                    <td class="py-3 px-2">{{ $coupon->university }}</td>
+                                    <td class="py-3 px-2">{{ $coupon->coach_name }}</td>
+                                    <td class="py-3 px-2 font-mono text-cyan-400">{{ $coupon->code }}</td>
+                                    <td class="py-3 px-2">
+                                        @if ($coupon->is_used)
+                                            <span class="text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Used</span>
+                                        @else
+                                            <span class="text-green-500 bg-green-500/10 px-2 py-0.5 rounded">Active</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-slate-600 italic">No coupons generated
+                                        yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
         {{-- Tabs Section --}}
         <div class="flex gap-6 mb-8 border-b border-cyan-500/10 pb-2 overflow-x-auto">
             @foreach ($events as $e)
