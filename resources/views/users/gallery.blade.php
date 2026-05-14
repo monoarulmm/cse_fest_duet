@@ -102,77 +102,52 @@
             <p class="text-slate-500 font-mono text-sm mt-2 tracking-widest">>> ENCRYPTED_MEMORIES_2026.SYS</p>
         </div>
 
-        <!-- Gallery Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            <!-- Item 1 -->
-            <div class="group gallery-card bg-slate-900 border border-cyan-500/20 overflow-hidden h-80">
-                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070"
-                    class="w-full h-full object-cover clickable-img group-hover:scale-110 transition-transform duration-700"
-                    alt="IUPC 2026 Competitive Programming Arena">
-
+            @for ($i = 1; $i <= 15; $i++)
+                <!-- Gallery Item {{ $i }} -->
                 <div
-                    class="absolute inset-0 data-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <h4 class="heading-font text-cyan-400 text-lg font-bold">IUPC SEASON I</h4>
-                            <p class="text-[10px] text-slate-400 font-mono uppercase">Node: DUET_SERVER_01</p>
+                    class="group gallery-card relative bg-slate-900 border border-cyan-500/20 overflow-hidden h-80 rounded-lg">
+                    <!-- Image Source from public/gallery -->
+                    <img src="{{ asset('gallery/' . $i . '.jpg') }}"
+                        class="w-full h-full object-cover clickable-img group-hover:scale-110 transition-transform duration-700"
+                        alt="DUET CSE Carnival Image {{ $i }}">
+
+                    <!-- Cyberpunk Overlay -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h4 class="heading-font text-cyan-400 text-lg font-bold uppercase">
+                                    @php
+                                        $titles = [
+                                            'IUPC Arena',
+                                            'Cyber Hackathon',
+                                            'Project Demo',
+                                            'ICT Olympiad',
+                                            'Deep Learning',
+                                            'Tech Seminar',
+                                        ];
+                                        echo $titles[($i - 1) % count($titles)];
+                                    @endphp
+                                </h4>
+                                <p class="text-[10px] text-slate-400 font-mono uppercase">Node:
+                                    DUET_GALLERY_0{{ $i }}</p>
+                            </div>
+
+                            <!-- Expand Icon -->
+                            <div class="expand-icon-btn bg-cyan-500/20 p-2 rounded border border-cyan-500/50">
+                                <i class="fa-solid fa-expand text-cyan-400 text-sm"></i>
+                            </div>
                         </div>
-                        <!-- বড় করার আইকন -->
-                        <div class="expand-icon-btn">
-                            <i class="fa-solid fa-expand text-sm"></i>
+
+                        <!-- Animated Progress Bar -->
+                        <div class="mt-4 h-[2px] w-full bg-cyan-900 overflow-hidden">
+                            <div class="h-full bg-cyan-400 w-0 group-hover:w-full transition-all duration-700 ease-out">
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-4 h-[2px] w-full bg-cyan-900 overflow-hidden">
-                        <div class="h-full bg-cyan-400 w-0 group-hover:w-full transition-all duration-700"></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="group gallery-card bg-slate-900 border border-cyan-500/20 overflow-hidden h-80">
-                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070"
-                    class="w-full h-full object-cover clickable-img group-hover:scale-110 transition-transform duration-700"
-                    alt="Hackathon Coding Marathon Session">
-                <div
-                    class="absolute inset-0 data-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <h4 class="heading-font text-cyan-400 text-lg font-bold">CYBER HACKATHON</h4>
-                            <p class="text-[10px] text-slate-400 font-mono uppercase">Protocol: FAST_DEV_2026</p>
-                        </div>
-                        <div class="expand-icon-btn">
-                            <i class="fa-solid fa-expand text-sm"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 h-[2px] w-full bg-cyan-900 overflow-hidden">
-                        <div class="h-full bg-cyan-400 w-0 group-hover:w-full transition-all duration-700"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="group gallery-card bg-slate-900 border border-cyan-500/20 overflow-hidden h-80">
-                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070"
-                    class="w-full h-full object-cover clickable-img group-hover:scale-110 transition-transform duration-700"
-                    alt="AI and Deep Learning Seminar">
-                <div
-                    class="absolute inset-0 data-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <h4 class="heading-font text-cyan-400 text-lg font-bold">DL SPRINT</h4>
-                            <p class="text-[10px] text-slate-400 font-mono uppercase">Module: NEURAL_NETWORKS</p>
-                        </div>
-                        <div class="expand-icon-btn">
-                            <i class="fa-solid fa-expand text-sm"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 h-[2px] w-full bg-cyan-900 overflow-hidden">
-                        <div class="h-full bg-cyan-400 w-0 group-hover:w-full transition-all duration-700"></div>
-                    </div>
-                </div>
-            </div>
-
+            @endfor
         </div>
     </div>
 

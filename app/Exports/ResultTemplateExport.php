@@ -40,6 +40,7 @@ class ResultTemplateExport implements FromQuery, WithHeadings, WithMapping, Shou
             'event_name',      // ইমপোর্টে $row['event_name'] হিসেবে রিড হবে
             'university_name',    // অতিরিক্ত তথ্যের জন্য
             'team_name',    // অতিরিক্ত তথ্যের জন্য
+            'seat_plan',    // অতিরিক্ত তথ্যের জন্য
             'result_status'    // এই কলামটি খালি থাকবে
         ];
     }

@@ -14,7 +14,7 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
-Route::get('/gallery', function () {
+Route::get('/cse-gallery', function () {
     return view('users.gallery');
 });
 Route::get('/contact', function () {

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- user-scalable=no যোগ করা হয়েছে যাতে জুম না হয় -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'CSE FEST 2026 | DUET')</title>
+    <title>@yield('title', 'CSE CERNIVAL 2026 | DUET')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @php
         $setting = \App\Models\Setting::first();
@@ -133,10 +133,10 @@
                 </div>
                 <div class="flex flex-col leading-none">
                     <span class="heading-font font-black text-sm md:text-xl tracking-tighter uppercase mr-2 text-white">
-                        CSE <span class="text-cyan-400">FEST</span>
+                        DUET <span class="text-cyan-400">CSE</span>
                     </span>
-                    <span class="text-[8px] md:text-[10px] font-bold tracking-[0.2em] text-cyan-500/80 uppercase">DUET
-                        Gazipur</span>
+                    <span class="text-[8px] md:text-[10px] font-bold tracking-[0.2em] text-cyan-500/80 uppercase">
+                        CERNIVAL</span>
                 </div>
             </div>
 
@@ -168,6 +168,7 @@
                 </div>
                 <a href="/schedule" class="hover:text-cyan-400 transition duration-300">Schedule</a>
                 <a href="/contact" class="hover:text-cyan-400 transition duration-300">Contact</a>
+                <a href="/cse-gallery" class="hover:text-cyan-400 transition duration-300">Gallery</a>
             </div>
 
             {{-- <div class="flex items-center gap-2">
@@ -388,14 +389,18 @@
                         <span
                             class="text-[12px] font-bold tracking-[0.2em] uppercase text-[var(--text-main)]">Contact</span>
                     </a>
-
-                    @guest
+                    <a href="{{ url('cse-gallery') }}"
+                        class="mt-4 flex items-center justify-center gap-3 bg-cyan-500 py-4 rounded-2xl text-slate-950 font-black text-[12px] uppercase tracking-tighter hover:scale-[0.98] transition-transform shadow-[0_10px_20px_rgba(6,182,212,0.3)]">
+                        <i class="fa-solid fa-id-card-clip text-lg"></i>
+                        Visual Archive
+                    </a>
+                    {{-- @guest
                         <a href="{{ route('login') }}"
                             class="mt-4 flex items-center justify-center gap-3 bg-cyan-500 py-4 rounded-2xl text-slate-950 font-black text-[12px] uppercase tracking-tighter hover:scale-[0.98] transition-transform shadow-[0_10px_20px_rgba(6,182,212,0.3)]">
                             <i class="fa-solid fa-id-card-clip text-lg"></i>
                             Get Access Card
                         </a>
-                    @endguest
+                    @endguest --}}
                 </div>
             </div>
         </div>

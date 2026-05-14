@@ -20,7 +20,7 @@ class SettingController extends Controller
         $request->validate([
             'site_name'        => 'required|string|max:255',
             'logo'             => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'favicon'          => 'nullable|image|mimes:png,ico,svg,jpg|max:1024',
+            'favicon'          => 'nullable|image|mimes:png,ico,svg,jpg|max:2024',
             'main_banner1'      => 'nullable|image|max:5120', // ব্লেড অনুযায়ী নাম ঠিক করা হয়েছে
             'main_banner2'     => 'nullable|image|max:5120',
             'main_banner3'     => 'nullable|image|max:5120',

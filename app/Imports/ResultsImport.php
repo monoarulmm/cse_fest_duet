@@ -18,6 +18,7 @@ class ResultsImport implements ToModel, WithHeadingRow
             'event_name'     => $row['event_name'],
             'university_name'     => $row['university_name'],
             'team_name'     => $row['team_name'],
+            'seat_plan'     => $row['seat_plan'],
             'result_status'  => $row['result_status'],
         ]);
     }

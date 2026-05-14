@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('event_name');
             $table->string('university_name');
             $table->string('team_name');
+            $table->string('seat_plan');
             $table->string('result_status'); // e.g., Winner, Runner Up, Participated
             $table->timestamps();
         });
