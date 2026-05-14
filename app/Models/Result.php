@@ -11,6 +11,7 @@ class Result extends Model
         'event_name',
         'university_name',
         'team_name',
+        'seat_plan',
         'result_status'
     ];
 }

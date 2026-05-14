@@ -10,6 +10,7 @@ use App\Models\Registration;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf; // ফাইল এর উপরে এটি ইমপোর্ট করুন
 
 class EventController extends Controller
 {
@@ -475,33 +476,47 @@ class EventController extends Controller
     }
 
 
-    public function downloadAdmitCard($slug, $team_id)
-    {
-        $event = Event::where('slug', $slug)->firstOrFail();
-        $team = Registration::where('team_id', $team_id)
-            ->where('event_id', $event->id)
-            ->where('status', 'verified')
-            ->firstOrFail();
+    // public function downloadAdmitCard($slug, $team_id)
+    // {
+    //     $event = Event::where('slug', $slug)->firstOrFail();
+    //     $team = Registration::where('team_id', $team_id)
+    //         ->where('event_id', $event->id)
+    //         ->where('status', 'verified')
+    //         ->firstOrFail();
 
-        return view('users.events.admit_card', compact('event', 'team'));
-    }
+    //     return view('users.events.admit_card', compact('event', 'team'));
+    // }
 
     /**
      * ICT Olympiad Admit Card Download
      */
 
-    public function ictAdmitCard($slug, $id)
+
+    /**
+     * Universal Admit Card Download Logic
+     */
+    public function downloadAdmitCard($slug, $id)
     {
         $event = Event::where('slug', $slug)->firstOrFail();
 
+        // ভেরিফাইড রেজিস্ট্রেশন চেক
         $team = Registration::where('event_id', $event->id)
             ->where('id', $id)
             ->where('status', 'verified')
-            ->where('payment_status', 'paid')
             ->firstOrFail();
 
-        return view('users.events.admit_card_ict', compact('event', 'team'));
+        // ইভেন্ট অনুযায়ী আলাদা ভিউ রিটার্ন
+        $teamEvents = ['iupc', 'ai-hackathon', 'project-showcase'];
+
+        if (in_array($event->slug, $teamEvents)) {
+            // টিম ভিত্তিক ইভেন্টের জন্য
+            return view('users.events.admit_card_team', compact('event', 'team'));
+        } else {
+            // ICT Olympiad এবং অন্যান্য ইভেন্টের জন্য
+            return view('users.events.admit_card_single', compact('event', 'team'));
+        }
     }
+
 
 
     public function checkResult(Request $request)

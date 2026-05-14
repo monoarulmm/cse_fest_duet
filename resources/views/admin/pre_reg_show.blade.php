@@ -60,10 +60,7 @@
                             </span>
                         </div>
 
-                        @if ($registration->event->slug === 'iupc')
-                            <p class="text-muted text-[10px] uppercase mt-4">Coupon Code</p>
-                            <p class="font-mono text-xl text-white">{{ $registration->coupon_code ?? 'NOT GENERATED' }}</p>
-                        @endif
+
 
                         <p class="text-muted text-[10px] uppercase mt-4">Payment Status</p>
                         <p
@@ -130,56 +127,42 @@
             <div
                 class="mt-8 bg-slate-900/50 p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
 
+
+
+                {{-- ১. IUPC ম্যানেজমেন্ট --}}
                 @if ($registration->event->slug === 'iupc')
-                    <div class="text-center md:text-left">
-                        <h4 class="text-cyan-500 font-bold uppercase text-xs tracking-widest mb-1">IUPC Coupon Action</h4>
-                        <p class="text-muted text-[11px]">Send coupon code to coach for payment.</p>
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
+                        <div class="text-center md:text-left">
+                            <h4 class="text-cyan-500 font-bold uppercase text-xs tracking-widest mb-1">IUPC Team Management
+                            </h4>
+                            <p class="text-slate-500 text-[11px]">Updating to 'Selected' will notify the <span
+                                    class="text-cyan-400 font-bold">Coach</span> via email.</p>
+                        </div>
+                        <form action="{{ route('admin.registration.updateStatus_pw', $registration->id) }}" method="POST"
+                            class="flex items-center gap-2">
+                            @csrf @method('PATCH')
+                            <select name="status"
+                                class="bg-slate-800 text-white text-xs border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-cyan-500 transition">
+                                <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="selected" {{ $registration->status == 'selected' ? 'selected' : '' }}>
+                                    Selected</option>
+                                <option value="verified" {{ $registration->status == 'verified' ? 'selected' : '' }}>
+                                    Verified (Paid)</option>
+                                <option value="rejected" {{ $registration->status == 'rejected' ? 'selected' : '' }}>
+                                    Rejected</option>
+                            </select>
+                            <button type="submit"
+                                class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-5 py-2.5 rounded-lg font-black uppercase text-[10px] transition-all shadow-[0_0_15px_rgba(34,211,238,0.3)]">Update</button>
+                        </form>
                     </div>
-                    <div>
-                        @if (!$registration->coupon_code)
-                            <form action="{{ route('admin.send.coupon', $registration->id) }}" method="POST">
-                                @csrf
-                                <button type="submit"
-                                    class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-8 py-3 rounded-xl font-black uppercase text-xs transition-all shadow-lg hover:scale-105">
-                                    Generate & Send Coupon
-                                </button>
-                            </form>
-                        @else
-                            <div class="bg-cyan-500/10 border border-cyan-500/30 px-6 py-2 rounded-xl text-center">
-                                <span class="text-[9px] text-green-400 uppercase font-bold block mb-1">Already Sent</span>
-                                <span
-                                    class="font-mono text-xl text-white tracking-widest">{{ $registration->coupon_code }}</span>
-                            </div>
-                        @endif
-                    </div>
-                @elseif($registration->event->slug === 'project-showcase')
-                    <div class="text-center md:text-left">
-                        <h4 class="text-cyan-500 font-bold uppercase text-xs tracking-widest mb-1">Project Status</h4>
-                        <p class="text-muted text-[11px]">Update status to trigger notification.</p>
-                    </div>
-                    <form action="{{ route('admin.registration.updateStatus_pw', $registration->id) }}" method="POST"
-                        class="flex items-center gap-2">
-                        @csrf
-                        @method('PATCH')
-                        <select name="status"
-                            class="bg-slate-800 text-white text-xs border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-cyan-500 transition">
-                            <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>Pending
-                            </option>
-                            <option value="selected" {{ $registration->status == 'selected' ? 'selected' : '' }}>Selected
-                            </option>
-                            <option value="verified" {{ $registration->status == 'verified' ? 'selected' : '' }}>Verified
-                            </option>
-                            <option value="rejected" {{ $registration->status == 'rejected' ? 'selected' : '' }}>Rejected
-                            </option>
-                        </select>
-                        <button type="submit"
-                            class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-5 py-2.5 rounded-lg font-black uppercase text-[10px] transition-all">Update</button>
-                    </form>
+
+                    {{-- ২. এআই হ্যাকাথন ম্যানেজমেন্ট --}}
                 @elseif($registration->event->slug === 'ai-hackathon')
                     <div class="space-y-6">
-                        {{-- পার্ট ১: সবাইকে লিঙ্ক পাঠানোর ফর্ম --}}
+                        {{-- পার্ট ১: বাল্ক লিঙ্ক --}}
                         <div class="bg-cyan-500/5 p-4 rounded-xl border border-cyan-500/20">
-                            <h4 class="text-cyan-500 font-bold uppercase text-[10px] mb-2">Phase 1: Send Link to Everyone
+                            <h4 class="text-cyan-500 font-bold uppercase text-[10px] mb-2">Phase 1: Send Preliminary Link
                             </h4>
                             <form action="{{ route('admin.event.sendBulkLink', $registration->event_id) }}" method="POST"
                                 class="flex gap-2">
@@ -187,24 +170,20 @@
                                 <input type="url" name="contest_link" placeholder="Enter Global Contest Link" required
                                     class="bg-slate-800 text-white text-xs border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-500 transition flex-1">
                                 <button type="submit"
-                                    class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition">
-                                    Send to All
-                                </button>
+                                    class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition">Send
+                                    to All</button>
                             </form>
                         </div>
-
-                        {{-- পার্ট ২: ইন্ডিভিজুয়াল স্ট্যাটাস আপডেট --}}
+                        {{-- পার্ট ২: ইন্ডিভিজুয়াল আপডেট --}}
                         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                             <div class="text-center md:text-left">
-                                <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-1">Phase 2: Individual
-                                    Status</h4>
-                                <p class="text-muted text-[11px]">Update team status after contest evaluation.</p>
+                                <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-1">Phase 2: Status
+                                    Update</h4>
+                                <p class="text-muted text-[11px]">Updates will notify all team members.</p>
                             </div>
-
                             <form action="{{ route('admin.registration.updateStatus.ai', $registration->id) }}"
                                 method="POST" class="flex items-center gap-2">
-                                @csrf
-                                @method('PATCH')
+                                @csrf @method('PATCH')
                                 <select name="status"
                                     class="bg-slate-800 text-white text-xs border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-cyan-500 transition">
                                     <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>
@@ -217,14 +196,43 @@
                                         Rejected</option>
                                 </select>
                                 <button type="submit"
-                                    class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-6 py-2.5 rounded-lg font-black uppercase text-[10px] transition-all">
-                                    Update Status
-                                </button>
+                                    class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-6 py-2.5 rounded-lg font-black uppercase text-[10px] transition-all">Update</button>
                             </form>
                         </div>
                     </div>
-                @endif
 
+                    {{-- ৩. প্রজেক্ট শোকেস, আইসিটি অলিম্পিয়াড এবং অন্যান্য সকল ইভেন্ট --}}
+                @else
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
+                        <div class="text-center md:text-left">
+                            <h4 class="text-cyan-500 font-bold uppercase text-xs tracking-widest mb-1">
+                                {{ str_replace('-', ' ', $registration->event->slug) }} Management
+                            </h4>
+                            <p class="text-slate-500 text-[11px]">Update status and trigger automatic email notifications.
+                            </p>
+                        </div>
+
+                        <form action="{{ route('admin.registration.updateStatus_pw', $registration->id) }}"
+                            method="POST" class="flex items-center gap-2">
+                            @csrf @method('PATCH')
+                            <select name="status"
+                                class="bg-slate-800 text-white text-xs border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-cyan-500 transition">
+                                <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="selected" {{ $registration->status == 'selected' ? 'selected' : '' }}>
+                                    Selected</option>
+                                <option value="verified" {{ $registration->status == 'verified' ? 'selected' : '' }}>
+                                    Verified (Paid)</option>
+                                <option value="rejected" {{ $registration->status == 'rejected' ? 'selected' : '' }}>
+                                    Rejected</option>
+                            </select>
+                            <button type="submit"
+                                class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-5 py-2.5 rounded-lg font-black uppercase text-[10px] transition-all shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+                                Update Status
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

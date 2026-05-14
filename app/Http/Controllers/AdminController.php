@@ -20,15 +20,20 @@ use Maatwebsite\Excel\Facades\Excel;
 use DB;
 use App\Imports\UniversitySlotImport;
 
+
 class AdminController extends Controller
 {
 
 
-    public function downloadExcel()
-    {
-        return Excel::download(new TeamsExport, 'teams_slot_entry.xlsx');
-    }
 
+
+    public function downloadExcel($eventId)
+    {
+        // ফাইলের নামে ইভেন্ট আইডি বা বর্তমান তারিখ যোগ করতে পারেন চেনার সুবিধার জন্য
+        $fileName = 'result_entry_event_' . $eventId . '.xlsx';
+
+        return Excel::download(new ResultTemplateExport($eventId), $fileName);
+    }
     // app/Http/Controllers/Admin/CouponController.php
     public function import(Request $request, $eventId)
     {
@@ -56,40 +61,6 @@ class AdminController extends Controller
         return Excel::download(new RegistrationExport($eventId), $fileName);
     }
 
-    // public function dashboard(Request $request)
-    // {
-    //     // ১. সব ইভেন্ট নিয়ে আসা (ট্যাব দেখানোর জন্য)
-    //     $events = Event::all();
-
-    //     // ২. বর্তমানে কোন ইভেন্ট দেখা হচ্ছে সেটি নির্ধারণ করা (ডিফল্ট প্রথমটি)
-    //     $selectedEventId = $request->get('event_id', $events->first()?->id);
-    //     $selectedEvent = Event::find($selectedEventId);
-
-    //     // ৩. কুয়েরি শুরু করা (শুধুমাত্র সিলেক্টেড ইভেন্টের ডাটা)
-    //     $query = Registration::where('event_id', $selectedEventId);
-
-    //     // ৪. সার্চ ফিল্টার (টিম নাম, ইউনিভার্সিটি বা লিডারের নাম অনুযায়ী)
-    //     if ($request->filled('search')) {
-    //         $searchTerm = $request->search;
-    //         $query->where(function ($q) use ($searchTerm) {
-    //             $q->where('university_name', 'LIKE', '%' . $searchTerm . '%')
-    //                 ->orWhere('team_name', 'LIKE', '%' . $searchTerm . '%')
-    //                 ->orWhere('m1_name', 'LIKE', '%' . $searchTerm . '%');
-    //         });
-    //     }
-
-    //     // ৫. ডাটা নিয়ে আসা (Pagination সহ)
-    //     $teams = $query->latest()->paginate(20)->appends(['event_id' => $selectedEventId, 'search' => $request->search]);
-
-    //     // ৬. স্ট্যাটিস্টিকস (সিলেক্টেড ইভেন্টের জন্য কোন ইউনিভার্সিটির কয়টি রেজিস্ট্রেশন)
-    //     $stats = Registration::where('event_id', $selectedEventId)
-    //         ->select('university_name', DB::raw('count(*) as total'))
-    //         ->groupBy('university_name')
-    //         ->orderBy('total', 'desc')
-    //         ->get();
-
-    //     return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent'));
-    // }
 
 
     public function dashboard(Request $request)
@@ -136,41 +107,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent', 'coupons'));
     }
     // কুপন পাঠানো এবং ইমেইল হ্যান্ডলিং
-    public function sendCoupon($id)
-    {
-        // ১. ডাটা খুঁজে বের করা এবং সাথে ইভেন্ট রিলেশন লোড করা
-        $team = Registration::with('event')->findOrFail($id);
 
-        // ২. কুপন চেক
-        if ($team->coupon_code) {
-            return back()->with('error', 'Coupon already sent to this team!');
-        }
-
-        // ৩. কুপন জেনারেট
-        $coupon = strtoupper(Str::random(8));
-
-        // ৪. আপডেট (Status & Coupon)
-        $team->update([
-            'coupon_code' => $coupon,
-            'status' => 'selected'
-        ]);
-
-        try {
-            // ৫. ইমেইল লজিক: IUPC হলে কোচ, নয়তো লিডার (m1)
-            $recipientEmail = ($team->event->slug === 'iupc')
-                ? $team->coach_email
-                : $team->m1_email;
-
-            if ($recipientEmail) {
-                Mail::to($recipientEmail)->send(new CouponCodeMail($team));
-                return back()->with('success', 'Confirmation & Coupon sent to ' . $recipientEmail);
-            }
-
-            return back()->with('warning', 'Data updated, but no email address found.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Database updated but email failed: ' . $e->getMessage());
-        }
-    }
 
     // প্রতিটি রেজিস্ট্রেশনের ফুল ডিটেইলস দেখার জন্য
     public function show($id)
@@ -178,33 +115,132 @@ class AdminController extends Controller
         $registration = Registration::with('event')->findOrFail($id);
         return view('admin.pre_reg_show', compact('registration'));
     }
-
-
-
-
-    public function updateStatus(Request $request, $id)
+    public function common_updateStatus(Request $request, $id)
     {
         $registration = Registration::with('event')->findOrFail($id);
+        $newStatus = $request->status;
 
-        // ১. প্রজেক্ট শোকেসের জন্য সিলেকশন লজিক
-        if ($registration->event->slug === 'project-showcase') {
-            $registration->update([
-                'status' => 'selected' // অ্যাডমিন ম্যানুয়ালি সিলেক্ট করল
-            ]);
+        // ১. ডাটা আপডেট অ্যারে
+        $updateData = ['status' => $newStatus];
 
-            try {
-                // প্রজেক্ট সিলেকশনের মেইল পাঠানো
-                Mail::to($registration->m1_email)->send(new ProjectSelectionMail($registration));
-                return back()->with('success', 'Project selected and email sent to team leader.');
-            } catch (\Exception $e) {
-                return back()->with('error', 'Status updated but email failed.');
+        // ২. ভেরিফাইড হলে পেমেন্ট এবং আইডি সেট করা
+        if ($newStatus === 'verified') {
+            $updateData['payment_status'] = 'paid';
+            if (!$registration->participant_id) {
+                // ইভেন্ট অনুযায়ী প্রিফিক্স সেট করা (যেমন: ICT-XXXX)
+                $prefix = strtoupper(substr($registration->event->slug, 0, 3));
+                $updateData['participant_id'] = $prefix . '-' . rand(1000, 9999);
             }
         }
 
-        return back()->with('error', 'Invalid action for this event.');
+        $registration->update($updateData);
+
+        try {
+            // ৩. মেইল পাঠানোর লজিক (Selected বা Verified হলে)
+            if (in_array($newStatus, ['selected', 'verified'])) {
+                // ডিফল্টভাবে m1_email এ মেইল যাবে
+                Mail::to($registration->m1_email)->send(new ProjectSelectionMail($registration, $registration->event->slug));
+                $message = "Status updated to {$newStatus} and notification sent.";
+            } else {
+                $message = "Status updated successfully.";
+            }
+
+            return back()->with('success', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Data updated but email failed: ' . $e->getMessage());
+        }
+    }
+
+    // project and iupc
+    public function updateStatus(Request $request, $id)
+    {
+        $registration = Registration::with('event')->findOrFail($id);
+        $eventSlug = $registration->event->slug;
+        $newStatus = $request->status;
+
+        // আপডেট ডাটা অ্যারে
+        $updateData = ['status' => $newStatus];
+
+        // যদি ভেরিফাইড (পেইড) করা হয়
+        if ($newStatus === 'verified') {
+            $updateData['payment_status'] = 'paid';
+
+            // যদি আগে থেকে আইডি না থাকে তবেই নতুন আইডি জেনারেট হবে
+            if (!$registration->participant_id) {
+                $updateData['participant_id'] = 'DUET-CSE-' . strtoupper(Str::random(4)) . '-' . rand(100, 999);
+            }
+        }
+
+        $registration->update($updateData);
+
+        try {
+            // শুধুমাত্র selected অথবা verified হলে মেইল যাবে
+            if (in_array($newStatus, ['selected', 'verified'])) {
+                if ($eventSlug === 'iupc') {
+                    // IUPC হলে কোচের ইমেইলে যাবে
+                    Mail::to($registration->coach_email)->send(new ProjectSelectionMail($registration, 'iupc'));
+                } else {
+                    // Project Showcase হলে লিডারের ইমেইলে যাবে
+                    Mail::to($registration->m1_email)->send(new ProjectSelectionMail($registration, 'project'));
+                }
+                $message = "Status updated to {$newStatus}, Payment set to Paid & ID Generated.";
+            } else {
+                $message = "Status updated to {$newStatus}.";
+            }
+
+            return back()->with('success', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Update successful, but email failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * AI Hackathon Update
+     */
+    public function ai_updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,selected,verified,rejected',
+        ]);
+
+        $registration = Registration::findOrFail($id);
+        $newStatus = $request->status;
+
+        $updateData = ['status' => $newStatus];
+
+        // ভেরিফাইড হলে পেমেন্ট স্ট্যাটাস এবং আইডি জেনারেশন
+        if ($newStatus === 'verified') {
+            $updateData['payment_status'] = 'paid';
+            if (!$registration->participant_id) {
+                $updateData['participant_id'] = 'AI-HACK-' . rand(1000, 9999);
+            }
+        }
+
+        $registration->update($updateData);
+
+        // মেইল পাঠানোর লজিক (Selected, Verified বা Rejected হলে)
+        if (in_array($newStatus, ['selected', 'verified', 'rejected'])) {
+            $emails = array_filter([
+                $registration->m1_email,
+                $registration->m2_email,
+                $registration->m3_email
+            ]);
+
+            if (!empty($emails)) {
+                try {
+                    Mail::to($emails)->send(new AIRegistrationStatusMail($registration, $newStatus));
+                } catch (\Exception $e) {
+                    return back()->with('success', 'Status & Payment updated, but email failed.');
+                }
+            }
+        }
+
+        return back()->with('success', 'Status updated to ' . $newStatus . ' and Participant ID assigned.');
     }
 
     // ai hackton
+
+
     // ১. সবাইকে একসাথে লিঙ্ক পাঠানোর মেথড
     public function sendBulkContestLink(Request $request, $eventId)
     {
@@ -242,38 +278,7 @@ class AdminController extends Controller
     }
 
     // ২. স্ট্যাটাস আপডেট করার মেথড (এখন আর মেইল যাবে না, শুধু স্ট্যাটাস চেঞ্জ হবে)
-    public function ai_updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|in:pending,selected,verified,rejected',
-        ]);
 
-        $registration = Registration::findOrFail($id);
-        $registration->update(['status' => $request->status]);
-
-        // শুধুমাত্র 'selected' অথবা 'rejected' হলে ইমেইল পাঠানো হবে
-        if (in_array($request->status, ['selected', 'rejected'])) {
-
-            // সকল মেম্বারের ইমেইল সংগ্রহ (ফাঁকা ইমেইলগুলো বাদ দিয়ে)
-            $emails = array_filter([
-                $registration->m1_email,
-                $registration->m2_email,
-                $registration->m3_email
-            ]);
-
-            if (!empty($emails)) {
-                try {
-                    // RegistrationStatusMail ক্লাসে রেজিস্ট্রেশন অবজেক্ট এবং নতুন স্ট্যাটাস পাঠানো হচ্ছে
-                    Mail::to($emails)->send(new AIRegistrationStatusMail($registration, $request->status));
-                } catch (\Exception $e) {
-                    // মেইল না গেলেও স্ট্যাটাস আপডেট যেন সাকসেস দেখায়, তাই এররটি ইগনোর করা বা লগ করা যেতে পারে
-                    return back()->with('success', 'Status updated, but email could not be sent.');
-                }
-            }
-        }
-
-        return back()->with('success', 'Status updated successfully to ' . $request->status);
-    }
 
 
 

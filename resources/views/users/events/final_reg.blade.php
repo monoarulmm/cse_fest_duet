@@ -68,19 +68,13 @@
 
                                     <td class="p-6">
                                         <div class="flex justify-center">
-                                            @if ($event->slug == 'ict-olympiad')
-                                                <a href="{{ route('event.ict_admit_card', [$event->slug, $team->id]) }}"
-                                                    target="_blank"
-                                                    class="flex items-center gap-2 bg-indigo-500/10 hover:bg-indigo-500 border border-indigo-500/30 py-2 px-4 rounded-xl text-[10px] font-bold uppercase text-indigo-400 hover:text-white transition-all group">
-                                                    <i class="fas fa-download group-hover:bounce"></i> Admit Card
-                                                </a>
-                                            @else
-                                                <a href="{{ route('event.admit_card', [$event->slug, $team->team_id]) }}"
-                                                    target="_blank"
-                                                    class="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500 border border-cyan-500/30 py-2 px-4 rounded-xl text-[10px] font-bold uppercase text-cyan-400 hover:text-white transition-all group">
-                                                    <i class="fas fa-download group-hover:bounce"></i> Admit Card
-                                                </a>
-                                            @endif
+
+                                            <a href="{{ route('event.admit_card', [$event->slug, $team->id]) }}"
+                                                target="_blank"
+                                                class="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500 border border-cyan-500/30 py-2 px-4 rounded-xl text-[10px] font-bold uppercase text-cyan-400 hover:text-white transition-all group">
+                                                <i class="fas fa-download group-hover:bounce"></i> Admit Card
+                                            </a>
+
                                         </div>
                                     </td>
 

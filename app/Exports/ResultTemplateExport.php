@@ -52,10 +52,11 @@ class ResultTemplateExport implements FromQuery, WithHeadings, WithMapping, Shou
     {
         return [
             $reg->participant_id,
-            $reg->event->name ?? 'N/A', // রেজিস্ট্রেশন মডেলের event() রিলেশন থেকে নাম আনা হচ্ছে
-            $reg->university_name ?? 'N/A', // টিম না থাকলে মেম্বার-১ এর নাম
-            $reg->team_name ?? $reg->m1_name, // টিম না থাকলে মেম্বার-১ এর নাম
-            '', // রেজাল্ট কলামটি খালি রাখা হয়েছে (এখানে আপনি ম্যানুয়ালি লিখবেন)
+            $reg->event->name ?? 'N/A',
+            $reg->university_name ?? 'N/A',
+            $reg->team_name ?? $reg->m1_name, // টিম না থাকলে লিডারের নাম দেখাবে
+            '', // seat_plan কলামটি খালি (ম্যানুয়ালি বসানোর জন্য)
+            '', // result_status কলামটি খালি (ম্যানুয়ালি বসানোর জন্য)
         ];
     }
 }

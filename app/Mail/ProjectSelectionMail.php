@@ -13,43 +13,32 @@ class ProjectSelectionMail extends Mailable
     use Queueable, SerializesModels;
 
     public $registration;
+    public $type;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($registration)
+    public function __construct($registration, $type = 'general')
     {
-        // রেজিস্ট্রেশন ডাটা রিসিভ করা হচ্ছে
         $this->registration = $registration;
+        $this->type = $type;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Congratulations! Your Project has been Selected - DUET CSE FEST 2026',
-        );
+        // ইভেন্ট অনুযায়ী সাবজেক্ট নির্ধারণ
+        $subject = match ($this->type) {
+            'iupc' => 'Selected for IUPC - DUET CSE Carnival 2026',
+            'ict-olympiad' => 'Selected for ICT Olympiad - DUET CSE Carnival ',
+            'project-showcase' => 'Project Shawcasing Selected - DUET CSE Carnival ',
+            default => 'Congratulations! Your Registration is Confirmed',
+        };
+
+        return new Envelope(subject: $subject);
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
-            view: 'emails.project_selected', // আপনার ব্লেড ফাইলের পাথ
+            view: 'emails.selection_notification',
+            with: ['registration' => $this->registration, 'type' => $this->type]
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }

@@ -200,7 +200,8 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
 //     Route::get('/admit-download/{id}', [EventController::class, 'downloadAdmit'])->name('event.admit_download');
 // });
 
-
+Route::get('/event/{slug}/admit-card/{id}', [EventController::class, 'downloadAdmitCard'])
+    ->name('event.admit_card');
 Route::prefix('iupc')->name('iupc.')->group(function () {
     // কুপন ভেরিফিকেশন পেজ দেখার জন্য
 
@@ -233,7 +234,7 @@ Route::prefix('event/{slug}')->group(function () {
     // অ্যাডমিট কার্ড
 
     // Admit Card/Confirmation ডাউনলোড রাউট
-    Route::get('/admit-card/{team_id}', [EventController::class, 'downloadAdmitCard'])->name('event.admit_card');
+    // Route::get('/admit-card/{team_id}', [EventController::class, 'downloadAdmitCard'])->name('event.admit_card');
 
     Route::get('/ict-admit-card/{id}', [EventController::class, 'ictAdmitCard'])
         ->name('event.ict_admit_card');
