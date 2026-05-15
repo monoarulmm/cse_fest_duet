@@ -11,18 +11,18 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class TeamsExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
-    /**
-     * Collection method: University-r nam onujayi grouping korar jonno orderBy use kora hoyeche.
-     */
     public function collection()
     {
-        // 'university_name' onujayi sort korle ekoi university-r sob team eksathe thakbe
-        return Registration::orderBy('university_name', 'asc')->get();
+        // ১. প্রথমে 'iupc' স্ল্যাগ বিশিষ্ট ইভেন্টটি খুঁজে বের করা
+        // এখানে ধরে নেওয়া হচ্ছে আপনার Event মডেল আছে এবং সেখানে 'slug' কলাম আছে
+        return Registration::whereHas('event', function ($query) {
+            $query->where('slug', 'iupc'); // ইভেন্ট টেবিলের স্ল্যাগ চেক করা হচ্ছে
+        })
+            ->orderBy('university_name', 'asc')
+            ->orderBy('coach_name', 'asc')
+            ->get();
     }
 
-    /**
-     * Excel-er Header row set kora.
-     */
     public function headings(): array
     {
         return [
@@ -33,17 +33,14 @@ class TeamsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
         ];
     }
 
-    /**
-     * Protiti row-r data mapping.
-     * @var Registration $team
-     */
     public function map($team): array
     {
         return [
             $team->university_name,
             $team->coach_name,
             $team->coach_email,
-            '',                     // Eta faka thakbe (Image_cc443a.png-r moton)
+            '', // Slots কলাম ফাঁকা
+            '', // Codes কলাম ফাঁকা
         ];
     }
 }

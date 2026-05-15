@@ -3,12 +3,15 @@
 @section('content')
     <div class="max-w-6xl mx-auto px-4 py-10">
         <div class="mb-8 flex justify-between items-center">
-            <div>
-                <h2 class="text-3xl font-black text-white uppercase italic">
-                    Participating <span class="text-purple-500">Institutions</span>
-                </h2>
-                <p class="text-slate-500">Event: {{ $event->name }}</p>
-            </div>
+
+            <button onclick="window.history.back()"
+                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                    Back to previous
+                </span>
+            </button>
+
             <div class="bg-slate-900 border border-slate-800 px-6 py-2 rounded-2xl">
                 <span class="text-slate-400 text-sm">Total Unique Institutes:</span>
                 <span class="text-purple-400 font-bold ml-2">{{ $institutes->count() }}</span>

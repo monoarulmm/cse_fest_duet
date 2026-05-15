@@ -3,7 +3,16 @@
 @section('content')
     <div class="container mx-auto px-4 py-10">
         <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center border-b border-cyan-500/20 pb-4 mb-6">
 
+                <button onclick="window.history.back()"
+                    class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                    <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                    <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                        Back to previous
+                    </span>
+                </button>
+            </div>
             {{-- ইভেন্ট হেডার --}}
             <div class="text-center mb-10">
                 <h1 class="text-4xl font-black text-white uppercase tracking-tight">{{ $event->name }}</h1>

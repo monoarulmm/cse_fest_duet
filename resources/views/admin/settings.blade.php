@@ -4,14 +4,27 @@
     <div class="min-h-screen bg-[#080a11] py-12 px-6 lg:px-16 text-white">
 
         {{-- Top Header Section --}}
-        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-            <div>
-                <h2 class="text-3xl font-black italic tracking-tighter uppercase">Admin <span
-                        class="text-yellow-500">Panel</span></h2>
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em]">Management Dashboard</p>
-            </div>
-        </div>
+        <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-800 pb-8 mb-10">
 
+            {{-- ১. বড় প্রফেশনাল টাইটেল --}}
+            <div>
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
+                    Settings <span class="text-cyan-400">Details</span>
+                </h2>
+                <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
+            </div>
+
+            {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
+            <button onclick="window.history.back()"
+                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                    Back to previous
+                </span>
+            </button>
+
+        </div>
         <div class="max-w-7xl mx-auto">
             {{-- Title & Success Alert --}}
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">

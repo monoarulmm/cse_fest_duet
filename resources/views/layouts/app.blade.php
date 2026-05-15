@@ -20,6 +20,8 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
     @endif
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Alpine.js (Include this in your layouts/app.blade.php if not present) -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500&display=swap');
 

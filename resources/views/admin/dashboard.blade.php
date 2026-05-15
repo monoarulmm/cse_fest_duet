@@ -4,225 +4,175 @@
     <style>
         :root {
             --card-bg: rgba(15, 23, 42, 0.8);
-            --table-header: rgba(34, 211, 238, 0.1);
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
             --border-color: rgba(34, 211, 238, 0.2);
-        }
-
-        /* Light Mode Colors */
-        .light-mode {
-            --card-bg: #ffffff;
-            --table-header: #f1f5f9;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
         }
 
         .admin-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
         }
 
-        .text-main {
-            color: var(--text-main);
+        .active-tab {
+            border-bottom: 2px solid #22d3ee;
+            color: #22d3ee !important;
         }
 
-        .text-muted {
-            color: var(--text-muted);
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
         }
 
-        .stat-badge {
-            background: rgba(34, 211, 238, 0.1);
-            border: 1px solid rgba(34, 211, 238, 0.2);
-            color: #0891b2;
-            /* Cyan 600 for better visibility in light mode */
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
         }
     </style>
 @endsection
+
 @section('content')
     <div class="container mx-auto px-4 py-8">
+        <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-800 pb-8 mb-10">
 
-        <div class="flex justify-end mb-4 gap-3">
+            {{-- ১. বড় প্রফেশনাল টাইটেল --}}
+            <div>
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
+                    Admin Dashboard <span class="text-cyan-400">Details</span>
+                </h2>
+                <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
+            </div>
 
-            <a href="{{ route('admin.teams.export') }}" class="btn btn-primary">
-                Download Entry Sheet
-            </a>
-            <!-- রেজাল্ট টেমপ্লেট ডাউনলোড বাটন -->
-            <a href="{{ route('admin.export.result.template', ['event' => $selectedEvent->id]) }}"
-                class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase flex items-center gap-2 transition shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Download Result Template (.xlsx)
-            </a>
+            {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
+            <button onclick="window.history.back()"
+                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                    Back to previous
+                </span>
+            </button>
 
-            <!-- আপনার আগের এক্সেল ডাউনলোড বাটন (উদাহরণস্বরূপ) -->
-            <a href="{{ route('admin.export.excel', ['event_id' => $selectedEvent->id]) }}"
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase flex items-center gap-2 transition shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Download Registration (.xlsx)
-            </a>
         </div>
+        {{-- Top Action Bar --}}
+        <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
+            <h1 class="text-xl font-black text-white uppercase italic">
+                Admin <span class="text-cyan-500">Panel</span> <span
+                    class="text-[10px] text-slate-500 ml-2">[{{ $selectedEvent->name }}]</span>
+            </h1>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('admin.export.result.template', $selectedEvent->id) }}"
+                    class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
+                    Result & Seat Plan Template
+                </a>
 
-        <div class="bg-slate-900 p-6 rounded-2xl border border-cyan-500/20">
-            <h3 class="text-white mb-4">Upload Event Results</h3>
 
-            <!-- ফরম্যাট ডাউনলোড বাটন -->
+                <a href="{{ route('admin.export.all_event', ['event_id' => $selectedEvent->id]) }}"
+                    class="bg-green-600/20 hover:bg-green-600/30 text-green-500 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
+                    Export Registration
+                </a>
 
-
-            <form action="{{ route('admin.upload.result') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="excel_file"
-                    class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20">
-                <button type="submit" class="mt-4 bg-cyan-500 px-6 py-2 rounded-lg font-bold">Upload Now</button>
-            </form>
-        </div>
-
-        <div class="p-6 bg-slate-900 border border-slate-800 rounded-3xl">
-            <h3 class="text-white font-bold mb-4">Upload University Slots (Excel)</h3>
-
-            <form action="{{ route('admin.slots.upload') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="flex items-center gap-4">
-                    <input type="file" name="file"
-                        class="bg-slate-950 text-slate-400 border border-slate-800 p-2 rounded-xl text-xs">
-                    <button type="submit"
-                        class="bg-cyan-500 text-slate-950 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all">
-                        Upload & Update
-                    </button>
-                </div>
-            </form>
-
-            <div class="mt-6">
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-2">Excel Column Headers
-                    (Required):</p>
-                <div class="flex gap-2 text-[9px] font-mono text-cyan-500/80">
-                    <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">university_name</span>
-                    <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">category</span>
-                    <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">max_slots</span>
-                </div>
+                <a href="{{ route('admin.iupc.export') }}"
+                    class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
+                    iupc coach export
+                </a>
             </div>
         </div>
 
-        {{-- শুধুমাত্র IUPC ইভেন্টের জন্য স্লট এবং কুপন সেকশন দেখা যাবে --}}
-        @if ($selectedEvent->slug == 'iupc')
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        {{-- Upload Tools Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {{-- Result Upload --}}
+            <div class="admin-card p-6 rounded-3xl">
+                <h3 class="text-white text-xs font-bold uppercase mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-upload text-cyan-500"></i> Results Upload
+                </h3>
+                <form action="{{ route('admin.upload.result') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="excel_file"
+                        class="block w-full text-[10px] text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-cyan-500/10 file:text-cyan-400 mb-4"
+                        required>
+                    <button type="submit"
+                        class="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 rounded-xl font-bold text-[10px] uppercase transition">Process
+                        Results</button>
+                </form>
+            </div>
 
-                {{-- ১. ইউনিভার্সিটি স্লট আপডেট (Excel) --}}
-                <div class="p-6 bg-slate-900 border border-slate-800 rounded-3xl">
-                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-university text-cyan-500"></i>
-                        Upload University Slots (Excel)
-                    </h3>
-
+            {{-- Event Specific Tools (Slots/Coupons) --}}
+            @if ($selectedEvent->slug == 'iupc')
+                <div class="admin-card p-6 rounded-3xl">
+                    <h3 class="text-white text-xs font-bold uppercase mb-4">University Slots</h3>
                     <form action="{{ route('admin.slots.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="flex items-center gap-4">
-                            <input type="file" name="file" required
-                                class="bg-slate-950 text-slate-400 border border-slate-800 p-2 rounded-xl text-xs flex-1">
-                            <button type="submit"
-                                class="bg-cyan-500 text-slate-950 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all">
-                                Update Slots
-                            </button>
-                        </div>
+                        <input type="file" name="file" class="block w-full text-[10px] mb-4" required>
+                        <button type="submit"
+                            class="w-full bg-slate-700 text-white py-2 rounded-xl text-[10px] font-bold uppercase">Update
+                            Slots</button>
                     </form>
-
-                    <div class="mt-4">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-2">Required Columns:
-                        </p>
-                        <div class="flex gap-2 text-[9px] font-mono text-cyan-500/80">
-                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">university_name</span>
-                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">max_slots</span>
-                        </div>
-                    </div>
                 </div>
-
-                {{-- ২. কোচ ভিত্তিক কুপন জেনারেশন --}}
-                <div class="p-6 bg-slate-900 border border-slate-800 rounded-3xl">
-                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-ticket text-cyan-500"></i>
-                        Import IUPC Coach Slots & Mail
-                    </h3>
-
+                <div class="admin-card p-6 rounded-3xl">
+                    <h3 class="text-white text-xs font-bold uppercase mb-4">Coach Coupons</h3>
                     <form action="{{ route('admin.coupons.import', $selectedEvent->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        <div class="flex items-center gap-4">
-                            <input type="file" name="excel_file" required
-                                class="bg-slate-950 text-slate-400 border border-slate-800 p-2 rounded-xl text-xs flex-1">
-                            <button type="submit"
-                                class="bg-green-500 text-slate-950 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-green-400 transition-all">
-                                Generate & Mail
-                            </button>
-                        </div>
+                        <input type="file" name="excel_file" class="block w-full text-[10px] mb-4" required>
+                        <button type="submit"
+                            class="w-full bg-green-600 text-white py-2 rounded-xl text-[10px] font-bold uppercase">Generate
+                            & Mail</button>
                     </form>
+                </div>
 
-                    <div class="mt-4">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-2">Required Columns:
-                        </p>
-                        <div class="flex gap-2 text-[9px] font-mono text-green-500/80">
-                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">university</span>
-                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">coach_email</span>
-                            <span class="bg-slate-950 px-2 py-1 border border-white/5 rounded">slots</span>
-                        </div>
+                {{-- ৩. কুপন স্ট্যাটাস টেবিল (শুধুমাত্র IUPC এর জন্য) --}}
+                <div class="p-8 bg-slate-900/50 border border-slate-800 rounded-[2rem] mb-8">
+                    <h2 class="text-xl font-black text-cyan-400 mb-6 uppercase flex items-center gap-2">
+                        <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
+                        Coupon Status Tracker
+                    </h2>
+                    <div class="max-h-64 overflow-y-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="text-slate-500 border-b border-slate-800 uppercase">
+                                    <th class="py-3 px-2">University</th>
+                                    <th class="py-3 px-2">Coach</th>
+                                    <th class="py-3 px-2">Code</th>
+                                    <th class="py-3 px-2">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-400">
+                                @forelse ($coupons as $coupon)
+                                    <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                                        <td class="py-3 px-2">{{ $coupon->university }}</td>
+                                        <td class="py-3 px-2">{{ $coupon->coach_name }}</td>
+                                        <td class="py-3 px-2 font-mono text-cyan-400">{{ $coupon->code }}</td>
+                                        <td class="py-3 px-2">
+                                            @if ($coupon->is_used)
+                                                <span class="text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Used</span>
+                                            @else
+                                                <span
+                                                    class="text-green-500 bg-green-500/10 px-2 py-0.5 rounded">Active</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4 text-slate-600 italic">No coupons
+                                            generated
+                                            yet.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-
-            {{-- ৩. কুপন স্ট্যাটাস টেবিল (শুধুমাত্র IUPC এর জন্য) --}}
-            <div class="p-8 bg-slate-900/50 border border-slate-800 rounded-[2rem] mb-8">
-                <h2 class="text-xl font-black text-cyan-400 mb-6 uppercase flex items-center gap-2">
-                    <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
-                    Coupon Status Tracker
-                </h2>
-                <div class="max-h-64 overflow-y-auto custom-scrollbar">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="text-slate-500 border-b border-slate-800 uppercase">
-                                <th class="py-3 px-2">University</th>
-                                <th class="py-3 px-2">Coach</th>
-                                <th class="py-3 px-2">Code</th>
-                                <th class="py-3 px-2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-slate-400">
-                            @forelse ($coupons as $coupon)
-                                <tr class="border-b border-slate-800/50 hover:bg-white/5">
-                                    <td class="py-3 px-2">{{ $coupon->university }}</td>
-                                    <td class="py-3 px-2">{{ $coupon->coach_name }}</td>
-                                    <td class="py-3 px-2 font-mono text-cyan-400">{{ $coupon->code }}</td>
-                                    <td class="py-3 px-2">
-                                        @if ($coupon->is_used)
-                                            <span class="text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Used</span>
-                                        @else
-                                            <span class="text-green-500 bg-green-500/10 px-2 py-0.5 rounded">Active</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center py-4 text-slate-600 italic">No coupons generated
-                                        yet.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+            @else
+                <div
+                    class="lg:col-span-2 admin-card p-6 rounded-3xl flex items-center justify-center text-slate-500 italic text-sm">
+                    Additional tools only available for IUPC event.
                 </div>
-            </div>
-        @endif
-        {{-- Tabs Section --}}
-        <div class="flex gap-6 mb-8 border-b border-cyan-500/10 pb-2 overflow-x-auto">
+            @endif
+        </div>
+
+        {{-- Tabs --}}
+        <div class="flex gap-6 mb-6 border-b border-white/5 overflow-x-auto">
             @foreach ($events as $e)
                 <a href="{{ route('admin.dashboard', ['event_id' => $e->id]) }}"
-                    class="heading-font uppercase text-xs tracking-widest pb-2 {{ $selectedEvent->id == $e->id ? 'active-tab text-cyan-500' : 'text-muted hover:text-cyan-400' }}">
+                    class="pb-3 text-[10px] font-black uppercase tracking-widest transition-all {{ $selectedEvent->id == $e->id ? 'active-tab' : 'text-slate-500 hover:text-cyan-400' }}">
                     {{ $e->name }}
                 </a>
             @endforeach
@@ -230,84 +180,126 @@
 
         <div class="flex flex-col lg:flex-row gap-8">
             {{-- Stats Sidebar --}}
-            <div class="w-full lg:w-1/4">
-                <div class="admin-card p-6 rounded-3xl sticky top-24 shadow-sm">
-                    <h3 class="heading-font text-main mb-6 uppercase text-sm border-b border-cyan-500/20 pb-2">University
-                        Stats</h3>
-                    <div class="space-y-3">
+            <div class="w-full lg:w-1/4 space-y-6">
+                <div class="admin-card p-6 rounded-3xl">
+                    <h4 class="text-white text-[10px] font-black uppercase mb-4 border-b border-white/5 pb-2">Uni Stats</h4>
+                    <div class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
                         @foreach ($stats as $stat)
-                            <div class="flex justify-between items-center text-[10px] uppercase tracking-wider">
-                                <span class="text-muted">{{ $stat->university_name }}</span>
-                                <span class="stat-badge px-2 py-1 rounded-md">{{ $stat->total }} Reg.</span>
+                            <div class="flex justify-between items-center text-[10px]">
+                                <span class="text-slate-400 truncate pr-2">{{ $stat->university_name }}</span>
+                                <span
+                                    class="text-cyan-500 font-bold bg-cyan-500/10 px-2 py-0.5 rounded">{{ $stat->total }}</span>
                             </div>
                         @endforeach
                     </div>
                 </div>
             </div>
 
-            {{-- Main Table --}}
-            <div class="w-full lg:w-3/4">
-                <div class="admin-card rounded-3xl overflow-hidden shadow-xl">
-                    <table class="w-full text-left">
-                        <thead
-                            class="bg-[var(--table-header)] text-cyan-600 dark:text-cyan-400 heading-font text-[10px] uppercase">
-                            <tr>
-                                <th class="p-5">Team/Participant</th>
-                                <th class="p-5">Details</th>
-                                <th class="p-5">Status</th>
-                                <th class="p-5 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-xs">
-                            @foreach ($teams as $team)
-                                <tr class="border-b border-[var(--border-color)] hover:bg-cyan-500/5 transition">
-                                    <td class="p-5">
-                                        <div class="font-bold text-main text-sm">
-                                            {{ $selectedEvent->slug == 'ict-olympiad' ? $team->m1_name : $team->team_name }}
-                                        </div>
-                                        <div class="text-cyan-600 opacity-80">{{ $team->university_name }}</div>
-                                    </td>
+            {{-- Main Content --}}
+            <div class="w-full lg:w-3/4 space-y-8">
+                {{-- Registrations Table --}}
+                <div class="admin-card rounded-3xl overflow-hidden">
+                    <form id="bulkDeleteForm" action="{{ route('admin.registrations.bulkDelete') }}" method="POST">
+                        @csrf @method('DELETE')
+                        <div class="p-4 bg-white/5 flex justify-between items-center">
+                            <span class="text-white text-[10px] font-bold uppercase">Registration Records</span>
+                            <button type="submit" onclick="return confirm('Delete selected?')"
+                                class="hidden bulk-btn bg-red-600 text-white px-3 py-1 rounded text-[9px] font-bold uppercase">Delete
+                                Selected</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-900 text-slate-500 uppercase text-[9px]">
+                                    <tr>
+                                        <th class="p-4"><input type="checkbox" id="selectAll"></th>
+                                        <th class="p-4">Participant</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-slate-400 divide-y divide-white/5">
+                                    @foreach ($teams as $team)
+                                        <tr class="hover:bg-white/5 transition">
+                                            <td class="p-4"><input type="checkbox" name="ids[]"
+                                                    value="{{ $team->id }}" class="row-checkbox"></td>
+                                            <td class="p-4">
+                                                <div class="text-white font-bold">
+                                                    {{ $selectedEvent->slug == 'ict-olympiad' ? $team->m1_name : $team->team_name }}
+                                                </div>
+                                                <div class="text-[10px] text-cyan-600">{{ $team->university_name }}</div>
+                                            </td>
+                                            <td class="p-4">
+                                                <span
+                                                    class="px-2 py-0.5 rounded-[4px] text-[9px] uppercase font-bold {{ $team->status == 'verified' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500' }}">
+                                                    {{ $team->status }}
+                                                </span>
+                                            </td>
+                                            <td class="p-4 text-right">
+                                                <a href="{{ route('admin.registration.show', $team->id) }}"
+                                                    class="text-cyan-500 hover:underline">Details →</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4">{{ $teams->links() }}</div>
+                    </form>
+                </div>
 
-                                    <td class="p-5 text-muted">
-                                        @if ($selectedEvent->slug == 'iupc')
-                                            <div class="text-main font-medium">Coach: {{ $team->coach_name }}</div>
-                                            <div class="text-[10px]">CF: {{ $team->m1_cf_handle }},
-                                                {{ $team->m2_cf_handle }}</div>
-                                        @elseif($selectedEvent->slug == 'project-showcase')
-                                            <div class="text-main font-medium">Title: {{ $team->project_title }}</div>
-                                            <a href="{{ asset('storage/' . $team->abstract_file) }}"
-                                                class="text-cyan-600 underline">PDF Abstract</a>
-                                        @elseif($selectedEvent->slug == 'ict-olympiad')
-                                            <div class="text-main font-medium">ID: {{ $team->student_id }}</div>
-                                            <div>{{ $team->m1_phone }}</div>
-                                        @endif
-                                    </td>
-
-                                    <td class="p-5">
-                                        <div class="flex flex-col gap-1">
-                                            <span
-                                                class="w-fit text-[9px] px-2 py-0.5 rounded border {{ $team->status == 'verified' ? 'bg-green-500/10 text-green-600 border-green-500/20' : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' }}">
-                                                {{ strtoupper($team->status) }}
-                                            </span>
-                                            <span
-                                                class="w-fit text-[9px] px-2 py-0.5 rounded border {{ $team->payment_status == 'paid' ? 'bg-cyan-500/10 text-cyan-600 border-cyan-500/20' : 'bg-red-500/10 text-red-600 border-red-500/20' }}">
-                                                {{ strtoupper($team->payment_status) }}
-                                            </span>
-                                        </div>
-                                    </td>
-
-                                    <td class="p-5 text-right">
-                                        <a href="{{ route('admin.registration.show', $team->id) }}"
-                                            class="bg-slate-100 dark:bg-slate-800 text-main px-3 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-cyan-500 transition text-[10px] uppercase font-bold tracking-wider inline-block">
-                                            Details →
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                {{-- Imported Results View --}}
+                <div class="admin-card rounded-3xl overflow-hidden">
+                    <div class="p-4 bg-cyan-500/5 border-b border-white/5">
+                        <h3 class="text-cyan-400 text-[10px] font-black uppercase">Live Result Hub</h3>
+                    </div>
+                    <div class="max-h-64 overflow-y-auto custom-scrollbar">
+                        <table class="w-full text-left text-[10px]">
+                            <tbody class="divide-y divide-white/5">
+                                @forelse($results as $res)
+                                    <tr class="hover:bg-white/5">
+                                        <td class="p-4 text-white font-mono">{{ $res->participant_id }}</td>
+                                        <td class="p-4 text-slate-500">{{ $res->university_name }}</td>
+                                        <td class="p-4"><span class="text-cyan-500">{{ $res->result_status }}</span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <form action="{{ route('admin.result.delete', $res->id) }}" method="POST">
+                                                @csrf @method('DELETE')
+                                                <button type="submit"
+                                                    class="text-red-500 opacity-50 hover:opacity-100"><i
+                                                        class="fa-solid fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="p-10 text-center text-slate-600 italic">No results
+                                            uploaded for this event.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Bulk Select Logic
+        const selectAll = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkBtn = document.querySelector('.bulk-btn');
+
+        selectAll.addEventListener('change', function() {
+            rowCheckboxes.forEach(cb => cb.checked = this.checked);
+            toggleBulkBtn();
+        });
+
+        rowCheckboxes.forEach(cb => cb.addEventListener('change', toggleBulkBtn));
+
+        function toggleBulkBtn() {
+            const anyChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+            bulkBtn.classList.toggle('hidden', !anyChecked);
+        }
+    </script>
 @endsection

@@ -10,6 +10,16 @@
                 <p class="text-purple-400 tracking-[0.2em] mt-1 text-sm font-bold uppercase">Selection Phase</p>
             </div>
 
+
+            {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
+            <button onclick="window.history.back()"
+                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                    Back to previous
+                </span>
+            </button>
+
             {{-- ডাইনামিক ট্যাব মেনু (কাউন্ট সহ) --}}
             {{-- <div class="flex flex-wrap justify-center gap-4 mb-10">
                 <a href="{{ route('event.pre_registered', $event->slug) }}"

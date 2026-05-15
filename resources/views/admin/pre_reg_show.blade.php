@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
+
         <div
             class="max-w-4xl mx-auto admin-card rounded-3xl overflow-hidden p-8 shadow-2xl bg-slate-900/80 backdrop-blur-xl border border-white/5">
             {{-- Header --}}

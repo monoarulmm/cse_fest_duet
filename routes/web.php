@@ -124,7 +124,7 @@ use App\Http\Controllers\PaymentController;
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/upload-results', [AdminController::class, 'uploadExcel'])->name('admin.upload.result'); // Admin 
-    Route::get('/teams/export', [AdminController::class, 'downloadExcel'])->name('admin.teams.export');
+    Route::get('/admin/export-iupc-slots', [AdminController::class, 'exportIUPCTeams'])->name('admin.iupc.export');    // Route::get('/admin/export-excel/{event_id}', [AdminController::class, 'downloadExcel'])->name('admin.export.excel');
     // routes/web.php
     Route::post('/admin/event/{id}/import-coupons', [AdminController::class, 'import'])->name('admin.coupons.import');
 
@@ -141,7 +141,7 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     // ফ্রন্টএন্ডে ইউজারদের স্লট লিস্ট দেখানোর জন্য
 
 
-    Route::get('/admin/export-excel', [AdminController::class, 'exportExcel'])->name('admin.export.excel');
+    Route::get('/admin/export-excel', [AdminController::class, 'exportExcel'])->name('admin.export.all_event');
 
     Route::get('/admin/export-result-template/{event}', [AdminController::class, 'downloadResultTemplate'])
         ->name('admin.export.result.template');
@@ -287,4 +287,8 @@ Route::get('/event/{slug}/slots', [EventController::class, 'slot_list'])->name('
 
 Route::get('/test_payment', [PaymentTestController::class, 'create'])->name('paymentCreate');
 Route::post('/shurjopay', [PaymentTestController::class, 'send_payment_request_to_shurjopay'])->name('shurjopay.lara');
-Route::get('/paymentUpdate', [PaymentTestController::class, 'verify_payment']);
+Route::get('/paymentUpdate', [PaymentTestController::class, 'verify_payment']);;
+Route::delete('/result/delete/{id}', [AdminController::class, 'deleteResult'])->name('admin.result.delete');
+// একাধিক রেজিস্ট্রেশন একসাথে ডিলিট (Bulk Action)
+Route::delete('/registrations/bulk-delete', [AdminController::class, 'bulkDeleteRegistrations'])
+    ->name('admin.registrations.bulkDelete');

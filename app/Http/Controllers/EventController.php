@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf; // ফাইল এর উপরে এটি ইমপোর্ট করুন
-
 class EventController extends Controller
 {
     public function index()
@@ -259,8 +258,11 @@ class EventController extends Controller
 
         $totalRegistered = Registration::where('event_id', $event->id)->whereIn('status', ['pre-registered', 'selected', 'verified'])->count();
 
+
+        $totalSlots = DB::table('university_slots')->sum('max_slots');
+
         // compact-এ 'team' ভেরিয়েবলটি যুক্ত করুন
-        return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered', 'judges', 'team'));
+        return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered', 'judges', 'team', 'totalSlots'));
     }
 
     public function showFinalRegForm($team_id)

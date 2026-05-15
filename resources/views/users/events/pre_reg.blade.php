@@ -7,6 +7,14 @@
             {{-- ইভেন্ট হেডার --}}
             <div class="text-center mb-10">
                 <h1 class="text-4xl font-black text-white uppercase">{{ $event->name }}</h1>
+                {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
+                <button onclick="window.history.back()"
+                    class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                    <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                    <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                        Back to previous
+                    </span>
+                </button>
                 <p class="text-cyan-400 tracking-widest mt-1 text-sm italic">Registration Status & List</p>
             </div>
 

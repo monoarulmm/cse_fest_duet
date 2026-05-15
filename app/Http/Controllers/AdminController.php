@@ -25,7 +25,13 @@ class AdminController extends Controller
 {
 
 
+    public function exportIUPCTeams()
+    {
+        // ফাইলের নামে স্পষ্ট করে IUPC উল্লেখ করা হলো
+        $fileName = 'IUPC_Registration_Slot_Entry_' . date('d_M_Y') . '.xlsx';
 
+        return Excel::download(new TeamsExport, $fileName);
+    }
 
     public function downloadExcel($eventId)
     {
@@ -65,17 +71,12 @@ class AdminController extends Controller
 
     public function dashboard(Request $request)
     {
-        // ১. সব ইভেন্ট নিয়ে আসা (ট্যাব দেখানোর জন্য)
         $events = Event::all();
-
-        // ২. বর্তমানে কোন ইভেন্ট দেখা হচ্ছে সেটি নির্ধারণ করা
         $selectedEventId = $request->get('event_id', $events->first()?->id);
         $selectedEvent = Event::find($selectedEventId);
 
-        // ৩. কুয়েরি শুরু করা (শুধুমাত্র সিলেক্টেড ইভেন্টের ডাটা)
         $query = Registration::where('event_id', $selectedEventId);
 
-        // ৪. সার্চ ফিল্টার
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
@@ -85,26 +86,27 @@ class AdminController extends Controller
             });
         }
 
-        // ৫. ডাটা নিয়ে আসা (Pagination সহ)
         $teams = $query->latest()->paginate(20)->appends([
             'event_id' => $selectedEventId,
             'search' => $request->search
         ]);
 
-        // ৬. স্ট্যাটিস্টিকস
         $stats = Registration::where('event_id', $selectedEventId)
             ->select('university_name', \DB::raw('count(*) as total'))
             ->groupBy('university_name')
             ->orderBy('total', 'desc')
             ->get();
 
-        // --- নতুন অংশ: কুপন ডাটা হ্যান্ডলিং ---
-        // যদি সিলেক্টেড ইভেন্ট IUPC হয়, তবে কুপন নিয়ে আসবে, নাহলে খালি কালেকশন পাঠাবে
+        // রেজাল্ট টেবিল থেকে ডাটা আনা (event_name দিয়ে ফিল্টার)
+        $results = \App\Models\Result::where('event_name', $selectedEvent->name)
+            ->latest()
+            ->get();
+
         $coupons = ($selectedEvent && $selectedEvent->slug == 'iupc')
             ? \App\Models\Coupon::where('event_id', $selectedEventId)->latest()->get()
             : collect();
 
-        return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent', 'coupons'));
+        return view('admin.dashboard', compact('teams', 'stats', 'events', 'selectedEvent', 'coupons', 'results'));
     }
     // কুপন পাঠানো এবং ইমেইল হ্যান্ডলিং
 
@@ -314,5 +316,44 @@ class AdminController extends Controller
         Excel::import(new UniversitySlotImport, $request->file('file'));
 
         return back()->with('success', 'University slots uploaded successfully!');
+    }
+
+
+    /**
+     * একাধিক রেজিস্ট্রেশন একসাথে ডিলিট করার জন্য (Bulk Delete)
+     */
+    public function bulkDeleteRegistrations(Request $request)
+    {
+        // ব্লেড ফাইল থেকে পাঠানো 'ids' অ্যারে চেক করা
+        $ids = $request->input('ids');
+
+        if (!$ids || count($ids) == 0) {
+            return back()->with('error', 'কোন রেকর্ড সিলেক্ট করা হয়নি।');
+        }
+
+        try {
+            // একসাথে সব সিলেক্টেড আইডি ডিলিট করা
+            Registration::whereIn('id', $ids)->delete();
+            return back()->with('success', count($ids) . ' টি রেজিস্ট্রেশন সফলভাবে ডিলিট হয়েছে।');
+        } catch (\Exception $e) {
+            return back()->with('error', 'ডিলিট করতে সমস্যা হয়েছে: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * ইমপোর্ট করা সিঙ্গেল রেজাল্ট ডিলিট করার জন্য
+     */
+    public function deleteResult($id)
+    {
+        try {
+            // রেজাল্ট মডেল থেকে আইডি খুঁজে ডিলিট করা
+            // দ্রষ্টব্য: আপনার রেজাল্ট মডেলের নাম EventResult না হলে সেটি পরিবর্তন করুন
+            $result = \App\Models\Result::findOrFail($id);
+            $result->delete();
+
+            return back()->with('success', 'রেজাল্টটি সফলভাবে রিমুভ করা হয়েছে।');
+        } catch (\Exception $e) {
+            return back()->with('error', 'রেজাল্ট ডিলিট করা যায়নি।');
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="min-h-screen bg-[#F8FAFC] dark:bg-slate-900 py-8 px-4 md:px-8 transition-colors duration-300">
+
         <div class="max-w-7xl mx-auto">
 
             {{-- ১. হেডার ও ফিল্টার সেকশন --}}
@@ -21,6 +22,15 @@
                             Total Institutions: <span id="totalCount">{{ $universitySlots->flatten()->count() }}</span>
                         </div>
                     </div>
+                    {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
+                    <button onclick="window.history.back()"
+                        class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                        <i
+                            class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
+                        <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                            Back to previous
+                        </span>
+                    </button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
@@ -239,7 +249,7 @@
                     if (order === 'asc') return a.dataset.name.localeCompare(b.dataset.name);
                     if (order === 'desc') return b.dataset.name.localeCompare(a.dataset.name);
                     if (order === 'quota-high') return parseInt(b.dataset.quota) - parseInt(a.dataset
-                    .quota);
+                        .quota);
                 });
 
                 // সর্টিং এর সময় গ্রুপিং ভেঙে আইটেমগুলো নতুন করে সাজানো

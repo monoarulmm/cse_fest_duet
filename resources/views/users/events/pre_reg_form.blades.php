@@ -38,13 +38,38 @@
             margin-top: 40px;
         }
 
-        /* TomSelect Cyberpunk Style */
+        /* TomSelect Dark Theme Support */
+        .ts-control {
+            background-color: var(--input-bg) !important;
+            border: 1px solid var(--input-border) !important;
+            border-radius: 0.75rem !important;
+            padding: 14px 16px !important;
+            color: white !important;
+        }
+
+        .ts-dropdown {
+            background-color: #0f172a !important;
+            color: white !important;
+            border: 1px solid #22d3ee !important;
+        }
+
+        .ts-dropdown .active {
+            background-color: #22d3ee !important;
+            color: #000 !important;
+        }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
+    <style>
+        /* আপনার সাইবারপাঙ্ক থিমের সাথে মিল রাখার জন্য কাস্টম স্টাইল */
         .ts-control {
             background: rgba(34, 211, 238, 0.05) !important;
             border: 1px solid rgba(34, 211, 238, 0.2) !important;
             color: #e2e8f0 !important;
             border-radius: 12px !important;
-            padding: 14px 16px !important;
+            padding: 10px !important;
         }
 
         .ts-dropdown {
@@ -57,8 +82,11 @@
             background: rgba(34, 211, 238, 0.2) !important;
             color: #22d3ee !important;
         }
+
+        .ts-control input::placeholder {
+            color: rgba(148, 163, 184, 0.5) !important;
+        }
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -89,52 +117,60 @@
                 class="form-glass rounded-[2.5rem] p-8 md:p-14 shadow-2xl">
                 @csrf
                 <input type="hidden" name="event_id" value="{{ $event->id }}">
-
                 <div class="flex justify-between items-center border-b border-cyan-500/20 pb-4 mb-6">
                     <h2 class="heading-font text-2xl text-white uppercase">
                         Registration <span class="text-cyan-400">Details</span>
                     </h2>
-                    <button type="button" onclick="window.history.back()"
+                    <button onclick="window.history.back()"
                         class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
                         <i
                             class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                        <span
-                            class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">Back</span>
+                        <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                            Back to previous
+                        </span>
                     </button>
                 </div>
-
-                {{-- Step 1: Institutional Info --}}
+                {{-- --- Step 1: Institutional & Team Info --- --}}
                 <div class="section-divider !mt-0">
                     <h3 class="heading-font text-lg font-bold uppercase text-white">Institutional Details</h3>
+
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    {{-- ইউনিভার্সিটি সিলেকশন --}}
                     <div class="space-y-2">
-                        <label
-                            class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Institution*</label>
-                        <select name="university_name" id="uni_select" required class="w-full">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">
+                            Institution*
+                        </label>
+                        <select name="university_name" id="uni_select" required class="w-full"
+                            placeholder="Search or type your institution...">
                             <option value=""></option>
                         </select>
                     </div>
 
+                    {{-- নতুন ফিল্ড: Previous Experience --}}
                     <div class="space-y-2">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Previous
-                            Experience?*</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">
+                            Previous Experience in CSE FEST?*
+                        </label>
                         <select name="prev_ex" required class="input-field w-full rounded-xl px-4 py-4">
                             <option value="NO" {{ old('prev_ex') == 'NO' ? 'selected' : '' }}>NO</option>
                             <option value="YES" {{ old('prev_ex') == 'YES' ? 'selected' : '' }}>YES</option>
                         </select>
                     </div>
 
-                    @if (in_array($event->slug, ['iupc', 'project-showcase', 'ai-hackathon']))
+                    {{-- টিম নেম ফিল্ড: শুধুমাত্র IUPC এবং Project Showcase এর জন্য দেখাবে --}}
+                    {{-- অন্য সব ইভেন্ট (ICT Olympiad, AI Hackathon ইত্যাদি) এর জন্য এটা হাইড থাকবে --}}
+                    @if (in_array($event->slug, ['iupc', 'project-showcase']))
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Team
                                 Name*</label>
                             <input type="text" name="team_name" value="{{ old('team_name') }}" required
-                                class="input-field w-full rounded-xl px-4 py-4" placeholder="Enter Team Name">
+                                class="input-field w-full rounded-xl px-4 py-4">
                         </div>
                     @endif
 
+                    {{-- Project Showcase এর জন্য অতিরিক্ত ফিল্ডসমূহ --}}
                     @if ($event->slug === 'project-showcase')
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Project
@@ -142,6 +178,19 @@
                             <input type="text" name="project_title" required
                                 class="input-field w-full rounded-xl px-4 py-4">
                         </div>
+
+                        <div class="space-y-2">
+                            <label
+                                class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Domain*</label>
+                            <select name="domain" required class="input-field w-full rounded-xl px-4 py-4">
+                                <option value="">Select Domain</option>
+                                <option value="AI & Data Science">AI & Data Science</option>
+                                <option value="IoT">IoT & Embedded Intelligence</option>
+                                <option value="Software">Software & Digital Platforms</option>
+                                <option value="Smart">Smart Solutions</option>
+                            </select>
+                        </div>
+
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Abstract
                                 (PDF)*</label>
@@ -151,13 +200,13 @@
                     @endif
                 </div>
 
-                {{-- Step 2: Coach Info (IUPC Only) --}}
+                {{-- --- Step 2: Coach Info (Only for IUPC) --- --}}
                 @if ($event->slug === 'iupc')
                     <div class="section-divider">
                         <h3 class="heading-font text-lg font-bold uppercase text-white">Coach Details</h3>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                        <input type="text" name="coach_name" required placeholder="Coach Name"
+                        <input type="text" name="coach_name" required placeholder="Coach Full Name"
                             class="input-field rounded-xl px-4 py-4">
                         <input type="email" name="coach_email" required placeholder="Coach Email"
                             class="input-field rounded-xl px-4 py-4">
@@ -166,26 +215,27 @@
                         <input type="text" name="coach_designation" required placeholder="Designation"
                             class="input-field rounded-xl px-4 py-4">
                         <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4">
-                            <option value="">T-Shirt Size</option>
+                            <option value="">Coach T-Shirt Size</option>
                             <option value="M">M</option>
                             <option value="L">L</option>
                             <option value="XL">XL</option>
                             <option value="XXL">XXL</option>
+                            <option value="XXXL">XXXL</option>
                         </select>
                     </div>
                 @endif
 
-                {{-- Step 3: Participant/Member Info --}}
+                {{-- --- Step 3: Participant Details --- --}}
                 @php
                     $slug = $event->slug;
-                    // AI Hackathon কে এখানে লিস্টে যুক্ত করা হয়েছে
-                    $teamEvents = ['iupc', 'project-showcase', 'ai-hackathon'];
-                    $isTeamEvent = in_array($slug, $teamEvents);
+                    $isOlympiad = $slug === 'ict-olympiad';
 
-                    // ICT Olympiad এ ১ জন, বাকি টিম ইভেন্টে ৩ জন
-                    $maxMembers = $isTeamEvent ? 3 : 1;
-                    // মিনিমাম কতজন প্রয়োজন
-                    $minRequired = $slug === 'iupc' || $slug === 'ai-hackathon' ? 2 : 1;
+                    // চেক করা হচ্ছে এটা IUPC, ICT Olympiad বা Project Showcase কি না
+                    $isSpecialEvent = in_array($slug, ['iupc', 'ict-olympiad', 'project-showcase']);
+
+                    // যদি স্পেশাল ইভেন্ট না হয়, তবে মেম্বার সংখ্যা ১ হবে
+                    $maxMembers = $isSpecialEvent ? ($isOlympiad ? 1 : 3) : 1;
+                    $minRequired = $isSpecialEvent ? ($isOlympiad ? 1 : 2) : 1;
                 @endphp
 
                 @for ($i = 1; $i <= $maxMembers; $i++)
@@ -198,46 +248,58 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {{-- ১. নাম --}}
                             <input type="text" name="m{{ $i }}_name"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Full Name"
                                 class="input-field rounded-xl px-4 py-4">
 
+                            {{-- ২. ইমেইল --}}
                             <input type="email" name="m{{ $i }}_email"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Email"
                                 class="input-field rounded-xl px-4 py-4">
 
+                            {{-- ৩. ফোন --}}
                             <input type="text" name="m{{ $i }}_phone"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Phone"
                                 class="input-field rounded-xl px-4 py-4">
 
+                            {{-- ৪. স্পেশাল ফিল্ড অথবা স্টুডেন্ট আইডি --}}
                             @if ($slug === 'iupc')
-                                <input type="text" name="m{{ $i }}_cf_handle"
-                                    {{ $i <= $minRequired ? 'required' : '' }} placeholder="Codeforces Handle"
-                                    class="input-field rounded-xl px-4 py-4">
+                                <input type="text" name="m{{ $i }}_cf_handle" required
+                                    placeholder="Codeforces Handle" class="input-field rounded-xl px-4 py-4">
                             @elseif ($slug === 'ai-hackathon')
-                                <input type="text" name="m{{ $i }}_cf_handle"
-                                    {{ $i <= $minRequired ? 'required' : '' }} placeholder="Kaggle Link"
-                                    class="input-field rounded-xl px-4 py-4">
+                                <input type="text" name="m{{ $i }}_cf_handle" required
+                                    placeholder="Kaggle Account Link" class="input-field rounded-xl px-4 py-4">
                             @else
+                                {{-- অন্য সব ইভেন্টের জন্য স্টুডেন্ট আইডি/রোল --}}
                                 <input type="text" name="student_id" required placeholder="Student ID/Roll"
                                     class="input-field rounded-xl px-4 py-4">
                             @endif
 
-                            <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
-                                class="input-field rounded-xl px-4 py-4">
-                                <option value="">T-Shirt Size</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                            </select>
+                            {{-- টি-শার্ট ফিল্ড: শুধুমাত্র স্পেশাল ইভেন্টগুলোর জন্য দেখানো হবে --}}
+                            @if ($isSpecialEvent)
+                                <div class="md:col-span-2 lg:col-span-1">
+                                    <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
+                                        class="input-field w-full rounded-xl px-4 py-4">
+                                        <option value="">T-Shirt Size</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                        <option value="XXXL">XXXL</option>
+                                    </select>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endfor
 
+                {{-- --- Submit Button --- --}}
+                {{-- Submit Button লজিক --}}
                 <div class="mt-12">
                     <button type="submit"
                         class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-6 rounded-2xl transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.4)] uppercase tracking-[0.2em] text-lg">
+                        {{-- ICT Olympiad বা অন্য সিঙ্গেল ইভেন্ট হলে 'Proceed to Payment' দেখাবে --}}
                         {{ in_array($event->slug, ['ict-olympiad']) ? 'Proceed to Payment' : 'Submit Registration' }}
                     </button>
                 </div>
@@ -245,30 +307,46 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
+
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Tom Select ইনিশিয়ালাইজ করা
             new TomSelect("#uni_select", {
                 valueField: 'name',
                 labelField: 'name',
                 searchField: 'name',
-                create: true,
-                placeholder: "Search University...",
+                create: true, // ইউজার লিস্টে না থাকলে নিজে টাইপ করতে পারবে
+                placeholder: "Search University or Polytechnic...",
                 load: function(query, callback) {
-                    fetch('/data/universities.json')
+                    // আপনার JSON ফাইল থেকে ডেটা ফেচ করা
+                    var url = '/data/universities.json';
+                    fetch(url)
                         .then(response => response.json())
                         .then(json => {
-                            let data = json.map(item => ({
-                                name: item
-                            }));
+                            // JSON ডেটাকে Tom Select এর ফরম্যাটে ম্যাপ করা
+                            let data = json.map(item => {
+                                return {
+                                    name: item
+                                };
+                            });
                             callback(data);
-                        }).catch(() => callback());
+                        }).catch(() => {
+                            callback();
+                        });
                 },
+                // অপশনাল: ড্রপডাউন রেন্ডারিং স্টাইল
                 render: {
-                    option: (item, escape) =>
-                        `<div class="py-2 px-3 uppercase text-[11px] tracking-wider font-bold">${escape(item.name)}</div>`,
-                    no_results: (data, escape) =>
-                        `<div class="no-results py-2 px-3 text-red-400 text-[10px]">Press Enter to add "${escape(data.query)}"</div>`
+                    option: function(item, escape) {
+                        return `<div class="py-2 px-3 uppercase text-[11px] tracking-wider font-bold">
+                            ${escape(item.name)}
+                        </div>`;
+                    },
+                    no_results: function(data, escape) {
+                        return `<div class="no-results py-2 px-3 text-red-400 text-[10px]">No matches found. Press Enter to add "${escape(data.query)}"</div>`;
+                    }
                 }
             });
         });

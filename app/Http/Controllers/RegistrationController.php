@@ -26,6 +26,7 @@ class RegistrationController extends Controller
         return view('users.events.pre_reg_form', compact('event'));
     }
 
+
     public function store(Request $request)
     {
         // ১. কমন ভ্যালিডেশন রুলস
@@ -43,18 +44,44 @@ class RegistrationController extends Controller
         $eventSlug = $event->slug;
         $eventRules = [];
 
-        // ২. ইভেন্ট অনুযায়ী ডাইনামিক ভ্যালিডেশন (আগের মতোই)
+        // ২. ইভেন্ট অনুযায়ী ডাইনামিক ভ্যালিডেশন
         if ($eventSlug === 'ict-olympiad') {
-            $eventRules = ['student_id' => 'required|string|max:50'];
+            $eventRules = [
+                'student_id' => 'required|string|max:50'
+            ];
         } elseif ($eventSlug === 'iupc') {
             $eventRules = [
-                'team_name' => 'required|unique:registrations,team_name|max:255',
-                // ... বাকি রুলস
+                'team_name'         => 'required|unique:registrations,team_name|max:255',
+                'coach_name'        => 'required|string',
+                'coach_email'       => 'required|email',
+                'coach_phone'       => 'required|string',
+                'coach_designation' => 'required|string',
+                'coach_tshirt'      => 'required|string',
+                'm1_cf_handle'      => 'required|string',
+                'm2_name'           => 'required|string',
+                'm2_email'          => 'required|email',
+                'm2_phone'          => 'required|string',
+                'm2_tshirt'         => 'required|string',
+                'm2_cf_handle'      => 'required|string',
+                'm3_name'           => 'nullable|string',
+                'm3_email'          => 'nullable|email',
+                'm3_phone'          => 'nullable|string',
+                'm3_tshirt'         => 'nullable|string',
+                'm3_cf_handle'      => 'nullable|string',
             ];
         } elseif ($eventSlug === 'project-showcase' || $eventSlug === 'ai-hackathon') {
             $eventRules = [
-                'team_name' => 'required|unique:registrations,team_name|max:255',
-                // ... বাকি রুলস
+                'team_name'     => 'required|unique:registrations,team_name|max:255',
+                'project_title' => $eventSlug === 'project-showcase' ? 'required|string' : 'nullable',
+                'abstract_file' => $eventSlug === 'project-showcase' ? 'required|mimes:pdf|max:3072' : 'nullable',
+                'm2_name'       => 'required|string',
+                'm2_email'      => 'required|email',
+                'm2_phone'      => 'required|string',
+                'm2_tshirt'     => 'required|string',
+                'm3_name'       => 'nullable|string',
+                'm3_email'      => 'nullable|email',
+                'm3_phone'      => 'nullable|string',
+                'm3_tshirt'     => 'nullable|string',
             ];
         }
 
@@ -66,39 +93,54 @@ class RegistrationController extends Controller
                 $validatedData['university_name'] = $request->other_university;
             }
 
-            // ৪. টিম আইডি জেনারেশন (ডাটাবেসে সেভ করার আগেই এটি করতে হবে)
+            // ৪. ফাইল আপলোড হ্যান্ডলিং (Project Showcase এর জন্য)
+            if ($request->hasFile('abstract_file')) {
+                $path = $request->file('abstract_file')->store('abstracts', 'public');
+                $validatedData['abstract_file'] = $path;
+            }
+
+            // ৫. টিম আইডি জেনারেশন (টিম ইভেন্টগুলোর জন্য)
             $teamEvents = ['iupc', 'project-showcase', 'ai-hackathon'];
             if (in_array($eventSlug, $teamEvents)) {
-                $prefix = strtoupper(str_replace('-', '', $eventSlug));
-                $prefix = substr($prefix, 0, 4);
-
+                $prefix = strtoupper(substr(str_replace('-', '', $eventSlug), 0, 4));
                 do {
                     $teamId = $prefix . '-' . rand(1000, 9999);
                 } while (\App\Models\Registration::where('team_id', $teamId)->exists());
 
-                // গুরুত্বপূর্ণ: ডাটা সেভ করার আগেই অ্যারেতে টিম আইডি ঢুকিয়ে দিন
                 $validatedData['team_id'] = $teamId;
-            } else {
-                $validatedData['team_id'] = null;
             }
 
-            // ৫. এবার ডাটা সেভ করুন (এখন $validatedData তে team_id আছে)
+            // ৬. স্ট্যাটাস এবং ইভেন্ট আইডি সেট করা
+            $validatedData['status'] = 'pre-registered';
+            $validatedData['event_id'] = $event->id;
+
+            // ৭. ডাটাবেসে সেভ করা
             $registration = \App\Models\Registration::create($validatedData);
-            // ৬. যদি ICT Olympiad হয়, তবে সরাসরি পেমেন্ট মেথড কল করুন
-            if ($eventSlug === 'ict-olympiad') {
-                return $this->makePayment($registration->id);
-            }
-            // ৬. সাকসেস মেসেজ
-            $msg = 'Registration submitted for ' . $event->title;
-            if ($registration->team_id) {
-                $msg .= '. Your Team ID: ' . $registration->team_id;
+
+            // ৮. কন্ডিশনাল রিডাইরেক্ট
+            // ক্যাটাগরি ১: সরাসরি সাকসেস (IUPC, AI, Project Showcase)
+            if (in_array($eventSlug, $teamEvents)) {
+                $msg = 'Registration submitted successfully for ' . $event->title;
+                if ($registration->team_id) {
+                    $msg .= '. Your Team ID: ' . $registration->team_id;
+                }
+                return redirect()->back()->with('success', $msg);
             }
 
-            return redirect()->back()->with('success', $msg);
+            // ক্যাটাগরি ২: পেমেন্টে যাবে (ICT Olympiad এবং অন্যান্য)
+            return $this->makePayment($registration->id);
         } catch (\Exception $e) {
             return back()->with('error', 'Something went wrong: ' . $e->getMessage())->withInput();
         }
     }
+
+
+
+
+
+
+
+
     public function makePayment($registration_id)
     {
         $registration = Registration::with('event')->findOrFail($registration_id);
@@ -172,5 +214,16 @@ class RegistrationController extends Controller
         } catch (Exception $e) {
             return redirect()->route('home')->with('error', 'ভেরিফিকেশন এরর: ' . $e->getMessage());
         }
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        // পেমেন্ট গেটওয়ে থেকে ট্রানজেকশন ভেরিফাই করার পর
+        $reg = \App\Models\Registration::where('id', $request->reg_id)->first();
+        if ($reg) {
+            $reg->status = 'paid'; // বা 'registered'
+            $reg->save();
+        }
+        return redirect('/')->with('success', 'Payment Received & Registration Confirmed!');
     }
 }
