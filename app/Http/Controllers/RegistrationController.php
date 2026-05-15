@@ -200,19 +200,22 @@ class RegistrationController extends Controller
 
                     // ২. রেজিস্ট্রেশন স্ট্যাটাস আপডেট
                     $registration->update([
-                        'transaction_id' => $data->bank_trx_id,
+                        'transaction_id' => $registration->id,
                         'payment_status' => 'paid',
                         'status'         => 'verified'
                     ]);
-
-                    // Success Invoice with registration and transaction data
-                    return view('invoice', [
-                        'registration' => $registration,
-                        'transaction' => $transaction,
-                        'payment_status' => 'success',
-                        'message' => 'আপনার পেমেন্ট সফল হয়েছে!'
-                    ]);
                 }
+
+                $transaction=Transaction::where('id', $registration->transaction_id)->first();
+
+                //dd($transaction);
+                // Success Invoice with registration and transaction data
+                return view('invoice', [
+                    'registration' => $registration,
+                    'transaction' => $transaction,
+                    'payment_status' => 'success',
+                    'message' => 'আপনার পেমেন্ট সফল হয়েছে!'
+                ]);
             }
 
             // Payment Failed - Get registration info if exists
