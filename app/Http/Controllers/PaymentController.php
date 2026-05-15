@@ -5,58 +5,84 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Registration;
 use App\Models\Transaction;
-use App\Models\Coupon;
+use Exception;
 
 use ShurjopayPlugin\Shurjopay;
 use ShurjopayPlugin\PaymentRequest;
 
 class PaymentController extends Controller
 {
-
-
     protected $shurjopay;
 
     public function __construct(Shurjopay $shurjopay)
     {
-        // লারাভেল সার্ভিস কন্টেইনার স্বয়ংক্রিয়ভাবে ইনজেক্ট করবে
         $this->shurjopay = $shurjopay;
     }
 
+
+
+
+
+
+    // ─────────────────────────────────────────────
+    // 1. IUPC — form update + pay
+    // ─────────────────────────────────────────────
     public function iupc_updateAndPay(Request $request)
     {
-        $team = Registration::with('event')->findOrFail($request->team_id);
+        $team  = Registration::with('event')->findOrFail($request->team_id);
         $event = $team->event;
 
-        // ১. ভ্যালিডেশন
-        if ($event->slug == 'iupc') {
-            $request->validate([
-                'coach_name' => 'required|string',
-                'm1_name'    => 'required|string',
-                'm1_phone'   => 'required|digits:11',
-                'm1_email'   => 'required|email',
-            ]);
+        $request->validate([
+            'coupon_code'  => 'required|string',
+            'coach_name'   => 'required|string',
+            'm1_name'      => 'required|string',
+            'm1_phone'     => 'required|digits:11',
+            'm1_email'     => 'required|email',
+        ]);
 
-            $team->update($request->except(['_token', 'team_id', 'amount']));
+        // ✅ Coupon verify
+        $coupon = \App\Models\Coupon::where('code', $request->coupon_code)
+            ->where('event_id', $event->id)
+            ->where('is_used', false)
+            ->first();
+
+        if (!$coupon) {
+            return back()->with('error', 'Invalid or already used coupon code!');
         }
 
-        // ২. পেমেন্ট রিকোয়েস্ট
+        if (strtolower($coupon->university) !== strtolower($team->university_name)) {
+            return back()->with('error', 'This coupon does not belong to your university!');
+        }
+
+        $team->update($request->except(['_token', 'team_id', 'amount', 'coupon_code']));
+
+        if ($team->payment_status === 'paid') {
+            return redirect()->route('event.dashboard', 'iupc')
+                ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
+        }
+
         try {
-            // ইভেন্ট টেবিল থেকে অটোমেটিক ফি নেওয়া হচ্ছে
-            $registration_fee = $event->reg_fee;
+            $order_id = 'IUPC-' . uniqid();
 
-            // একটি ইউনিক অর্ডার আইডি তৈরি (image_bdd263.png এ যেমন দেখা যাচ্ছে)
-            $order_id = strtoupper($event->slug) . "-" . uniqid();
-            $team->update(['order_id' => $order_id]);
+            // ✅ coupon_id save করো team এ — callback এ কাজে লাগবে
+            $team->update([
+                'order_id'  => $order_id,
+                'coupon_id' => $coupon->id, // registrations table এ coupon_id column লাগবে
+            ]);
 
-            $paymentRequest = new PaymentRequest();
-            $paymentRequest->currency = 'BDT';
-            $paymentRequest->amount = $registration_fee;
-            $paymentRequest->orderId = $order_id;
-            $paymentRequest->customerName = $team->team_name ?? $team->m1_name;
-            $paymentRequest->customerPhone = $team->m1_phone;
-            $paymentRequest->customerEmail = $team->m1_email;
+            $paymentRequest                  = new PaymentRequest();
+            $paymentRequest->currency        = 'BDT';
+            $paymentRequest->amount          = $event->reg_fee;
+            $paymentRequest->orderId         = $order_id;
+            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name;
+            $paymentRequest->customerPhone   = $team->m1_phone;
+            $paymentRequest->customerEmail   = $team->m1_email;
             $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
-            $paymentRequest->customerCity = 'Gazipur';
+            $paymentRequest->customerCity    = 'Gazipur';
+            $paymentRequest->value1          = $team->id;
+            $paymentRequest->value2          = $coupon->id; // ← callback এ is_used করতে লাগবে
+
+            // ✅ এখানে is_used করা হচ্ছে না, callback এ হবে
 
             return $this->shurjopay->makePayment($paymentRequest);
         } catch (Exception $e) {
@@ -64,105 +90,216 @@ class PaymentController extends Controller
         }
     }
 
-    //ai hacton and projectsh
+    // ─────────────────────────────────────────────
+    // 2. Project-Showcase / AI-Hackathon — direct pay
+    // ─────────────────────────────────────────────
     public function finalRegDirectPay($slug, $id)
     {
-        $team = Registration::with('event')->where('id', $id)->firstOrFail();
+        $team  = Registration::with('event')->findOrFail($id);
         $event = $team->event;
 
         if ($team->payment_status === 'paid') {
-            return redirect()->route('event.dashboard', $slug)->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
+            return redirect()->route('event.dashboard', $slug)
+                ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
         }
 
         try {
-            // ১. ফোন নম্বর ক্লিন করা (ShurjoPay সাধারণত ১১ ডিজিট নম্বর পছন্দ করে)
-            // নম্বর থেকে স্পেস বা অন্য ক্যারেক্টার বাদ দেওয়া
             $phone = preg_replace('/[^0-9]/', '', $team->m1_phone);
-
-            // যদি নম্বরটি ৮৮০ দিয়ে শুরু হয় তবে ৮৮ বাদ দিয়ে ১১ ডিজিট করা
             if (strlen($phone) > 11 && str_starts_with($phone, '88')) {
                 $phone = substr($phone, 2);
             }
 
-            // ২. রিকোয়েস্ট তৈরি
-            $paymentRequest = new PaymentRequest();
-            $paymentRequest->currency = 'BDT';
-            $paymentRequest->amount = $event->reg_fee;
-
-            $order_id = strtoupper($slug) . "-FIN-" . $team->id . "-" . uniqid();
+            $order_id = strtoupper($slug) . '-FIN-' . $team->id . '-' . uniqid();
             $team->update(['order_id' => $order_id]);
-            $paymentRequest->orderId = $order_id;
 
-            $paymentRequest->customerName = $team->team_name ?? $team->m1_name;
-            $paymentRequest->customerPhone = $phone; // পরিশোধিত ফোন নম্বর
-            $paymentRequest->customerEmail = $team->m1_email;
+            $paymentRequest                  = new PaymentRequest();
+            $paymentRequest->currency        = 'BDT';
+            $paymentRequest->amount          = $event->reg_fee;
+            $paymentRequest->orderId         = $order_id;
+            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name;
+            $paymentRequest->customerPhone   = $phone;
+            $paymentRequest->customerEmail   = $team->m1_email;
             $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
-            $paymentRequest->customerCity = 'Gazipur';
-            $paymentRequest->value1 = $team->id;
+            $paymentRequest->customerCity    = 'Gazipur';
+            $paymentRequest->value1          = $team->id;   // ← callback এ লাগবে
 
             return $this->shurjopay->makePayment($paymentRequest);
         } catch (Exception $e) {
-            // image_bceabc.png এর মতো "getMessage() on null" এরর এড়াতে নিরাপদ ক্যাচিং
-            $errorMessage = method_exists($e, 'getMessage') ? $e->getMessage() : 'পেমেন্ট গেটওয়েতে টেকনিক্যাল সমস্যা হয়েছে।';
-
-            return back()->with('error', 'পেমেন্ট এরর: ' . $errorMessage);
+            $msg = $e->getMessage() ?: 'পেমেন্ট গেটওয়েতে টেকনিক্যাল সমস্যা হয়েছে।';
+            return back()->with('error', 'পেমেন্ট এরর: ' . $msg);
         }
     }
 
+    // ─────────────────────────────────────────────
+    // 3. ICT-Olympiad & অন্যান্য — single registration pay
+    // ─────────────────────────────────────────────
+    public function makePayment($registration_id)
+    {
+        $registration = Registration::with('event')->findOrFail($registration_id);
 
-    public function paymentCallback(Request $request)
+        if ($registration->payment_status === 'paid') {
+            return redirect()->route('event.dashboard', $registration->event->slug)
+                ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
+        }
+
+        try {
+            $order_id = 'ICT-' . uniqid();
+            $registration->update(['order_id' => $order_id]);
+
+            $paymentRequest                  = new PaymentRequest();
+            $paymentRequest->currency        = 'BDT';
+            $paymentRequest->amount          = $registration->event->reg_fee;
+            $paymentRequest->orderId         = $order_id;
+            $paymentRequest->customerName    = $registration->m1_name;
+            $paymentRequest->customerPhone   = $registration->m1_phone;
+            $paymentRequest->customerEmail   = $registration->m1_email;
+            $paymentRequest->customerAddress = 'DUET, Gazipur';
+            $paymentRequest->customerCity    = 'Gazipur';
+            $paymentRequest->value1          = $registration->id;  // ← callback এ লাগবে
+
+            return $this->shurjopay->makePayment($paymentRequest);
+        } catch (Exception $e) {
+            return back()->with('error', 'Payment Gateway Error: ' . $e->getMessage());
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // 4. SINGLE CALLBACK — সব event এর জন্য একটাই
+    //    কিন্তু slug দিয়ে view আলাদা হবে
+    // ─────────────────────────────────────────────
+    public function callback(Request $request)
     {
         $order_id = $request->order_id;
 
         try {
-            $response = $this->shurjopay->verifyPayment($order_id);
+            $verification = $this->shurjopay->verifyPayment($order_id);
+            $data         = $verification[0];
 
-            // ShurjoPay রেসপন্স অবজেক্ট না অ্যারো তা চেক করে ডেটা নেওয়া
-            $data = is_array($response) ? (object)$response[0] : $response;
+            // ─── Payment FAILED / Cancelled ───────────────────
+            if ($data->sp_code !== '1000') {
+                // order_id থেকে registration খোঁজার চেষ্টা
+                $registration = Registration::where('order_id', $order_id)->first();
+                $slug         = optional($registration?->event)->slug ?? 'event';
 
-            // image_bdc3df.png অনুযায়ী sp_code "1000" মানে সফল পেমেন্ট
-            if ($data->sp_code == "1000") {
-
-                // ১. রেজিস্ট্রেশন খুঁজে বের করা (customer_order_id ব্যবহার করে)
-                $team = Registration::where('order_id', $data->customer_order_id)->first();
-
-                if ($team && $team->payment_status !== 'paid') {
-
-                    // ২. অটোমেটিক Participant ID তৈরি (DUET-CSE-1001 স্টাইলে)
-                    $prefix = strtoupper($team->event->slug ?? 'EVENT');
-                    $count = Registration::where('event_id', $team->event_id)
-                        ->where('payment_status', 'paid')
-                        ->count();
-                    $new_participant_id = $prefix . "-" . (1000 + $count + 1);
-
-                    // ৩. Registration টেবিল আপডেট
-                    $team->update([
-                        'payment_status' => 'paid',
-                        'status'         => 'verified',
-                        'participant_id' => $new_participant_id,
-                        'transaction_id' => $data->bank_trx_id, // e.g. 6a055812
-                    ]);
-
-                    // ৪. Transaction টেবিল পূরণ (আপনার মাইগ্রেশন অনুযায়ী)
-                    \App\Models\Transaction::create([
-                        'transaction_id' => $data->bank_trx_id,
-                        'event_id'       => $team->event_id,
-                        'team_id'        => $team->id,
-                        'student_id'     => $team->m1_id ?? null,
-                        'amount'         => $data->amount,        // 1000.0000
-                        'currency'       => $data->currency,      // BDT
-                        'status'         => 'Successful',
-                        'payment_method' => $data->method,        // Nagad
-                    ]);
-
-                    return redirect()->route('event.dashboard', $team->event->slug ?? 'iupc')
-                        ->with('success', 'পেমেন্ট সফল এবং ট্রানজেকশন রেকর্ড করা হয়েছে।');
-                }
+                return view('payment.failed', [
+                    'registration'   => $registration,
+                    'payment_status' => 'failed',
+                    'sp_code'        => $data->sp_code ?? 'N/A',
+                    'message'        => 'পেমেন্ট সফল হয়নি। আবার চেষ্টা করুন।',
+                    'slug'           => $slug,
+                ]);
             }
 
-            return redirect()->route('home')->with('error', 'পেমেন্ট ভেরিফাই করা যায়নি।');
-        } catch (\Exception $e) {
-            return redirect()->route('home')->with('error', 'Error: ' . $e->getMessage());
+            // ─── Payment SUCCESS ──────────────────────────────
+            $registration = Registration::with('event')->where('id', $data->value1)->first();
+
+            if (! $registration) {
+                return view('payment.failed', [
+                    'registration'   => null,
+                    'payment_status' => 'error',
+                    'message'        => 'Registration খুঁজে পাওয়া যায়নি।',
+                    'slug'           => 'event',
+                ]);
+            }
+
+            $slug = $registration->event->slug;
+
+            // Already paid হলে duplicate invoice দেওয়া
+            if ($registration->payment_status === 'paid') {
+                $transaction = Transaction::where('team_id', $registration->id)->latest()->first();
+                return $this->invoiceView($slug, $registration, $transaction, 'already_paid');
+            }
+
+            // ─── Participant ID generate ──────────────────────
+            $prefix      = $this->getParticipantPrefix($slug);
+            $last        = Registration::whereNotNull('participant_id')
+                ->where('participant_id', 'like', $prefix . '%')
+                ->orderBy('id', 'desc')
+                ->first();
+
+            if ($last) {
+                $number = (int) str_replace($prefix, '', $last->participant_id);
+                $newId  = $prefix . str_pad($number + 1, 2, '0', STR_PAD_LEFT);
+            } else {
+                $newId = $prefix . '01';
+            }
+
+            // ─── Transaction save ─────────────────────────────
+            $transaction = Transaction::create([
+                'transaction_id' => $data->bank_trx_id,
+                'event_id'       => $registration->event_id,
+                'team_id'        => $registration->id,
+                'student_id'     => $registration->student_id ?? null,
+                'amount'         => $data->amount,
+                'currency'       => $data->currency,
+                'status'         => 'Successful',
+                'payment_method' => $data->method,
+            ]);
+
+            // ─── Registration update ──────────────────────────
+            $registration->update([
+                'participant_id' => $newId,
+                'transaction_id' => $data->bank_trx_id,
+                'payment_status' => 'paid',
+                'status'         => 'verified',
+            ]);
+
+            return $this->invoiceView($slug, $registration, $transaction, 'success');
+        } catch (Exception $e) {
+            return view('payment.failed', [
+                'registration'   => null,
+                'payment_status' => 'error',
+                'message'        => 'সিস্টেম এরর: ' . $e->getMessage(),
+                'slug'           => 'event',
+            ]);
         }
+    }
+
+    // ─────────────────────────────────────────────
+    // Helper: slug → participant ID prefix
+    // ─────────────────────────────────────────────
+    private function getParticipantPrefix(string $slug): string
+    {
+        return match ($slug) {
+            'iupc'              => 'IUPC',
+            'project-showcase'  => 'PS',
+            'ai-hackathon'      => 'AI',
+            'ict-olympiad'      => 'ICT',
+            default             => strtoupper(str_replace(['-', '_'], '', $slug)),
+        };
+    }
+
+    // ─────────────────────────────────────────────
+    // Helper: slug → invoice view
+    // প্রতিটি event এর জন্য আলাদা blade view থাকতে পারে,
+    // না থাকলে generic invoice ব্যবহার হবে।
+    // ─────────────────────────────────────────────
+    private function invoiceView(string $slug, $registration, $transaction, string $status)
+    {
+        $viewMap = [
+            'iupc'             => 'invoices.iupc',
+            'project-showcase' => 'invoices.project',
+            'ai-hackathon'     => 'invoices.hackathon',
+            'ict-olympiad'     => 'invoices.ict',
+        ];
+
+        // event-specific view থাকলে সেটা, না হলে generic
+        $view = isset($viewMap[$slug]) && view()->exists($viewMap[$slug])
+            ? $viewMap[$slug]
+            : 'invoices.generic';
+
+        $message = match ($status) {
+            'success'      => 'আপনার পেমেন্ট সফল হয়েছে!',
+            'already_paid' => 'এই রেজিস্ট্রেশনের পেমেন্ট আগেই সম্পন্ন হয়েছে।',
+            default        => '',
+        };
+
+        return view($view, [
+            'registration'   => $registration->fresh(),  // updated data
+            'transaction'    => $transaction,
+            'payment_status' => $status,
+            'message'        => $message,
+            'slug'           => $slug,
+        ]);
     }
 }

@@ -10,12 +10,16 @@ class UniversitySlotImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // একই নামের ইউনিভার্সিটি থাকলে তা আপডেট করবে, না থাকলে নতুন তৈরি করবে
+        // যদি university_name খালি থাকে তবে স্কিপ করবে
+        if (!isset($row['university_name']) || $row['university_name'] == null) {
+            return null;
+        }
+
         return UniversitySlot::updateOrCreate(
-            ['university_name' => $row['university_name']],
+            ['university_name' => trim($row['university_name'])], // স্পেস ক্লিন করা
             [
-                'category'   => $row['category'],
-                'max_slots'  => $row['max_slots'],
+                'category'  => $row['category'] ?? 'School/College', // ডিফল্ট ভ্যালু
+                'max_slots' => (int) ($row['max_slots'] ?? 0), // ইন্টিজার নিশ্চিত করা
             ]
         );
     }

@@ -19,12 +19,14 @@ return new class extends Migration
             $table->string('university_name');
             $table->string('team_name')->nullable(); // ICT Olympiad এ টিম নাম না থাকলে nullable
             $table->string('team_id')->nullable(); // ICT Olympiad এ টিম নাম না থাকলে nullable
+            $table->enum('team_person', ['Mail', 'Femail'])->default('Mail');
 
             // Member 1 (Lead/Solo)
             $table->string('m1_name'); // অন্তত একজনের নাম লাগবেই
             $table->string('m1_email');
             $table->string('m1_phone');
             $table->string('m1_tshirt')->nullable();
+            $table->string('m1_prev_ex')->nullable();
             $table->string('student_id')->nullable(); // ICT Olympiad এর জন্য মেইনলি
 
             // Member 2 (Optional for Solo events)
@@ -32,12 +34,16 @@ return new class extends Migration
             $table->string('m2_email')->nullable();
             $table->string('m2_phone')->nullable();
             $table->string('m2_tshirt')->nullable();
+            $table->string('m2_prev_ex')->nullable();
+
 
             // Member 3 (Optional)
             $table->string('m3_name')->nullable();
             $table->string('m3_email')->nullable();
             $table->string('m3_phone')->nullable();
             $table->string('m3_tshirt')->nullable();
+            $table->string('m3_prev_ex')->nullable();
+
 
             // --- IUPC SPECIFIC ---
             $table->string('coach_name')->nullable();
@@ -48,13 +54,13 @@ return new class extends Migration
             $table->string('m1_cf_handle')->nullable();
             $table->string('m2_cf_handle')->nullable();
             $table->string('m3_cf_handle')->nullable();
-            $table->enum('prev_ex', ['YES', 'NO'])->default('NO');
             // --- PROJECT SHOWCASE SPECIFIC ---
             $table->string('project_title')->nullable(); // Nullable করতে হবে কারণ IUPC তে এটা লাগবে না
             $table->string('domain')->nullable(); // AI, IoT, etc.
             $table->string('abstract_file')->nullable(); // PDF Path
 
             // --- SYSTEM & PAYMENT LOGIC ---
+            $table->string('transaction_id')->nullable();
             $table->string('participant_id')->nullable()->unique();
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
             $table->enum('status', ['pre-registered', 'selected', 'verified', 'rejected'])

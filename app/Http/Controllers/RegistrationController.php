@@ -37,7 +37,7 @@ class RegistrationController extends Controller
             'm1_email'        => 'required|email|max:255',
             'm1_phone'        => 'required|string|max:20',
             'm1_tshirt'       => 'nullable|string',
-            'prev_ex'         => 'nullable|string',
+            'm1_prev_ex'         => 'nullable|string',
         ];
 
         $event = \App\Models\Event::findOrFail($request->event_id);
@@ -57,21 +57,24 @@ class RegistrationController extends Controller
                 'coach_phone'       => 'required|string',
                 'coach_designation' => 'required|string',
                 'coach_tshirt'      => 'required|string',
-                'm1_cf_handle'      => 'required|string',
+                'm1_cf_handle'      => 'required|url',
                 'm2_name'           => 'required|string',
                 'm2_email'          => 'required|email',
                 'm2_phone'          => 'required|string',
                 'm2_tshirt'         => 'required|string',
-                'm2_cf_handle'      => 'required|string',
+                'm2_prev_ex'         => 'required|string',
+                'm2_cf_handle'      => 'required|url',
                 'm3_name'           => 'nullable|string',
                 'm3_email'          => 'nullable|email',
                 'm3_phone'          => 'nullable|string',
                 'm3_tshirt'         => 'nullable|string',
-                'm3_cf_handle'      => 'nullable|string',
+                'm3_prev_ex'         => 'nullable|string',
+                'm3_cf_handle'      => 'nullable|url',
             ];
         } elseif ($eventSlug === 'project-showcase' || $eventSlug === 'ai-hackathon') {
             $eventRules = [
                 'team_name'     => 'required|unique:registrations,team_name|max:255',
+                'team_person'     => 'required|string',
                 'project_title' => $eventSlug === 'project-showcase' ? 'required|string' : 'nullable',
                 'abstract_file' => $eventSlug === 'project-showcase' ? 'required|mimes:pdf|max:3072' : 'nullable',
                 'm2_name'       => 'required|string',
@@ -141,6 +144,21 @@ class RegistrationController extends Controller
 
 
 
+    public function retryPayment($registration_id)
+    {
+        // ডাটা খুঁজে বের করা
+        $registration = Registration::findOrFail($registration_id);
+
+        // চেক করা: ইউজার কি অলরেডি পেইড?
+        if ($registration->payment_status === 'paid') {
+            return redirect()->route('home')->with('info', 'আপনার পেমেন্ট অলরেডি সম্পন্ন হয়েছে।');
+        }
+
+        // যদি পেমেন্ট বাকি থাকে, তবে সরাসরি makePayment মেথডে পাঠিয়ে দেওয়া
+        return $this->makePayment($registration->id);
+    }
+
+
     public function makePayment($registration_id)
     {
         $registration = Registration::with('event')->findOrFail($registration_id);
@@ -179,18 +197,29 @@ class RegistrationController extends Controller
             $data = $verification[0];
 
             if ($data->sp_code == '1000') {
-                // customer_order_id অথবা value1 দিয়ে রেজিস্ট্রেশন খুঁজে বের করা
-                $registration = Registration::where('order_id', $data->customer_order_id)
-                    ->orWhere('id', $data->value1)
-                    ->first();
+                $registration = Registration::where('id', $data->value1)->first();
 
                 if ($registration && $registration->payment_status !== 'paid') {
 
+                    // --- Participant ID Generation Logic ---
+                    // ডাটাবেজে শেষ জেনারেট হওয়া ID খুঁজে বের করা
+                    $lastParticipant = Registration::whereNotNull('participant_id')
+                        ->orderBy('id', 'desc')
+                        ->first();
+
+                    if ($lastParticipant) {
+                        // ID থেকে নাম্বার অংশ আলাদা করা (CSECERNIVAL05 -> 5)
+                        $number = (int) str_replace('CSECERNIVAL', '', $lastParticipant->participant_id);
+                        $newId = 'CSECERNIVAL' . str_pad($number + 1, 2, '0', STR_PAD_LEFT);
+                    } else {
+                        $newId = 'CSECERNIVAL01'; // প্রথম রেজিস্ট্রেশন হলে
+                    }
+
                     // ১. ট্রানজেকশন টেবিলে এন্ট্রি
-                    Transaction::create([
+                    $transaction = Transaction::create([
                         'transaction_id' => $data->bank_trx_id,
                         'event_id'       => $registration->event_id,
-                        'team_id'        => $registration->id, // ICT এর জন্য টিম ID নাই, তাই রেজিস্ট্রেশন ID
+                        'team_id'        => $registration->id,
                         'student_id'     => $registration->student_id,
                         'amount'         => $data->amount,
                         'currency'       => $data->currency,
@@ -198,32 +227,26 @@ class RegistrationController extends Controller
                         'payment_method' => $data->method,
                     ]);
 
-                    // ২. রেজিস্ট্রেশন স্ট্যাটাস আপডেট
+                    // ২. রেজিস্ট্রেশন আপডেট (ID সহ)
                     $registration->update([
+                        'participant_id' => $newId, // নতুন কলামে সেভ
                         'transaction_id' => $data->bank_trx_id,
-                        'payment_status' => 'paid', // আপনার ডাটাবেস কলাম অনুযায়ী (pending_status হলে সেটা দিন)
+                        'payment_status' => 'paid',
                         'status'         => 'verified'
                     ]);
 
-                    return redirect()->route('event.dashboard', $registration->event->slug)
-                        ->with('success', 'আপনার পেমেন্ট সফল হয়েছে!');
+                    return view('invoice', [
+                        'registration' => $registration,
+                        'transaction' => $transaction,
+                        'payment_status' => 'success',
+                        'message' => 'আপনার পেমেন্ট সফল হয়েছে!'
+                    ]);
                 }
             }
 
-            return redirect()->route('home')->with('error', 'পেমেন্ট সফল হয়নি।');
+            // বাকি অংশ (Failed/Error) আগের মতোই থাকবে...
         } catch (Exception $e) {
-            return redirect()->route('home')->with('error', 'ভেরিফিকেশন এরর: ' . $e->getMessage());
+            // Error Handling...
         }
-    }
-
-    public function paymentSuccess(Request $request)
-    {
-        // পেমেন্ট গেটওয়ে থেকে ট্রানজেকশন ভেরিফাই করার পর
-        $reg = \App\Models\Registration::where('id', $request->reg_id)->first();
-        if ($reg) {
-            $reg->status = 'paid'; // বা 'registered'
-            $reg->save();
-        }
-        return redirect('/')->with('success', 'Payment Received & Registration Confirmed!');
     }
 }

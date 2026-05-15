@@ -117,10 +117,11 @@
             </button>
 
         </div>
-        <div class="mb-16 border-l-4 border-cyan-500 pl-6">
-            <h2 class="heading-font text-4xl md:text-6xl font-black uppercase tracking-tighter">
+        <div class="mb-16 border-l-4 border-cyan-500 pl-6 text-center">
+            <h2 class="heading-font text-4xl md:text-6xl font-black uppercase ">
                 Visual <span class="text-cyan-500">Archive</span>
             </h2>
+
 
             <p class="text-slate-500 font-mono text-sm mt-2 tracking-widest">>> ENCRYPTED_MEMORIES_2026.SYS</p>
         </div>

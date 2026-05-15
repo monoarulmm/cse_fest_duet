@@ -29,6 +29,7 @@
                         @if ($registration->team_name)
                             <p class="text-muted text-[10px] uppercase mt-3">Team Name</p>
                             <p class="text-cyan-400 font-bold text-lg">{{ $registration->team_name }}</p>
+                            <p class="text-cyan-400 font-bold text-lg">{{ $registration->team_person }}</p>
                         @endif
 
                         @if ($registration->event->slug === 'project-showcase')
@@ -86,6 +87,8 @@
                                 <p class="text-muted text-[10px]">{{ $registration->{"m{$i}_email"} }}</p>
                                 <p class="text-muted text-[10px]">{{ $registration->{"m{$i}_phone"} }}</p>
                                 <div class="mt-3 flex justify-between items-center border-t border-white/5 pt-2">
+                                    <span class="text-[9px] text-muted uppercase">Prev EX:
+                                        {{ $registration->{"m{$i}_prev_ex"} }}</span>
                                     <span class="text-[9px] text-muted uppercase">Size:
                                         {{ $registration->{"m{$i}_tshirt"} }}</span>
                                     @if ($registration->{"m{$i}_cf_handle"})

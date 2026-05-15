@@ -1,136 +1,194 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="bn">
 
-@section('content')
-    <div class="min-h-screen py-20 px-4 bg-[#0a0f1a]"> <!-- আপনার থিমের ব্যাকগ্রাউন্ড কালার -->
-        <div class="max-w-2xl mx-auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result & Seat Plan | DUET CSE FEST 2026</title>
 
-            <!-- Header Section -->
-            <div class="text-center mb-12">
-                <div class="inline-block px-4 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-4">
-                    <span class="text-[10px] text-cyan-500 font-bold uppercase tracking-[0.2em]">Live Results</span>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+        }
+
+        .cyber-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .print-card {
+                background: white !important;
+                color: black !important;
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .text-cyan-500 {
+                color: #0891b2 !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased text-slate-300">
+
+    <div class="min-h-screen py-10 px-4 flex items-center justify-center relative overflow-hidden">
+
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none">
+        </div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none">
+        </div>
+
+        <div class="max-w-xl w-full z-10">
+
+            <div class="text-center mb-10">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full mb-4">
+                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] cyber-font font-bold text-cyan-500 tracking-widest uppercase">Fest Portal
+                        2026</span>
                 </div>
-                <h1 class="text-5xl font-black text-white uppercase tracking-tighter mb-3">
-                    Event <span class="text-cyan-500">Results</span>
-                </h1>
-                <p class="text-slate-500 text-xs font-medium tracking-[0.3em] uppercase">DUET CSE FEST 2026 • Season II</p>
+                <h1 class="text-4xl font-black text-white italic tracking-tighter uppercase">CSE <span
+                        class="text-cyan-400">Fest</span> Status</h1>
             </div>
 
-            <!-- Main Search Card -->
-            <div class="max-w-xl mx-auto mt-10 animate-in fade-in zoom-in duration-700">
-                <!-- Main Result Card -->
-                <div class="relative group">
-                    <!-- Outer Glow Effect -->
-                    <div
-                        class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000">
-                    </div>
+            <div
+                class="print-card relative bg-[#0d1117] border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden transition-all duration-500 hover:border-cyan-500/30">
 
-                    <div class="relative bg-[#0d1117] border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                        <!-- Top Banner: University & Icon -->
-                        <div class="bg-gradient-to-r from-cyan-500/10 via-transparent to-transparent p-8 pb-4">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span
-                                            class="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span>
-                                        <p class="text-[9px] font-black text-cyan-500 uppercase tracking-[0.3em]">Official
-                                            Result Card</p>
-                                    </div>
-                                    <h2 class="text-white font-black text-xs uppercase tracking-widest opacity-80 mb-1">
-                                        {{ $result->university_name ?? 'Dhaka University of Engineering & Technology' }}
-                                    </h2>
-                                    <h1 class="text-2xl font-black text-white uppercase tracking-tighter">Event <span
-                                            class="text-cyan-500">Outcome</span></h1>
-                                </div>
-                                <div
-                                    class="w-14 h-14 rounded-2xl bg-slate-950/50 border border-white/5 flex items-center justify-center backdrop-blur-md shadow-inner">
-                                    <i class="fa-solid fa-trophy text-cyan-500 text-xl"></i>
-                                </div>
-                            </div>
+                <div class="bg-gradient-to-r from-cyan-500/10 via-transparent p-8 pb-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p
+                                class="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1 leading-none">
+                                Official Digital Pass</p>
+                            <h2 class="text-white text-lg font-black uppercase tracking-tight leading-tight">
+                                {{ $result->university_name ?? 'Dhaka University of Engineering & Technology' }}
+                            </h2>
                         </div>
-
-                        <!-- Content Body -->
-                        <div class="p-8 pt-2 space-y-5">
-                            <!-- Primary Info: Team Name -->
-                            <div
-                                class="bg-slate-950/40 p-6 rounded-[1.5rem] border border-white/5 text-center relative overflow-hidden group">
-                                <div
-                                    class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent">
-                                </div>
-                                <span class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.4em] block mb-2">Team
-                                    / Member Name</span>
-                                <h3
-                                    class="text-white font-black text-xl uppercase tracking-tight group-hover:text-cyan-400 transition-colors">
-                                    {{ $result->team_name ?? 'N/A' }}
-                                </h3>
-                            </div>
-
-                            <!-- Info Grid: Participant ID & Event Name -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div
-                                    class="bg-slate-950/50 p-5 rounded-3xl border border-white/5 transition-transform hover:scale-[1.02]">
-                                    <span
-                                        class="text-[8px] text-slate-500 font-bold uppercase tracking-widest block mb-1">Participant
-                                        ID</span>
-                                    <span
-                                        class="text-cyan-500 font-black text-sm tracking-widest">{{ $result->participant_id }}</span>
-                                </div>
-                                <div
-                                    class="bg-slate-950/50 p-5 rounded-3xl border border-white/5 transition-transform hover:scale-[1.02]">
-                                    <span
-                                        class="text-[8px] text-slate-500 font-bold uppercase tracking-widest block mb-1">Target
-                                        Event</span>
-                                    <span
-                                        class="text-white font-bold text-sm tracking-tight">{{ $result->event_name }}</span>
-                                </div>
-                            </div>
-
-                            <!-- Status Section -->
-                            <div
-                                class="relative p-8 rounded-[2.5rem] bg-slate-950/80 border border-white/5 text-center overflow-hidden shadow-inner">
-                                <div class="absolute -top-10 -left-10 w-24 h-24 bg-cyan-500/5 rounded-full blur-3xl"></div>
-                                <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-blue-500/5 rounded-full blur-3xl">
-                                </div>
-
-                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em] mb-4">Performance
-                                    Status</p>
-
-                                <div
-                                    class="inline-flex items-center gap-4 px-12 py-4 rounded-full bg-cyan-500 text-slate-950 shadow-[0_10px_30px_rgba(6,182,212,0.3)] transform transition hover:scale-105 active:scale-95 duration-300">
-                                    <i class="fa-solid fa-award text-lg"></i>
-                                    <span
-                                        class="font-black uppercase tracking-[0.2em] text-sm italic">{{ $result->result_status }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Footer -->
-                        <div class="px-8 py-5 bg-slate-950/90 border-t border-white/5 flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <div class="flex -space-x-1">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></div>
-                                    <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-50"></div>
-                                </div>
-                                <span
-                                    class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.2em] italic font-mono">Digital
-                                    Certificate Generated by DUET CSE</span>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <button onclick="window.print()"
-                                    class="text-slate-600 hover:text-cyan-500 transition-all transform hover:rotate-12">
-                                    <i class="fa-solid fa-print text-sm"></i>
-                                </button>
-                                <button class="text-slate-600 hover:text-cyan-500 transition-all">
-                                    <i class="fa-solid fa-share-nodes text-sm"></i>
-                                </button>
-                            </div>
+                        <div class="bg-slate-900 border border-white/5 p-3 rounded-2xl shadow-inner">
+                            <i class="fa-solid fa-qrcode text-cyan-500 text-xl"></i>
                         </div>
                     </div>
                 </div>
+
+                <div class="p-8 pt-0">
+
+                    <div class="bg-slate-950/40 border border-white/5 p-6 rounded-3xl mb-6 text-center group">
+                        <span
+                            class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.4em] block mb-2">PARTICIPANT_IDENTITY</span>
+                        <h3
+                            class="text-2xl font-black text-white uppercase tracking-tighter group-hover:text-cyan-400 transition-colors">
+                            {{ $result->team_name ?? ($result->name ?? 'PARTICIPANT NAME') }}
+                        </h3>
+                        <p class="text-cyan-500/60 font-mono text-[10px] mt-2 tracking-widest">ID:
+                            #{{ $result->participant_id ?? '0000-XX' }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5">
+                            <p class="text-[8px] text-slate-600 font-bold uppercase tracking-widest mb-1">Target Event
+                            </p>
+                            <p class="text-white text-[11px] font-black uppercase tracking-tight italic">
+                                {{ $result->event_name ?? 'N/A' }}</p>
+                        </div>
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5">
+                            <p class="text-[8px] text-slate-600 font-bold uppercase tracking-widest mb-1">Status</p>
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                                <p class="text-cyan-400 text-[11px] font-black uppercase tracking-widest">
+                                    {{ $result->result_status ?? 'PENDING' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-white/5 rounded-3xl overflow-hidden shadow-inner">
+                        <div class="bg-white/5 px-5 py-3 border-b border-white/5 flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-cyan-500 text-[10px]"></i>
+                            <span class="text-[9px] text-slate-400 font-black uppercase tracking-widest">Venue Details &
+                                Seat Plan</span>
+                        </div>
+
+                        <div class="p-0">
+                            <table class="w-full text-[11px] uppercase font-bold text-center">
+                                <thead>
+                                    <tr class="text-slate-600 border-b border-white/5">
+                                        <th class="py-4 border-r border-white/5">Lab / Room</th>
+                                        <th class="py-4 border-r border-white/5">Seat / PC</th>
+                                        <th class="py-4">Floor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-white">
+                                        <td class="py-5 border-r border-white/5">{{ $result->room_no ?? 'CSE-101' }}
+                                        </td>
+                                        <td class="py-5 border-r border-white/5 text-cyan-500 cyber-font text-sm">
+                                            {{ $result->seat_no ?? 'PC-00' }}</td>
+                                        <td class="py-5">{{ $result->floor ?? '3rd' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex gap-3 items-start opacity-60">
+                        <i class="fa-solid fa-circle-exclamation text-cyan-500 text-[10px] mt-1"></i>
+                        <p class="text-[8px] text-slate-400 leading-relaxed italic uppercase tracking-wider">
+                            This document is required at the entry point. Participant must carry university ID card
+                            along with this pass.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 p-6 border-t border-white/5 flex items-center justify-between no-print">
+                    <button onclick="window.print()"
+                        class="bg-white hover:bg-cyan-500 text-slate-950 px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-tighter flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-file-pdf"></i> Save Document
+                    </button>
+
+                    <div class="flex gap-2">
+                        <button
+                            class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-all">
+                            <i class="fa-solid fa-share-nodes text-xs"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <!-- Footer Note -->
-            <p class="mt-12 text-center text-slate-600 text-[10px] font-bold uppercase tracking-widest">
-                Developed for DUET CSE Department
-            </p>
+
+            <div class="mt-10 text-center opacity-30">
+                <p class="text-[9px] font-black uppercase tracking-[0.5em] text-slate-500">
+                    Developed By DUET CSE Community
+                </p>
+            </div>
         </div>
     </div>
-@endsection
+
+</body>
+
+</html>

@@ -52,6 +52,9 @@ class AdminController extends Controller
         return back()->with('success', 'Coupons generated and emails sent successfully!');
     }
 
+
+
+
     public function downloadResultTemplate($eventId)
     {
         $fileName = 'result_upload_sheet_event_' . $eventId . '.xlsx';

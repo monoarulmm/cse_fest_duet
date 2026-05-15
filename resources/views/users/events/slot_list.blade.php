@@ -1,195 +1,159 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-[#F8FAFC] dark:bg-slate-900 py-8 px-4 md:px-8 transition-colors duration-300">
+    {{-- Main Background wrapper --}}
+    <div class="min-h-screen py-12 px-4 md:px-8 font-sans selection:bg-indigo-500/30 selection:text-white">
+        <div class="max-w-7xl mx-auto space-y-10">
 
-        <div class="max-w-7xl mx-auto">
-
-            {{-- ১. হেডার ও ফিল্টার সেকশন --}}
+            {{-- 1. Control Center (Cyber-UI Header) --}}
             <div
-                class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 mb-8 backdrop-blur-sm bg-opacity-80">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tight">
-                            <i class="fas fa-university mr-2"></i> Institution Quotas
-                        </h2>
-                        <p class="text-slate-400 text-[10px] uppercase font-mono mt-1 tracking-widest">Database Protocol:
-                            Active</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <div
-                            class="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-bold text-xs px-5 py-2.5 rounded-full border border-indigo-200 dark:border-indigo-800 transition-all">
-                            Total Institutions: <span id="totalCount">{{ $universitySlots->flatten()->count() }}</span>
+                class="relative overflow-hidden bg-slate-900/40 backdrop-blur-3xl border border-slate-800/60 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px]"></div>
+
+                <div class="relative flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-8">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-5">
+                            <div
+                                class="h-14 w-14 rounded-2xl bg-indigo-600/20 flex items-center justify-center border border-indigo-500/30 shadow-lg shadow-indigo-500/5">
+                                <i class="fas fa-university text-indigo-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter italic">
+                                    Institution <span class="text-indigo-500">Quotas</span>
+                                </h2>
+                                <p
+                                    class="text-emerald-500 text-[10px] uppercase font-mono tracking-[0.4em] flex items-center gap-2 mt-1">
+                                    <span
+                                        class="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></span>
+                                    Status: Live_Data_Synchronized
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
-                    <button onclick="window.history.back()"
-                        class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
-                        <i
-                            class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                        <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
-                            Back to previous
-                        </span>
-                    </button>
+
+                    <div class="flex items-center gap-5">
+                        <div class="px-7 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl shadow-inner">
+                            <p class="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Capacity
+                            </p>
+                            <p class="text-white font-mono text-2xl leading-none font-bold">
+                                <span id="totalCount"
+                                    class="text-indigo-400">{{ $universitySlots->flatten()->count() }}</span>
+                                <span class="text-[10px] text-slate-600 uppercase ml-1">Units</span>
+                            </p>
+                        </div>
+
+                        <button onclick="window.history.back()"
+                            class="h-14 px-8 bg-slate-950/80 border border-slate-800 rounded-2xl hover:border-indigo-500/50 transition-all group flex items-center gap-4">
+                            <i
+                                class="fa-solid fa-arrow-left text-indigo-500 group-hover:-translate-x-1 transition-transform text-sm"></i>
+                            <span
+                                class="text-[10px] font-black text-slate-400 group-hover:text-white uppercase tracking-widest">Return</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
-                    {{-- Filter by Category --}}
-                    <div>
+                {{-- Filter Hub --}}
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-5 relative z-10">
+                    <div class="space-y-2.5">
                         <label
-                            class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 tracking-wider">
-                            <i class="fas fa-filter mr-1 text-indigo-500"></i> Category
-                        </label>
+                            class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Protocol/Category</label>
                         <select id="categoryFilter"
-                            class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none dark:text-slate-200 cursor-pointer">
-                            <option value="all">All Categories</option>
+                            class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-300 focus:border-indigo-500/50 outline-none transition-all cursor-pointer appearance-none shadow-lg">
+                            <option value="all">Full Spectrum (All)</option>
                             @foreach ($universitySlots->keys() as $category)
                                 <option value="{{ Str::slug($category) }}">{{ $category }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    {{-- Sort By --}}
-                    <div>
+                    <div class="space-y-2.5">
                         <label
-                            class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 tracking-wider">
-                            <i class="fas fa-sort mr-1 text-indigo-500"></i> Sort By
-                        </label>
+                            class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Order/Priority</label>
                         <select id="sortOrder"
-                            class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none dark:text-slate-200 cursor-pointer">
-                            <option value="asc">Name (A-Z)</option>
-                            <option value="desc">Name (Z-A)</option>
-                            <option value="quota-high">Highest Quota</option>
+                            class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-300 focus:border-indigo-500/50 outline-none transition-all cursor-pointer appearance-none shadow-lg">
+                            <option value="asc">Alphabetical (A-Z)</option>
+                            <option value="desc">Alphabetical (Z-A)</option>
+                            <option value="quota-high">Capacity Priority</option>
                         </select>
                     </div>
 
-                    {{-- Quick Search --}}
-                    <div class="md:col-span-1">
-                        <label
-                            class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 tracking-wider">
-                            <i class="fas fa-search mr-1 text-indigo-500"></i> Search Institution
-                        </label>
-                        <div class="relative">
-                            <input type="text" id="searchInput" placeholder="Enter name..."
-                                class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 pl-10 text-sm focus:ring-2 focus:ring-indigo-500 outline-none dark:text-slate-200">
-                            <i class="fas fa-search absolute left-3 top-3.5 text-slate-400 text-xs"></i>
+                    <div class="space-y-2.5">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Global
+                            Query</label>
+                        <div class="relative group">
+                            <input type="text" id="searchInput" placeholder="Search ID or Name..."
+                                class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 pl-12 text-sm text-slate-200 focus:border-indigo-500/50 outline-none placeholder:text-slate-700 transition-all shadow-lg">
+                            <i
+                                class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-500 transition-colors"></i>
                         </div>
                     </div>
 
-                    {{-- Reset Button --}}
-                    <div>
+                    <div class="flex items-end">
                         <button onclick="window.location.reload()"
-                            class="w-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 font-bold text-xs py-3.5 rounded-xl border border-slate-200 dark:border-slate-600 hover:bg-indigo-600 hover:text-white transition-all uppercase shadow-sm">
-                            <i class="fas fa-sync-alt mr-2"></i> Reset
+                            class="w-full h-[54px] bg-slate-800/80 hover:bg-indigo-600 border border-slate-700/50 hover:border-indigo-400 text-white font-black text-[10px] rounded-xl transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl">
+                            <i class="fas fa-sync-alt animate-spin-slow"></i> Refresh System
                         </button>
                     </div>
                 </div>
             </div>
 
-            {{-- ২. টেবিল হেডার --}}
+            {{-- 2. Data Registry Table --}}
             <div
-                class="flex items-center bg-indigo-600 dark:bg-indigo-700 rounded-t-2xl overflow-hidden shadow-lg border-b border-indigo-500">
-                <div class="w-3/4 p-5 text-white font-black text-xs md:text-sm uppercase tracking-[0.2em]">
-                    Institution Name & Segment
+                class="rounded-[2.5rem] overflow-hidden border border-slate-800/60 shadow-2xl bg-slate-900/20 backdrop-blur-sm">
+                {{-- Table Header --}}
+                <div class="flex items-center bg-indigo-600 px-10 py-6">
+                    <div class="flex-1 text-white font-black text-[11px] uppercase tracking-[0.4em] italic">
+                        Registry_Identification</div>
+                    <div
+                        class="w-40 text-white font-black text-[11px] uppercase tracking-[0.4em] text-center border-l border-white/20 italic">
+                        Allocation</div>
                 </div>
-                <div
-                    class="w-1/4 p-5 text-white font-black text-xs md:text-sm uppercase tracking-[0.2em] text-center border-l border-indigo-500/50">
-                    Max Slots
-                </div>
-            </div>
 
-            {{-- ৩. ডাটা লিস্ট --}}
-            <div id="slotsContainer"
-                class="bg-white dark:bg-slate-800 shadow-2xl rounded-b-2xl overflow-hidden border-x border-b border-slate-200 dark:border-slate-700">
-                @foreach ($universitySlots as $category => $slots)
-                    <div class="category-group" data-category="{{ Str::slug($category) }}">
-                        {{-- ক্যাটাগরি লেবেল সর্ট হলেও যেন থাকে তার জন্য এটি জরুরি --}}
-                        <div
-                            class="category-header bg-slate-50 dark:bg-slate-900/50 px-6 py-2 border-b border-slate-100 dark:border-slate-700 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                            Category: {{ $category }}
-                        </div>
-
+                {{-- Single List Container --}}
+                <div id="slotsContainer">
+                    @foreach ($universitySlots as $category => $slots)
                         @foreach ($slots as $slot)
-                            <div class="slot-item flex items-center border-b border-slate-100 dark:border-slate-700 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-all duration-200"
+                            <div class="slot-item group flex items-center border-b border-slate-800/40 hover:bg-indigo-500/[0.03] transition-all duration-500"
                                 data-name="{{ strtolower($slot->university_name) }}" data-quota="{{ $slot->max_slots }}"
                                 data-cat="{{ Str::slug($category) }}">
 
-                                <div class="w-3/4 p-6">
+                                <div class="flex-1 px-10 py-8">
                                     <h5
-                                        class="text-slate-800 dark:text-slate-100 font-extrabold text-sm md:text-lg tracking-tight mb-1">
+                                        class="text-slate-100 group-hover:text-indigo-400 font-bold text-xl tracking-tight transition-colors duration-300">
                                         {{ $slot->university_name }}
                                     </h5>
-                                    <div class="flex items-center gap-2">
+                                    <div class="mt-3 flex items-center gap-3">
                                         <span
-                                            class="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-900/40 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-800">
-                                            {{ $category }}
+                                            class="text-[9px] font-black text-indigo-500/60 uppercase tracking-widest bg-indigo-500/10 px-3 py-1.5 rounded-lg border border-indigo-500/20">
+                                            Segment: {{ $category }}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div
-                                    class="w-1/4 p-6 flex justify-center border-l border-slate-50 dark:border-slate-700/50">
+                                <div class="w-40 p-8 flex justify-center border-l border-slate-800/30">
                                     <div
-                                        class="group bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl flex items-center gap-3 border border-slate-200 dark:border-slate-700 transition-all hover:border-indigo-400 shadow-sm">
-                                        <div
-                                            class="hidden md:flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/50">
-                                            <i class="fas fa-users text-indigo-600 dark:text-indigo-400 text-xs"></i>
-                                        </div>
+                                        class="h-16 w-20 bg-slate-950/60 rounded-2xl flex items-center justify-center border border-slate-800 group-hover:border-indigo-500/40 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all">
                                         <span
-                                            class="text-indigo-700 dark:text-indigo-300 font-black text-xl md:text-2xl">{{ $slot->max_slots }}</span>
+                                            class="text-indigo-400 group-hover:text-indigo-300 font-mono font-black text-2xl tracking-tighter">
+                                            {{ sprintf('%02d', $slot->max_slots) }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
 
-            {{-- No Result Found --}}
+            {{-- 3. Empty State --}}
             <div id="noResult"
-                class="hidden text-center py-32 bg-white dark:bg-slate-800 rounded-b-2xl border border-slate-200 dark:border-slate-700 shadow-xl">
-                <div class="mb-4">
-                    <i
-                        class="fas fa-search bg-slate-100 dark:bg-slate-700 p-6 rounded-full text-slate-300 dark:text-slate-500 text-3xl"></i>
-                </div>
-                <p class="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-[0.3em] text-xs italic">
-                    No matching institution found in this category
-                </p>
+                class="hidden text-center py-40 bg-slate-900/20 rounded-[3rem] border border-slate-800 border-dashed">
+                <i class="fas fa-database text-slate-800 text-6xl mb-6"></i>
+                <h3 class="text-slate-400 font-black uppercase tracking-[0.6em] text-sm mb-2">Zero Matches Found_</h3>
+                <p class="text-slate-600 text-xs font-mono">System query returned null response.</p>
             </div>
         </div>
     </div>
-
-    <style>
-        .slot-item {
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* কাস্টম স্ক্রলবার */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #6366f1;
-            border-radius: 10px;
-        }
-    </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -198,20 +162,23 @@
             const sortOrder = document.getElementById('sortOrder');
             const slotsContainer = document.getElementById('slotsContainer');
             const noResult = document.getElementById('noResult');
-            const totalCountSpan = document.getElementById('totalCount');
+            const totalCount = document.getElementById('totalCount');
 
-            function updateUI() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                const selectedCat = categoryFilter.value;
-                const items = Array.from(document.querySelectorAll('.slot-item'));
+            function filterAndSort() {
+                const searchValue = searchInput.value.toLowerCase();
+                const catValue = categoryFilter.value;
+                const sortValue = sortOrder.value;
+
+                let items = Array.from(document.querySelectorAll('.slot-item'));
                 let visibleCount = 0;
 
+                // filtering
                 items.forEach(item => {
-                    const name = item.dataset.name;
-                    const itemCat = item.dataset.cat;
+                    const name = item.getAttribute('data-name');
+                    const cat = item.getAttribute('data-cat');
 
-                    const matchesSearch = name.includes(searchTerm);
-                    const matchesCat = (selectedCat === 'all' || selectedCat === itemCat);
+                    const matchesSearch = name.includes(searchValue);
+                    const matchesCat = catValue === 'all' || cat === catValue;
 
                     if (matchesSearch && matchesCat) {
                         item.style.display = 'flex';
@@ -221,54 +188,71 @@
                     }
                 });
 
-                // ক্যাটাগরি হেডার ম্যানেজমেন্ট (খালি ক্যাটাগরি হাইড করা)
-                document.querySelectorAll('.category-group').forEach(group => {
-                    const hasVisible = Array.from(group.querySelectorAll('.slot-item'))
-                        .some(i => i.style.display !== 'none');
-                    group.style.display = hasVisible ? 'block' : 'none';
+                // sorting
+                const visibleItems = items.filter(item => item.style.display !== 'none');
+                visibleItems.sort((a, b) => {
+                    const nameA = a.getAttribute('data-name');
+                    const nameB = b.getAttribute('data-name');
+                    const quotaA = parseInt(a.getAttribute('data-quota'));
+                    const quotaB = parseInt(b.getAttribute('data-quota'));
+
+                    if (sortValue === 'asc') return nameA.localeCompare(nameB);
+                    if (sortValue === 'desc') return nameB.localeCompare(nameA);
+                    if (sortValue === 'quota-high') return quotaB - quotaA;
+                    return 0;
                 });
 
-                // টোটাল কাউন্ট আপডেট
-                totalCountSpan.innerText = visibleCount;
+                // re-append sorted items
+                visibleItems.forEach(item => slotsContainer.appendChild(item));
 
-                // নো রেজাল্ট মেসেজ
-                if (visibleCount === 0) {
-                    noResult.classList.remove('hidden');
-                    slotsContainer.classList.add('hidden');
-                } else {
-                    noResult.classList.add('hidden');
-                    slotsContainer.classList.remove('hidden');
-                }
+                // UI updates
+                totalCount.textContent = visibleCount;
+                noResult.classList.toggle('hidden', visibleCount > 0);
             }
 
-            function sortItems() {
-                const items = Array.from(document.querySelectorAll('.slot-item'));
-                const order = sortOrder.value;
-
-                items.sort((a, b) => {
-                    if (order === 'asc') return a.dataset.name.localeCompare(b.dataset.name);
-                    if (order === 'desc') return b.dataset.name.localeCompare(a.dataset.name);
-                    if (order === 'quota-high') return parseInt(b.dataset.quota) - parseInt(a.dataset
-                        .quota);
-                });
-
-                // সর্টিং এর সময় গ্রুপিং ভেঙে আইটেমগুলো নতুন করে সাজানো
-                // তবে ক্যাটাগরি হেডারগুলো রিমুভ করে দেওয়া ভালো যদি গ্লোবাল সর্ট হয়
-                const headers = document.querySelectorAll('.category-header');
-
-                if (order === 'quota-high') {
-                    headers.forEach(h => h.style.display = 'none');
-                } else {
-                    headers.forEach(h => h.style.display = 'block');
-                }
-
-                items.forEach(item => slotsContainer.appendChild(item));
-                updateUI(); // সর্ট করার পর ফিল্টার বজায় রাখা
-            }
-
-            searchInput.addEventListener('keyup', updateUI);
-            categoryFilter.addEventListener('change', updateUI);
-            sortOrder.addEventListener('change', sortItems);
+            searchInput.addEventListener('input', filterAndSort);
+            categoryFilter.addEventListener('change', filterAndSort);
+            sortOrder.addEventListener('change', filterAndSort);
         });
     </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap');
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .slot-item {
+            animation: cyberReveal 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+        }
+
+        @keyframes cyberReveal {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 @endsection

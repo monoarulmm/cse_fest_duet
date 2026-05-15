@@ -6,16 +6,14 @@
     <style>
         :root {
             --form-bg: rgba(15, 23, 42, 0.7);
-            --input-bg: rgba(2, 6, 23, 0.5);
+            --input-bg: rgba(33, 41, 71, 0.5);
             --input-border: rgba(34, 211, 238, 0.2);
-            --label-color: #22d3ee;
         }
 
         .form-glass {
             background: var(--form-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--input-border);
-            transition: all 0.4s ease;
         }
 
         .input-field {
@@ -38,7 +36,7 @@
             margin-top: 40px;
         }
 
-        /* TomSelect Cyberpunk Style */
+        /* TomSelect Styling */
         .ts-control {
             background: rgba(34, 211, 238, 0.05) !important;
             border: 1px solid rgba(34, 211, 238, 0.2) !important;
@@ -52,11 +50,6 @@
             color: #e2e8f0 !important;
             border: 1px solid rgba(34, 211, 238, 0.2) !important;
         }
-
-        .ts-dropdown .active {
-            background: rgba(34, 211, 238, 0.2) !important;
-            color: #22d3ee !important;
-        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 @endsection
@@ -69,90 +62,76 @@
                 <h1 class="heading-font text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
                     {{ $event->name }} <span class="text-cyan-400">REGISTRATION</span>
                 </h1>
-                <div class="h-1 w-32 bg-cyan-500 mx-auto mt-2 rounded-full shadow-[0_0_10px_#22d3ee]"></div>
-                <p class="mt-4 text-[11px] tracking-[0.3em] text-cyan-400/80 uppercase font-bold">
-                    Registration Fee: {{ $event->reg_fee }} BDT | Ends: {{ $event->end_date->format('d M, Y') }}
-                </p>
+                <div class="h-1 w-32 bg-cyan-500 mx-auto mt-2 rounded-full"></div>
             </div>
-
-            @if ($errors->any())
-                <div class="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/50 text-red-400">
-                    <ul class="list-disc list-inside text-sm">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             <form action="{{ route('registration.store') }}" method="POST" enctype="multipart/form-data"
                 class="form-glass rounded-[2.5rem] p-8 md:p-14 shadow-2xl">
                 @csrf
                 <input type="hidden" name="event_id" value="{{ $event->id }}">
 
-                <div class="flex justify-between items-center border-b border-cyan-500/20 pb-4 mb-6">
-                    <h2 class="heading-font text-2xl text-white uppercase">
-                        Registration <span class="text-cyan-400">Details</span>
-                    </h2>
-                    <button type="button" onclick="window.history.back()"
-                        class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
-                        <i
-                            class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                        <span
-                            class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">Back</span>
-                    </button>
-                </div>
-
-                {{-- Step 1: Institutional Info --}}
+                {{-- Institutional & Team Info --}}
                 <div class="section-divider !mt-0">
-                    <h3 class="heading-font text-lg font-bold uppercase text-white">Institutional Details</h3>
+                    <h3 class="heading-font text-lg font-bold uppercase text-white">General Information</h3>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                     <div class="space-y-2">
-                        <label
-                            class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Institution*</label>
+                        <label class="block text-[10px] font-bold uppercase text-cyan-400">Institution*</label>
                         <select name="university_name" id="uni_select" required class="w-full">
                             <option value=""></option>
                         </select>
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Previous
-                            Experience?*</label>
-                        <select name="prev_ex" required class="input-field w-full rounded-xl px-4 py-4">
-                            <option value="NO" {{ old('prev_ex') == 'NO' ? 'selected' : '' }}>NO</option>
-                            <option value="YES" {{ old('prev_ex') == 'YES' ? 'selected' : '' }}>YES</option>
-                        </select>
-                    </div>
+                    @php
+                        $slug = $event->slug;
+                        $noStudentIdEvents = ['iupc', 'project-showcase', 'ai-hackathon'];
+                    @endphp
 
-                    @if (in_array($event->slug, ['iupc', 'project-showcase', 'ai-hackathon']))
+                    @if (in_array($slug, $noStudentIdEvents))
                         <div class="space-y-2">
-                            <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Team
-                                Name*</label>
+                            <label class="block text-[10px] font-bold uppercase text-cyan-400">Team Name*</label>
                             <input type="text" name="team_name" value="{{ old('team_name') }}" required
                                 class="input-field w-full rounded-xl px-4 py-4" placeholder="Enter Team Name">
                         </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-bold uppercase text-cyan-400">All-Female Team?*</label>
+                            <select name="team_person" required class="input-field w-full rounded-xl px-4 py-4">
+                                <option value="Mail" {{ old('team_person') == 'Mail' ? 'selected' : '' }}>NO</option>
+                                <option value="Femail" {{ old('team_person') == 'Femail' ? 'selected' : '' }}>YES</option>
+                            </select>
+                        </div>
                     @endif
 
-                    @if ($event->slug === 'project-showcase')
+                    @if ($slug === 'project-showcase')
                         <div class="space-y-2">
-                            <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Project
-                                Title*</label>
-                            <input type="text" name="project_title" required
+                            <label class="block text-[10px] font-bold uppercase text-cyan-400">Project Title*</label>
+                            <input type="text" name="project_title" value="{{ old('project_title') }}" required
                                 class="input-field w-full rounded-xl px-4 py-4">
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Abstract
-                                (PDF)*</label>
+                            <label class="block text-[10px] font-bold uppercase text-cyan-400">Abstract (PDF)*</label>
                             <input type="file" name="abstract_file" accept=".pdf" required
                                 class="input-field w-full rounded-xl px-4 py-3">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label
+                                class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Domain*</label>
+                            <select name="domain" required class="input-field w-full rounded-xl px-4 py-4">
+                                <option value="">Select Domain</option>
+                                <option value="AI & Data Science">AI & Data Science</option>
+                                <option value="IoT">IoT & Embedded Intelligence</option>
+                                <option value="Software">Software & Digital Platforms</option>
+                                <option value="Smart">Smart Solutions</option>
+                            </select>
                         </div>
                     @endif
                 </div>
 
                 {{-- Step 2: Coach Info (IUPC Only) --}}
-                @if ($event->slug === 'iupc')
+                @if ($slug === 'iupc')
                     <div class="section-divider">
                         <h3 class="heading-font text-lg font-bold uppercase text-white">Coach Details</h3>
                     </div>
@@ -175,17 +154,11 @@
                     </div>
                 @endif
 
-                {{-- Step 3: Participant/Member Info --}}
+                {{-- Step 3: Member Info --}}
                 @php
-                    $slug = $event->slug;
-                    // AI Hackathon কে এখানে লিস্টে যুক্ত করা হয়েছে
-                    $teamEvents = ['iupc', 'project-showcase', 'ai-hackathon'];
-                    $isTeamEvent = in_array($slug, $teamEvents);
-
-                    // ICT Olympiad এ ১ জন, বাকি টিম ইভেন্টে ৩ জন
+                    $isTeamEvent = in_array($slug, $noStudentIdEvents);
                     $maxMembers = $isTeamEvent ? 3 : 1;
-                    // মিনিমাম কতজন প্রয়োজন
-                    $minRequired = $slug === 'iupc' || $slug === 'ai-hackathon' ? 2 : 1;
+                    $minRequired = in_array($slug, ['iupc', 'ai-hackathon']) ? 2 : 1;
                 @endphp
 
                 @for ($i = 1; $i <= $maxMembers; $i++)
@@ -197,28 +170,40 @@
                             </h3>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <input type="text" name="m{{ $i }}_name"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Full Name"
-                                class="input-field rounded-xl px-4 py-4">
+                                class="input-field rounded-xl px-4 py-4" value="{{ old('m' . $i . '_name') }}">
 
                             <input type="email" name="m{{ $i }}_email"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Email"
-                                class="input-field rounded-xl px-4 py-4">
+                                class="input-field rounded-xl px-4 py-4" value="{{ old('m' . $i . '_email') }}">
 
                             <input type="text" name="m{{ $i }}_phone"
                                 {{ $i <= $minRequired ? 'required' : '' }} placeholder="Phone"
-                                class="input-field rounded-xl px-4 py-4">
+                                class="input-field rounded-xl px-4 py-4" value="{{ old('m' . $i . '_phone') }}">
 
+                            <select name="m{{ $i }}_prev_ex" {{ $i <= $minRequired ? 'required' : '' }}
+                                class="input-field rounded-xl px-4 py-4">
+                                <option value="">Previous Experience</option>
+                                <option value="YES" {{ old('m' . $i . '_prev_ex') == 'YES' ? 'selected' : '' }}>YES
+                                </option>
+                                <option value="NO" {{ old('m' . $i . '_prev_ex') == 'NO' ? 'selected' : '' }}>No
+                                </option>
+                            </select>
+
+                            {{-- Handles Logic --}}
                             @if ($slug === 'iupc')
                                 <input type="text" name="m{{ $i }}_cf_handle"
                                     {{ $i <= $minRequired ? 'required' : '' }} placeholder="Codeforces Handle"
-                                    class="input-field rounded-xl px-4 py-4">
+                                    class="input-field rounded-xl px-4 py-4" value="{{ old('m' . $i . '_cf_handle') }}">
                             @elseif ($slug === 'ai-hackathon')
                                 <input type="text" name="m{{ $i }}_cf_handle"
                                     {{ $i <= $minRequired ? 'required' : '' }} placeholder="Kaggle Link"
-                                    class="input-field rounded-xl px-4 py-4">
-                            @else
+                                    class="input-field rounded-xl px-4 py-4" value="{{ old('m' . $i . '_cf_handle') }}">
+                            @elseif (!in_array($slug, $noStudentIdEvents))
+                                {{-- শুধুমাত্র ICT বা অন্য সাধারণ ইভেন্টে (যেগুলো $noStudentIdEvents এ নেই) স্টুডেন্ট আইডি আসবে --}}
+                                {{-- অন্য সব ইভেন্টের জন্য স্টুডেন্ট আইডি/রোল --}}
                                 <input type="text" name="student_id" required placeholder="Student ID/Roll"
                                     class="input-field rounded-xl px-4 py-4">
                             @endif
@@ -226,10 +211,11 @@
                             <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
                                 class="input-field rounded-xl px-4 py-4">
                                 <option value="">T-Shirt Size</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
+                                @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                    <option value="{{ $size }}"
+                                        {{ old('m' . $i . '_tshirt') == $size ? 'selected' : '' }}>{{ $size }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -237,14 +223,15 @@
 
                 <div class="mt-12">
                     <button type="submit"
-                        class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-6 rounded-2xl transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.4)] uppercase tracking-[0.2em] text-lg">
-                        {{ in_array($event->slug, ['ict-olympiad']) ? 'Proceed to Payment' : 'Submit Registration' }}
+                        class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-6 rounded-2xl transition-all shadow-[0_0_30px_rgba(34,211,238,0.4)] uppercase tracking-[0.2em] text-lg">
+                        {{ $slug === 'ict-olympiad' ? 'Proceed to Payment' : 'Submit Registration' }}
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
+    {{-- Script remains same as before --}}
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -255,20 +242,11 @@
                 create: true,
                 placeholder: "Search University...",
                 load: function(query, callback) {
-                    fetch('/data/universities.json')
-                        .then(response => response.json())
-                        .then(json => {
-                            let data = json.map(item => ({
-                                name: item
-                            }));
-                            callback(data);
-                        }).catch(() => callback());
-                },
-                render: {
-                    option: (item, escape) =>
-                        `<div class="py-2 px-3 uppercase text-[11px] tracking-wider font-bold">${escape(item.name)}</div>`,
-                    no_results: (data, escape) =>
-                        `<div class="no-results py-2 px-3 text-red-400 text-[10px]">Press Enter to add "${escape(data.query)}"</div>`
+                    fetch('/data/universities.json').then(res => res.json()).then(json => {
+                        callback(json.map(item => ({
+                            name: item
+                        })));
+                    }).catch(() => callback());
                 }
             });
         });

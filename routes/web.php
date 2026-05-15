@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('users.home');
@@ -80,25 +81,12 @@ use App\Http\Controllers\IupcController;
 use App\Http\Controllers\RegistrationController;
 
 // IUPC Public Routes
-Route::get('/iupc', [IupcController::class, 'index'])->name('iupc.index');
 // Route::get('/iupc/register', [IupcController::class, 'create'])->name('iupc.register');
 // Route::post('/iupc/register', [IupcController::class, 'store'])->name('iupc.store');
 Route::get('/register/{slug}', [RegistrationController::class, 'create'])->name('event.register');
 Route::post('/register/store', [RegistrationController::class, 'store'])->name('registration.store');
 
 
-// পেমেন্ট ইনিশিয়েট করার রাউট
-Route::get('/payment/make/{registration_id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
-// Route::get('/payment/make/{id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
-Route::any('/payment/callback', [RegistrationController::class, 'callback'])->name('payment.callback');
-// পেমেন্ট গেটওয়ে থেকে ফিরে আসার রাউট (Success/Fail)
-Route::post('/payment/success', [RegistrationController::class, 'success'])->name('payment.success');
-Route::post('/payment/fail', [RegistrationController::class, 'fail'])->name('payment.fail');
-
-
-Route::get('/registration-success', function () {
-    return view('users.iupc.success'); // আপনার সাকসেস ভিউ ফাইল
-})->name('success_page');
 
 
 
@@ -109,17 +97,40 @@ Route::get('/registration-success', function () {
 
 
 
-// Route::post('/verify-coupon', [IupcController::class, 'verifyCoupon'])->name('verify_coupon');
-// কুপন ভেরিফিকেশন এবং এডিট পেজ
-// Route::get('/iupc/final-step', [IupcController::class, 'finalStepForm'])->name('iupc.final.form');
-// Route::post('/iupc/verify-coupon', [IupcController::class, 'verifyCoupon'])->name('iupc.verify');
+// ════════════════════════════════════════════════════════════
+//  PAYMENT ROUTES
+// ════════════════════════════════════════════════════════════
 
-// Route::post('/update-and-pay', [IupcController::class, 'updateAndPay'])->name('iupc.updateAndPay');
-Route::get('/final-registration/{slug}', [IupcController::class, 'showFinalForm'])->name('final_form');
+// ─── 1. IUPC ─────────────────────────────────────────────
+Route::post('/payment/iupc/update-and-pay', [PaymentController::class, 'iupc_updateAndPay'])
+    ->name('payment.iupc.updateAndPay');
+
+// ─── 2. Project-Showcase & AI-Hackathon (direct pay) ─────
+//  URL: /payment/{slug}/final-pay/{id}
+//  slug হবে: project-showcase  অথবা  ai-hackathon
+Route::get('/payment/{slug}/final-pay/{id}', [PaymentController::class, 'finalRegDirectPay'])
+    ->name('payment.finalRegDirectPay')
+    ->where('slug', 'project-showcase|ai-hackathon');
+
+// ─── 3. ICT-Olympiad ও অন্যান্য single-registration event ─
+Route::get('/payment/make/{registration_id}', [PaymentController::class, 'makePayment'])
+    ->name('payment.make');
+
+// ─── 4. ShurjoPay Callback — সব event এর জন্য একটাই ─────
+//  ShurjoPay dashboard এ এই URL দিন:
+//  https://yourdomain.com/payment/callback
+Route::get('/payment/callback', [PaymentController::class, 'callback'])
+    ->name('payment.callback');
+// Route::post('/payment/callback', [PaymentController::class, 'callback']);
+// (ShurjoPay কখনো GET কখনো POST পাঠায়, তাই দুটোই রাখা)
+
+
+
+
+
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\PaymentController;
 
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -169,10 +180,7 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
 
     Route::delete('/admin/events/{id}/delete', [EventController::class, 'destroy'])->name('admin.events.destroy');
-    // Route::get('/event/{slug}', [EventController::class, 'showDashboard'])->name('event.dashboard');
-    // Route::get('/event/{slug}/pre-registered', [EventController::class, 'preRegistered'])->name('event.pre_registered');
-    // Route::get('/event/{slug}/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
-    // আরও রাউট যেমন: rulebook, seat-plan ইত্যাদি...
+
 
 
 
@@ -221,8 +229,7 @@ Route::prefix('event/{slug}')->group(function () {
     // Route::get('final-registration', [EventController::class, 'showFinalRegForm'])->name('iupc.final.reg.form');
     // সিলেকশন পেজ (এই নামটিই ড্যাশবোর্ড ও ট্যাবে ব্যবহার করুন)
     Route::get('/selected-teams', [EventController::class, 'selectedTeams'])->name('event.select_registered');
-    // Route::post('/verify-coupon', [EventController::class, 'verifyCoupon'])->name('event.verify_coupon');
-    // ফাইনাল রেজিস্টার্ড
+
     Route::get('/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
     // সঠিক রাউট ফরম্যাট
     Route::get('/schedule', [EventController::class, 'schedule'])->name('event.schedule');
@@ -241,21 +248,7 @@ Route::prefix('event/{slug}')->group(function () {
 });
 
 
-// IUPC পেমেন্ট রাউটস
 
-// IUPC Final Registration & Payment Routes
-// Route::prefix('iupc-payment')->group(function () {
-
-//     // ১. ফর্ম সাবমিট এবং পেমেন্ট গেটওয়েতে পাঠানো
-//     Route::post('/process', [EventController::class, 'updateAndPay'])
-//         ->name('iupc.payment.process');
-
-//     // ২. shurjoPay থেকে ফিরে আসার রাস্তা (Callback)
-//     // অনেক সময় গেটওয়ে মেথড পরিবর্তন করে, তাই match(['get', 'post']) নিরাপদ
-//     Route::match(['get', 'post'], '/callback', [EventController::class, 'paymentCallback'])
-//         ->name('iupc.payment.callback');
-// });
-// এটি অবশ্যই POST হতে হবে কারণ আপনি কুপন ডাটা পাঠাচ্ছেন
 
 // ঐচ্ছিক: কেউ যদি ভুল করে রিফ্রেশ দেয় বা সরাসরি লিঙ্কে ঢুকে তবে তাকে ফেরত পাঠানো
 Route::get('event/{slug}/verify-coupon', function ($slug) {
@@ -263,11 +256,6 @@ Route::get('event/{slug}/verify-coupon', function ($slug) {
 });
 
 
-// payment controller for iupc
-Route::post('event/{slug}/verify-coupon', [PaymentController::class, 'verifyCoupon'])->name('event.verify_coupon');
-Route::post('/iupc-payment/process', [PaymentController::class, 'updateAndPay'])->name('iupc.payment.process');
-Route::match(['get', 'post'], '/iupc-payment/callback', [PaymentController::class, 'paymentCallback'])->name('iupc.payment.callback');
-// IUPC Coupon Verification
 
 // Direct Final Registration for other events
 Route::get('event/{slug}/final-reg/{id}', [PaymentController::class, 'finalRegDirectPay'])->name('event.final_reg_direct');

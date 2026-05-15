@@ -40,7 +40,6 @@ class TeamsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             $team->coach_name,
             $team->coach_email,
             '', // Slots কলাম ফাঁকা
-            '', // Codes কলাম ফাঁকা
         ];
     }
 }
