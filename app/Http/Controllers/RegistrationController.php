@@ -178,19 +178,19 @@ class RegistrationController extends Controller
             $verification = $this->sp_instance->verifyPayment($order_id);
             $data = $verification[0];
 
+
             if ($data->sp_code == '1000') {
                 // customer_order_id অথবা value1 দিয়ে রেজিস্ট্রেশন খুঁজে বের করা
-                $registration = Registration::where('order_id', $data->customer_order_id)
-                    ->orWhere('id', $data->value1)
+                $registration = Registration::Where('id', $data->value1)
                     ->first();
 
                 if ($registration && $registration->payment_status !== 'paid') {
 
                     // ১. ট্রানজেকশন টেবিলে এন্ট্রি
-                    Transaction::create([
+                    $transaction = Transaction::create([
                         'transaction_id' => $data->bank_trx_id,
                         'event_id'       => $registration->event_id,
-                        'team_id'        => $registration->id, // ICT এর জন্য টিম ID নাই, তাই রেজিস্ট্রেশন ID
+                        'team_id'        => $registration->id,
                         'student_id'     => $registration->student_id,
                         'amount'         => $data->amount,
                         'currency'       => $data->currency,
@@ -201,18 +201,42 @@ class RegistrationController extends Controller
                     // ২. রেজিস্ট্রেশন স্ট্যাটাস আপডেট
                     $registration->update([
                         'transaction_id' => $data->bank_trx_id,
-                        'payment_status' => 'paid', // আপনার ডাটাবেস কলাম অনুযায়ী (pending_status হলে সেটা দিন)
+                        'payment_status' => 'paid',
                         'status'         => 'verified'
                     ]);
 
-                    return redirect()->route('event.dashboard', $registration->event->slug)
-                        ->with('success', 'আপনার পেমেন্ট সফল হয়েছে!');
+                    // Success Invoice with registration and transaction data
+                    return view('invoice', [
+                        'registration' => $registration,
+                        'transaction' => $transaction,
+                        'payment_status' => 'success',
+                        'message' => 'আপনার পেমেন্ট সফল হয়েছে!'
+                    ]);
                 }
             }
 
-            return redirect()->route('home')->with('error', 'পেমেন্ট সফল হয়নি।');
+            // Payment Failed - Get registration info if exists
+            $registration = Registration::Where('id', $request->value1)
+                ->first();
+
+            return view('invoice', [
+                'registration' => $registration,
+                'transaction' => null,
+                'payment_status' => 'failed',
+                'message' => 'পেমেন্ট সফল হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।'
+            ]);
+
         } catch (Exception $e) {
-            return redirect()->route('home')->with('error', 'ভেরিফিকেশন এরর: ' . $e->getMessage());
+            // Error Handling - Get registration info if exists
+            $registration = Registration::Where('id', $request->value1)
+                ->first();
+
+            return view('invoice', [
+                'registration' => $registration,
+                'transaction' => null,
+                'payment_status' => 'error',
+                'message' => 'ভেরিফিকেশন এরর: ' . $e->getMessage()
+            ]);
         }
     }
 

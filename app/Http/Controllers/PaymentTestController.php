@@ -55,6 +55,10 @@ class PaymentTestController extends Controller
 
         $order_id = $request->order_id;
         //dd($order_id);
-        return $this->shurjopay->verifyPayment($order_id);
+        $order=$this->shurjopay->verifyPayment($order_id);
+
+        dd($order);
+
+
     }
 }

@@ -90,7 +90,7 @@ Route::post('/register/store', [RegistrationController::class, 'store'])->name('
 // পেমেন্ট ইনিশিয়েট করার রাউট
 Route::get('/payment/make/{registration_id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
 // Route::get('/payment/make/{id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
-Route::any('/payment/callback', [RegistrationController::class, 'callback'])->name('payment.callback');
+Route::any('/payment/invoice', [RegistrationController::class, 'callback'])->name('payment.callback');
 // পেমেন্ট গেটওয়ে থেকে ফিরে আসার রাউট (Success/Fail)
 Route::post('/payment/success', [RegistrationController::class, 'success'])->name('payment.success');
 Route::post('/payment/fail', [RegistrationController::class, 'fail'])->name('payment.fail');
@@ -123,7 +123,7 @@ use App\Http\Controllers\PaymentController;
 
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::post('/upload-results', [AdminController::class, 'uploadExcel'])->name('admin.upload.result'); // Admin 
+    Route::post('/upload-results', [AdminController::class, 'uploadExcel'])->name('admin.upload.result'); // Admin
     Route::get('/admin/export-iupc-slots', [AdminController::class, 'exportIUPCTeams'])->name('admin.iupc.export');    // Route::get('/admin/export-excel/{event_id}', [AdminController::class, 'downloadExcel'])->name('admin.export.excel');
     // routes/web.php
     Route::post('/admin/event/{id}/import-coupons', [AdminController::class, 'import'])->name('admin.coupons.import');
