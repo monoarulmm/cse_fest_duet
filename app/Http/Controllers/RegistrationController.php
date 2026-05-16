@@ -138,19 +138,19 @@ class RegistrationController extends Controller
                 'coach_phone'       => 'required|digits:11',
                 'coach_designation' => 'required|string',
                 'coach_tshirt'      => 'required|string',
-                'm1_cf_handle'      => 'required|url',
+                'm1_cf_handle'      => 'required|string',
                 'm2_name'           => 'required|string',
                 'm2_email'          => 'required|email',
                 'm2_phone'          => 'required|digits:11',
                 'm2_tshirt'         => 'required|string',
                 'm2_prev_ex'        => 'required|string',
-                'm2_cf_handle'      => 'required|url',
+                'm2_cf_handle'      => 'required|string',
                 'm3_name'           => 'nullable|string',
                 'm3_email'          => 'nullable|email',
                 'm3_phone'          => 'nullable|digits:11',
                 'm3_tshirt'         => 'nullable|string',
                 'm3_prev_ex'        => 'nullable|string',
-                'm3_cf_handle'      => 'nullable|url',
+                'm3_cf_handle'      => 'nullable|string',
             ];
         } elseif (in_array($eventSlug, ['project-showcase', 'ai-hackathon'])) {
             $eventRules = [

@@ -106,9 +106,28 @@ class PaymentController extends Controller
         $request->validate([
             'coupon_code' => 'required|string',
             'coach_name'  => 'required|string',
+            'coach_email'  => 'required|email',
+            'coach_phone'  => 'required|string',
             'm1_name'     => 'required|string',
             'm1_phone'    => 'required|digits:11',
             'm1_email'    => 'required|email',
+            'm1_prev_ex'    => 'required|email',
+            'm2_name'       => 'required|string',
+            'm2_email'      => 'required|email',
+            'm2_phone'      => 'required|digits:11',
+            'm2_tshirt'     => 'required|string',
+            'm2_prev_ex'     => 'required|string',
+            'm3_name'       => 'required|string',
+            'm3_email'      => 'required|email',
+            'm3_phone'      => 'required|digits:11',
+            'm3_tshirt'     => 'required|string',
+            'team_name'     => 'required|unique:registrations,team_name|max:255',
+            'team_person'   => 'required|string',
+            'coach_tshirt'      => 'required|string',
+            'm1_cf_handle'      => 'required|string',
+            'm2_cf_handle'      => 'required|string',
+            'm3_cf_handle'      => 'required|string',
+            'm3_prev_ex'        => 'nullable|string',
         ]);
 
         // Coupon verify

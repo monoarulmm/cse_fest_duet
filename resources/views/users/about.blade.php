@@ -39,6 +39,7 @@
                                 Initiatives</span>. The event is designed to promote technical excellence and innovation
                             through prestigious competitions.
                         </p>
+                        <p>Competition Segments</p>
 
                         <!-- Segments Quick List -->
                         <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[12px] font-mono text-slate-300">
@@ -61,28 +62,7 @@
                     </div>
 
                     <!-- Key Info Grid -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="p-4 border border-cyan-500/10 bg-slate-900/50 rounded-lg text-center">
-                            <span class="block text-cyan-400 font-bold text-lg italic uppercase tracking-tighter">Season
-                                II</span>
-                            <span class="text-[9px] uppercase text-slate-500 tracking-widest font-bold">Event Cycle</span>
-                        </div>
-                        <div class="p-4 border border-cyan-500/10 bg-slate-900/50 rounded-lg text-center">
-                            <span class="block text-cyan-400 font-bold text-lg italic uppercase tracking-tighter">CSE
-                                DEPT</span>
-                            <span class="text-[9px] uppercase text-slate-500 tracking-widest font-bold">Main Host</span>
-                        </div>
-                        <div class="p-4 border border-cyan-500/10 bg-slate-900/50 rounded-lg text-center">
-                            <span
-                                class="block text-cyan-400 font-bold text-lg italic uppercase tracking-tighter">WhiteBoard</span>
-                            <span class="text-[9px] uppercase text-slate-500 tracking-widest font-bold">Collaborator</span>
-                        </div>
-                        <div class="p-4 border border-cyan-500/10 bg-slate-900/50 rounded-lg text-center">
-                            <span
-                                class="block text-cyan-400 font-bold text-lg italic uppercase tracking-tighter">National</span>
-                            <span class="text-[9px] uppercase text-slate-500 tracking-widest font-bold">Event Level</span>
-                        </div>
-                    </div>
+
                 </div>
 
                 <!-- Visual Poster Block -->
@@ -213,56 +193,9 @@
         </div>
 
 
-        <!-- SECTION: ABOUT CSE DEPARTMENT -->
+
+
         {{-- <section class="space-y-12">
-            <div class="text-center space-y-4">
-                <h2 class="heading-font text-4xl font-black uppercase">
-                    <span class="text-slate-500">Department of</span> <br>
-                    Computer Science & Engineering
-                </h2>
-                <div class="h-1 w-20 bg-cyan-500 mx-auto"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Info Card 1 -->
-                <div class="content-glass p-10 group hover:bg-cyan-500/5 transition-all">
-                    <div class="text-cyan-500 mb-6 text-3xl">
-                        <i class="fa-solid fa-microchip"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Academic Excellence</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        DUET CSE বিভাগ প্রযুক্তিগত শিক্ষার অন্যতম কেন্দ্র। এখানে তাত্ত্বিক শিক্ষার পাশাপাশি ব্যবহারিক
-                        গবেষণার ওপর সর্বোচ্চ গুরুত্ব দেওয়া হয়।
-                    </p>
-                </div>
-
-                <!-- Info Card 2 -->
-                <div class="content-glass p-10 group border-cyan-500/30">
-                    <div class="text-cyan-500 mb-6 text-3xl">
-                        <i class="fa-solid fa-code-branch"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Innovation Hub</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        প্রতি বছর এই বিভাগ থেকে অসংখ্য উদ্ভাবনী প্রোজেক্ট, অ্যাপ এবং রিসার্চ পেপার প্রকাশিত হয় যা জাতীয় ও
-                        আন্তর্জাতিক পর্যায়ে প্রশংসিত।
-                    </p>
-                </div>
-
-                <!-- Info Card 3 -->
-                <div class="content-glass p-10 group hover:bg-cyan-500/5 transition-all">
-                    <div class="text-cyan-500 mb-6 text-3xl">
-                        <i class="fa-solid fa-network-wired"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Community & Alumni</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        আমাদের অ্যালামনাই নেটওয়ার্ক বিশ্বব্যাপী টেক জায়ান্ট কোম্পানিগুলোতে সফলতার সাথে কাজ করে যাচ্ছে।
-                    </p>
-                </div>
-            </div>
-        </section> --}}
-
-
-        <section class="space-y-12">
             <div class="text-center space-y-4">
                 <h2 class="heading-font text-4xl font-black uppercase">
                     <span class="text-slate-500">Department of</span> <br>
@@ -323,6 +256,6 @@
                     </p>
                 </div>
             </div>
-        </section>
+        </section> --}}
     </div>
 @endsection

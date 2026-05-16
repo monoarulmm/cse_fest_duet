@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('university_slots', function (Blueprint $table) {
             $table->id();
             $table->string('university_name');
-            $table->string('category'); // University, Polytechnic, etc.
             $table->integer('max_slots');
             $table->timestamps();
         });

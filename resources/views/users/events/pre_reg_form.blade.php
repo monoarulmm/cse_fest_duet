@@ -98,7 +98,7 @@
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase text-cyan-400">All-Female Team?*</label>
                             <select name="team_person" required class="input-field w-full rounded-xl px-4 py-4">
-                                <option value="Mail" {{ old('team_person') == 'Mail' ? 'selected' : '' }}>NO</option>
+                                <option value="Mixed" {{ old('team_person') == 'Mail' ? 'selected' : '' }}>NO</option>
                                 <option value="Femail" {{ old('team_person') == 'Femail' ? 'selected' : '' }}>YES</option>
                             </select>
                         </div>
@@ -187,8 +187,11 @@
                                 class="input-field rounded-xl px-4 py-4">
                                 <option value="">Previous Experience</option>
                                 <option value="YES" {{ old('m' . $i . '_prev_ex') == 'YES' ? 'selected' : '' }}>YES
+                                    (Previously Perticipated )
                                 </option>
                                 <option value="NO" {{ old('m' . $i . '_prev_ex') == 'NO' ? 'selected' : '' }}>No
+                                    (First
+                                    time Participating)
                                 </option>
                             </select>
 

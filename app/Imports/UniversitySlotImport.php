@@ -18,7 +18,7 @@ class UniversitySlotImport implements ToModel, WithHeadingRow
         return UniversitySlot::updateOrCreate(
             ['university_name' => trim($row['university_name'])], // স্পেস ক্লিন করা
             [
-                'category'  => $row['category'] ?? 'School/College', // ডিফল্ট ভ্যালু
+
                 'max_slots' => (int) ($row['max_slots'] ?? 0), // ইন্টিজার নিশ্চিত করা
             ]
         );

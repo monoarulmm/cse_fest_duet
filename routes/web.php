@@ -85,7 +85,7 @@ use App\Http\Controllers\RegistrationController;
 // Route::post('/iupc/register', [IupcController::class, 'store'])->name('iupc.store');
 Route::get('/register/{slug}', [RegistrationController::class, 'create'])->name('event.register');
 Route::post('/register/store', [RegistrationController::class, 'store'])->name('registration.store');
-Route::any('/payment/invoice', [RegistrationController::class, 'callback'])->name('payment.callback');
+// Route::any('/payment/invoice', [RegistrationController::class, 'callback'])->name('payment.callback');
 
 
 // পেমেন্ট ইনিশিয়েট করার রাউট
@@ -291,3 +291,22 @@ Route::delete('/result/delete/{id}', [AdminController::class, 'deleteResult'])->
 // একাধিক রেজিস্ট্রেশন একসাথে ডিলিট (Bulk Action)
 Route::delete('/registrations/bulk-delete', [AdminController::class, 'bulkDeleteRegistrations'])
     ->name('admin.registrations.bulkDelete');
+
+
+Route::get('/storage-link', function () {
+    $targetFolder = storage_path('app/public');
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+
+    if (file_exists($linkFolder)) {
+        // Optional: delete the existing symlink
+        if (is_link($linkFolder)) {
+            unlink($linkFolder);
+        } else {
+            return 'Storage folder already exists and is not a symlink!';
+        }
+    }
+
+    symlink($targetFolder, $linkFolder);
+
+    return 'Storage link created successfully!';
+});

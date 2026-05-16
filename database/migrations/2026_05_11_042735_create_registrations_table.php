@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('university_name');
             $table->string('team_name')->nullable(); // ICT Olympiad এ টিম নাম না থাকলে nullable
             $table->string('team_id')->nullable(); // ICT Olympiad এ টিম নাম না থাকলে nullable
-            $table->enum('team_person', ['Mail', 'Femail'])->default('Mail');
+            $table->enum('team_person', ['Mixed', 'Femail'])->default('Mixed');
 
             // Member 1 (Lead/Solo)
             $table->string('m1_name'); // অন্তত একজনের নাম লাগবেই

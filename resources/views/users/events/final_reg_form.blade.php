@@ -115,6 +115,14 @@
                         <input type="text" name="team_name" value="{{ old('team_name', $team->team_name) }}" required
                             class="input-field rounded-xl px-4 py-4">
                     </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-[10px] font-bold uppercase text-cyan-400">All-Female Team?*</label>
+                        <select name="team_person" required class="input-field w-full rounded-xl px-4 py-4">
+                            <option value="Mixed" {{ old('team_person') == 'Mail' ? 'selected' : '' }}>NO</option>
+                            <option value="Femail" {{ old('team_person') == 'Femail' ? 'selected' : '' }}>YES</option>
+                        </select>
+                    </div>
                 </div>
 
                 {{-- Coach Details --}}
@@ -141,6 +149,14 @@
                             value="{{ old('coach_designation', $team->coach_designation) }}" required
                             class="input-field rounded-xl px-4 py-4 text-xs">
                     </div>
+
+                    <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4">
+                        <option value="">T-Shirt Size</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
                 </div>
 
                 {{-- Members Info --}}
@@ -150,6 +166,9 @@
                         $email = "m{$i}_email";
                         $phone = "m{$i}_phone";
                         $cf = "m{$i}_cf_handle";
+                        $cf = "m{$i}_cf_handle";
+                        $prev_ex = "m{$i}_prev_ex";
+                        $tshirt = "m{$i}_tshirt";
                     @endphp
                     <div class="mb-12">
                         <h3 class="section-title heading-font text-sm font-bold mb-6 uppercase">Member {{ $i }}
@@ -169,6 +188,28 @@
                             <input type="text" name="m{{ $i }}_cf_handle"
                                 value="{{ old("m{$i}_cf_handle", $team->$cf) }}"
                                 class="input-field rounded-xl px-4 py-4 text-xs" placeholder="CF Handle">
+
+                            <select name="m{{ $i }}_prev_ex" {{ 'required' }}
+                                class="input-field rounded-xl px-4 py-4">
+                                <option value="">Previous Experience</option>
+                                <option value="YES" {{ old('m' . $i . '_prev_ex') == 'YES' ? 'selected' : '' }}>YES
+                                    (Previously Perticipated )
+                                </option>
+                                <option value="NO" {{ old('m' . $i . '_prev_ex') == 'NO' ? 'selected' : '' }}>No
+                                    (First
+                                    time Participating)
+                                </option>
+                            </select>
+                            <select name="m{{ $i }}_tshirt" {{ 'required' }}
+                                class="input-field rounded-xl px-4 py-4">
+                                <option value="">T-Shirt Size</option>
+                                @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                    <option value="{{ $size }}"
+                                        {{ old('m' . $i . '_tshirt') == $size ? 'selected' : '' }}>{{ $size }}
+                                    </option>
+                                @endforeach
+                            </select>
+
                         </div>
                     </div>
                 @endfor
