@@ -5,190 +5,517 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result & Seat Plan | DUET CSE FEST 2026</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap"
         rel="stylesheet">
-
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #020617;
+            font-family: 'DM Sans', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
         }
 
-        .cyber-font {
-            font-family: 'Orbitron', sans-serif;
+        .page-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 5px;
+        /* ─── CARD ─── */
+        .pass-card {
+            width: 100%;
+            max-width: 560px;
+            background: #ffffff;
+            border: 2px solid #0e1829;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 7px 7px 0 #0e1829;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #020617;
+        /* Header */
+        .card-header {
+            background: #0e1829;
+            padding: 20px 24px 16px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+        .fest-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 9px;
+            letter-spacing: 0.35em;
+            color: #38bdf8;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .fest-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.04em;
+            line-height: 1.1;
+        }
+
+        .fest-title span {
+            color: #38bdf8;
+        }
+
+        .uni-name {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 4px;
+            line-height: 1.4;
+            max-width: 220px;
+        }
+
+        .header-badge {
+            background: #1e3a5f;
+            border: 1px solid #2d5a8e;
+            border-radius: 8px;
+            padding: 10px 14px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .badge-label {
+            font-size: 7px;
+            letter-spacing: 0.3em;
+            color: #64748b;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .badge-year {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: #38bdf8;
+            line-height: 1;
+        }
+
+        /* Stripe */
+        .stripe {
+            height: 5px;
+            background: repeating-linear-gradient(90deg, #38bdf8 0 14px, #0e1829 14px 18px);
+        }
+
+        /* Body */
+        .card-body {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Participant block */
+        .participant-block {
+            border: 1.5px solid #e2e8f0;
             border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f8fafc;
         }
 
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #0e1829;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #38bdf8;
+            border: 2px solid #38bdf8;
+            letter-spacing: 0.05em;
+        }
+
+        .part-tag {
+            font-size: 7.5px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .part-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.1;
+            margin: 2px 0;
+        }
+
+        .part-id {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: #38bdf8;
+            letter-spacing: 0.15em;
+        }
+
+        /* Info grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .info-cell {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            background: #f8fafc;
+        }
+
+        .cell-label {
+            font-size: 7.5px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .cell-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .status-val {
+            color: #16a34a;
+        }
+
+        /* Seat section */
+        .seat-section {
+            border: 2px solid #0e1829;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .seat-header {
+            background: #0e1829;
+            color: #38bdf8;
+            font-size: 9px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 9px 14px;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .seat-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .seat-table th {
+            background: #f1f5f9;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            padding: 9px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .seat-table th:last-child {
+            border-right: none;
+        }
+
+        .seat-table td {
+            padding: 14px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            border-right: 1px solid #e2e8f0;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .seat-table td:last-child {
+            border-right: none;
+        }
+
+        .seat-no {
+            font-family: 'Space Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0e1829;
+            background: #dbeafe;
+            border-radius: 5px;
+            padding: 3px 10px;
+            display: inline-block;
+            border: 1.5px solid #bfdbfe;
+        }
+
+        /* Notice */
+        .notice {
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .notice-text {
+            font-size: 9px;
+            color: #94a3b8;
+            line-height: 1.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .notice-icon {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        .card-footer {
+            background: #f8fafc;
+            border-top: 1.5px solid #e2e8f0;
+            padding: 13px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dev-tag {
+            font-size: 8px;
+            color: #94a3b8;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .print-btn {
+            background: #0e1829;
+            color: #38bdf8;
+            border: none;
+            border-radius: 7px;
+            padding: 9px 18px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: background 0.15s;
+        }
+
+        .print-btn:hover {
+            background: #1e3a5f;
+        }
+
+        /* ─── PRINT STYLES ─── */
         @media print {
-            .no-print {
+            body {
+                background: #fff !important;
+                padding: 0;
+                display: block;
+            }
+
+            .page-wrap {
+                align-items: flex-start;
+            }
+
+            .pass-card {
+                max-width: 100%;
+                box-shadow: none !important;
+                border: 2px solid #000 !important;
+                border-radius: 10px;
+                page-break-inside: avoid;
+            }
+
+            .card-footer {
                 display: none !important;
             }
 
-            .print-card {
-                background: white !important;
-                color: black !important;
-                border: 2px solid #000 !important;
-                box-shadow: none !important;
-                width: 100% !important;
-                margin: 0 !important;
+            .notice {
+                display: flex !important;
             }
 
-            .text-cyan-500 {
-                color: #0891b2 !important;
+            .stripe {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .card-header,
+            .seat-header {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .avatar {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .seat-no {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }
         }
     </style>
 </head>
 
-<body class="antialiased text-slate-300">
+<body>
+    <div class="page-wrap">
+        <div class="pass-card">
 
-    <div class="min-h-screen py-10 px-4 flex items-center justify-center relative overflow-hidden">
-
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none">
-        </div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none">
-        </div>
-
-        <div class="max-w-xl w-full z-10">
-
-            <div class="text-center mb-10">
-                <div
-                    class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full mb-4">
-                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span>
-                    <span class="text-[10px] cyber-font font-bold text-cyan-500 tracking-widest uppercase">Fest Portal
-                        2026</span>
+            <!-- Header -->
+            <div class="card-header">
+                <div>
+                    <span class="fest-label">Official Digital Pass &middot; CSE Fest Portal</span>
+                    <div class="fest-title">DUET <span>CSE</span> FEST</div>
+                    <div class="uni-name">Dhaka University of Engineering &amp; Technology</div>
                 </div>
-                <h1 class="text-4xl font-black text-white italic tracking-tighter uppercase">CSE <span
-                        class="text-cyan-400">Fest</span> Status</h1>
-            </div>
-
-            <div
-                class="print-card relative bg-[#0d1117] border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden transition-all duration-500 hover:border-cyan-500/30">
-
-                <div class="bg-gradient-to-r from-cyan-500/10 via-transparent p-8 pb-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p
-                                class="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1 leading-none">
-                                Official Digital Pass</p>
-                            <h2 class="text-white text-lg font-black uppercase tracking-tight leading-tight">
-                                {{ $result->university_name ?? 'Dhaka University of Engineering & Technology' }}
-                            </h2>
-                        </div>
-                        <div class="bg-slate-900 border border-white/5 p-3 rounded-2xl shadow-inner">
-                            <i class="fa-solid fa-qrcode text-cyan-500 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-8 pt-0">
-
-                    <div class="bg-slate-950/40 border border-white/5 p-6 rounded-3xl mb-6 text-center group">
-                        <span
-                            class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.4em] block mb-2">PARTICIPANT_IDENTITY</span>
-                        <h3
-                            class="text-2xl font-black text-white uppercase tracking-tighter group-hover:text-cyan-400 transition-colors">
-                            {{ $result->team_name ?? ($result->name ?? 'PARTICIPANT NAME') }}
-                        </h3>
-                        <p class="text-cyan-500/60 font-mono text-[10px] mt-2 tracking-widest">ID:
-                            #{{ $result->participant_id ?? '0000-XX' }}</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5">
-                            <p class="text-[8px] text-slate-600 font-bold uppercase tracking-widest mb-1">Target Event
-                            </p>
-                            <p class="text-white text-[11px] font-black uppercase tracking-tight italic">
-                                {{ $result->event_name ?? 'N/A' }}</p>
-                        </div>
-                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5">
-                            <p class="text-[8px] text-slate-600 font-bold uppercase tracking-widest mb-1">Status</p>
-                            <div class="flex items-center gap-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
-                                <p class="text-cyan-400 text-[11px] font-black uppercase tracking-widest">
-                                    {{ $result->result_status ?? 'PENDING' }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-950/80 border border-white/5 rounded-3xl overflow-hidden shadow-inner">
-                        <div class="bg-white/5 px-5 py-3 border-b border-white/5 flex items-center gap-2">
-                            <i class="fa-solid fa-map-location-dot text-cyan-500 text-[10px]"></i>
-                            <span class="text-[9px] text-slate-400 font-black uppercase tracking-widest">Venue Details &
-                                Seat Plan</span>
-                        </div>
-
-                        <div class="p-0">
-                            <table class="w-full text-[11px] uppercase font-bold text-center">
-                                <thead>
-                                    <tr class="text-slate-600 border-b border-white/5">
-                                        <th class="py-4 border-r border-white/5">Lab / Room</th>
-                                        <th class="py-4 border-r border-white/5">Seat / PC</th>
-                                        <th class="py-4">Floor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="text-white">
-                                        <td class="py-5 border-r border-white/5">{{ $result->room_no ?? 'CSE-101' }}
-                                        </td>
-                                        <td class="py-5 border-r border-white/5 text-cyan-500 cyber-font text-sm">
-                                            {{ $result->seat_no ?? 'PC-00' }}</td>
-                                        <td class="py-5">{{ $result->floor ?? '3rd' }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 flex gap-3 items-start opacity-60">
-                        <i class="fa-solid fa-circle-exclamation text-cyan-500 text-[10px] mt-1"></i>
-                        <p class="text-[8px] text-slate-400 leading-relaxed italic uppercase tracking-wider">
-                            This document is required at the entry point. Participant must carry university ID card
-                            along with this pass.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900/50 p-6 border-t border-white/5 flex items-center justify-between no-print">
-                    <button onclick="window.print()"
-                        class="bg-white hover:bg-cyan-500 text-slate-950 px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-tighter flex items-center gap-2 transition-all">
-                        <i class="fa-solid fa-file-pdf"></i> Save Document
-                    </button>
-
-                    <div class="flex gap-2">
-                        <button
-                            class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-all">
-                            <i class="fa-solid fa-share-nodes text-xs"></i>
-                        </button>
-                    </div>
+                <div class="header-badge">
+                    <span class="badge-label">Year</span>
+                    <span class="badge-year">2026</span>
                 </div>
             </div>
 
-            <div class="mt-10 text-center opacity-30">
-                <p class="text-[9px] font-black uppercase tracking-[0.5em] text-slate-500">
-                    Developed By DUET CSE Community
-                </p>
+            <div class="stripe"></div>
+
+            <!-- Body -->
+            <div class="card-body">
+
+                <!-- Participant -->
+                <div class="participant-block">
+                    <div class="avatar">TA</div>
+                    <div>
+                        <div class="part-tag">Participant Identity</div>
+                        <div class="part-name">{{ $result->team_name ?? 'Team Alpha / Participant Name' }}</div>
+                        <div class="part-id">ID: #{{ $result->participant_id ?? '2026-CSE-047' }}</div>
+                    </div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="info-grid">
+                    <div class="info-cell">
+                        <div class="cell-label">Target Event</div>
+                        <div class="cell-value">{{ $result->event_name ?? 'Programming Contest' }}</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="cell-label">Status</div>
+                        <div class="cell-value">
+                            <span class="status-dot"></span>
+                            <span class="status-val">{{ $result->result_status ?? 'Selected' }}</span>
+                        </div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="cell-label">Date</div>
+                        <div class="cell-value">18 May 2026</div>
+                    </div>
+                    <div class="info-cell">
+                        <div class="cell-label">Report Time</div>
+                        <div class="cell-value">08:30 AM</div>
+                    </div>
+                </div>
+
+                <!-- Seat Plan -->
+                <div class="seat-section">
+                    <div class="seat-header">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        Venue Details &amp; Seat Plan
+                    </div>
+                    <table class="seat-table">
+                        <thead>
+                            <tr>
+                                <th>Lab / Room</th>
+                                <th>Seat / PC No.</th>
+                                <th>Floor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ $result->room_no ?? 'CSE-101' }}</td>
+                                <td><span class="seat-no">{{ $result->seat_no ?? 'PC-14' }}</span></td>
+                                <td>{{ $result->floor ?? '3rd Floor' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Notice -->
+                <div class="notice">
+                    <i class="fa-solid fa-circle-exclamation notice-icon"></i>
+                    <p class="notice-text">
+                        This document is required at the entry point. Participant must carry their University ID card
+                        along with this pass. Unauthorized entry is strictly prohibited.
+                    </p>
+                </div>
+
+            </div><!-- /card-body -->
+
+            <!-- Footer (hidden on print) -->
+            <div class="card-footer">
+                <span class="dev-tag">Developed by DUET CSE Community</span>
+                <button class="print-btn" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i>
+                    Print / Save PDF
+                </button>
             </div>
-        </div>
+
+        </div><!-- /pass-card -->
     </div>
-
 </body>
 
 </html>

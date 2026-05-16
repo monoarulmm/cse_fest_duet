@@ -80,7 +80,7 @@
     {{-- ═══════════════════════════════════
      SPONSORS SECTION
 ═══════════════════════════════════ --}}
-    <section class="py-24 bg-[#020617] relative overflow-hidden border-t border-slate-900">
+    <section class="py-24  relative overflow-hidden border-t border-slate-900">
         <div class="container mx-auto px-6 relative">
             <div class="mb-16 text-center">
                 <h2 class="heading-font text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
@@ -131,7 +131,7 @@
         </div>
     </section>
 
-    <section class="py-24 bg-[#020617] border-t border-slate-900">
+    <section class="py-24  border-t border-slate-900">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h2 class="heading-font text-4xl md:text-6xl font-black uppercase text-white">

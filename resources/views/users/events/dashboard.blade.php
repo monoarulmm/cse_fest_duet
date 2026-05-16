@@ -16,9 +16,9 @@
 
     <style>
         /* ============================================================
-                   CRITICAL FIX 2: All dynamic Tailwind color classes hardcoded
-                   here so PurgeCSS never removes them at build time.
-                   ============================================================ */
+                       CRITICAL FIX 2: All dynamic Tailwind color classes hardcoded
+                       here so PurgeCSS never removes them at build time.
+                       ============================================================ */
 
         /* Stat card colors */
         .stat-icon-cyan {
@@ -139,8 +139,8 @@
         }
 
         /* ============================================================
-                   GLASSMORPHISM BASE
-                   ============================================================ */
+                       GLASSMORPHISM BASE
+                       ============================================================ */
         .glass-card {
             background: rgba(15, 23, 42, .6);
             backdrop-filter: blur(12px);
@@ -149,8 +149,8 @@
         }
 
         /* ============================================================
-                   SKELETON LOADER — shown while JS/images load
-                   ============================================================ */
+                       SKELETON LOADER — shown while JS/images load
+                       ============================================================ */
         @keyframes shimmer {
             0% {
                 background-position: -800px 0;
@@ -172,8 +172,8 @@
         }
 
         /* ============================================================
-                   STAT CARDS
-                   ============================================================ */
+                       STAT CARDS
+                       ============================================================ */
         .stat-card {
             transition: transform .25s ease, border-color .25s ease;
             flex: 1;
@@ -186,16 +186,16 @@
         }
 
         /* ============================================================
-                   BUTTONS
-                   ============================================================ */
+                       BUTTONS
+                       ============================================================ */
         .btn-glow:hover {
             box-shadow: 0 0 20px rgba(6, 182, 212, .35);
             transform: translateY(-2px);
         }
 
         /* ============================================================
-                   ROTATING BORDER ANIMATION (stat circle)
-                   ============================================================ */
+                       ROTATING BORDER ANIMATION (stat circle)
+                       ============================================================ */
         .stat-circle-border {
             background: conic-gradient(from 0deg, transparent, #06b6d4, transparent);
             animation: spin-ring 4s linear infinite;
@@ -208,8 +208,8 @@
         }
 
         /* ============================================================
-                   SWIPER
-                   ============================================================ */
+                       SWIPER
+                       ============================================================ */
         .swiper {
             width: 100%;
             padding-top: 20px;
@@ -217,8 +217,8 @@
         }
 
         /* ============================================================
-                   JUDGE CARDS
-                   ============================================================ */
+                       JUDGE CARDS
+                       ============================================================ */
         .judge-card {
             transition: transform .3s ease;
         }
@@ -236,8 +236,8 @@
         }
 
         /* ============================================================
-                   PAGE FADE-IN — avoids FOUC while styles parse
-                   ============================================================ */
+                       PAGE FADE-IN — avoids FOUC while styles parse
+                       ============================================================ */
         #page-root {
             opacity: 0;
             transition: opacity .35s ease;
@@ -248,8 +248,8 @@
         }
 
         /* ============================================================
-                   CONTENT VISIBILITY — paint performance boost
-                   ============================================================ */
+                       CONTENT VISIBILITY — paint performance boost
+                       ============================================================ */
         .cv-auto {
             content-visibility: auto;
             contain-intrinsic-size: 0 400px;
@@ -400,36 +400,28 @@
                         <a href="{{ $action['url'] ?? '#' }}"
                             @if ($action['url']) target="_blank" rel="noopener" @endif
                             class="action-btn-{{ $action['color'] }} px-6 py-4 glass-card rounded-2xl
-                              border transition-all flex items-center gap-2 uppercase text-xs font-bold
-                              tracking-widest {{ !$action['url'] ? 'opacity-30 pointer-events-none' : '' }}">
+          border transition-all flex items-center gap-2 uppercase text-xs font-bold
+          tracking-widest {{ !$action['url'] ? 'opacity-30 pointer-events-none' : '' }}">
                             <i class="fa-solid {{ $action['icon'] }}"></i> {{ $action['label'] }}
                         </a>
                     @endforeach
 
                     @php
                         $slug = $event->slug;
-
-                        // নির্দিষ্ট ৩টি ইভেন্টের স্লাগ চেক করছি
-                        $special_events = ['iupc', 'project-showcase', 'ai-hackathon'];
-
-                        if ($slug == 'iupc') {
-                            // শুধু IUPC এর জন্য
-                            $url = route('event.pre_registered', $slug);
-                        } elseif (!in_array($slug, $special_events)) {
-                            // IUPC, Project, AI বাদে বাকি সব (ICT Olympiad এবং অন্যান্য) পেমেন্ট রাউটে যাবে
-                            // নিশ্চিত করুন আপনার কাছে $registration->id বা সমতুল্য ডাটা আছে
-                            $url = route('payment.make', $registration->id ?? $event->id);
-                        } else {
-                            // Project বা AI এর জন্য যদি আলাদা কিছু না থাকে তবে ডিফল্ট
-                            $url = route('event.register', $slug);
-                        }
                     @endphp
 
-                    <a href="{{ $url }}"
-                        class="px-6 py-3 rounded-xl border {{ request()->is('payment/*') ? 'bg-cyan-500 text-slate-900 font-bold' : 'bg-slate-900 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/10 transition-all' }}">
-                        <i class="fa-solid fa-pen-to-square mr-1"></i>
-                        Final Register Now
-                    </a>
+                    {{-- শুধুমাত্র IUPC হলে এই বাটনটি স্ক্রিনে দেখাবে, অন্যথায় পুরোপুরি হাইড থাকবে --}}
+                    @if ($slug == 'iupc')
+                        @php
+                            $url = route('event.pre_registered', $slug);
+                        @endphp
+
+                        <a href="{{ $url }}"
+                            class="px-6 py-3 rounded-xl border {{ request()->is('payment/*') ? 'bg-cyan-500 text-slate-900 font-bold' : 'bg-slate-900 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/10 transition-all' }}">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i>
+                            Final Register Now
+                        </a>
+                    @endif
                 </div>
 
                 {{-- ── Judges Panel ─────────────────────────────────── --}}

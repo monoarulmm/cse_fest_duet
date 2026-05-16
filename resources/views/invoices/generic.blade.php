@@ -4,44 +4,80 @@
 @section('title', 'Payment Invoice | CSE CARNIVAL')
 
 @section('custom_css')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
-            --cyan: #22d3ee;
-            --cyan-dim: rgba(34, 211, 238, 0.15);
-            --cyan-border: rgba(34, 211, 238, 0.25);
+            --ink: #0e0e14;
+            --ink-2: #1a1a24;
+            --ink-3: #252535;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --gold-dim: rgba(201, 168, 76, .12);
+            --gold-border: rgba(201, 168, 76, .22);
+            --silver: #94a3b8;
+            --text: #e8e4dc;
+            --text-muted: #7a7a90;
             --green: #4ade80;
-            --green-dim: rgba(74, 222, 128, 0.1);
-            --red: #f87171;
-            --bg-card: rgba(10, 18, 30, 0.85);
-            --text-muted: rgba(148, 163, 184, 0.7);
+            --green-dim: rgba(74, 222, 128, .1);
+            --radius: 16px;
         }
 
-        .inv-wrap {
+        /* ══ PAGE SHELL ══ */
+        .inv-page {
             min-height: 100vh;
+            background: var(--ink);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 3rem 1rem;
+            padding: 48px 16px 80px;
+            position: relative;
         }
 
-        .inv-card {
+        .inv-page::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201, 168, 76, .06) 0%, transparent 60%),
+                radial-gradient(ellipse 30% 30% at 85% 90%, rgba(201, 168, 76, .04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Subtle dot grid */
+        .inv-page::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, .035) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        /* ══ INVOICE DOCUMENT ══ */
+        .inv-doc {
+            position: relative;
+            z-index: 1;
             width: 100%;
-            max-width: 700px;
-            background: var(--bg-card);
-            border: 1px solid var(--cyan-border);
-            border-radius: 2rem;
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 0 80px rgba(34, 211, 238, 0.07), 0 40px 80px rgba(0, 0, 0, 0.5);
-            animation: fadeUp 0.6s ease both;
+            max-width: 720px;
+            animation: docIn .7s cubic-bezier(.22, 1, .36, 1) both;
         }
 
-        @keyframes fadeUp {
+        @keyframes docIn {
             from {
                 opacity: 0;
-                transform: translateY(24px);
+                transform: translateY(32px);
             }
 
             to {
@@ -50,234 +86,203 @@
             }
         }
 
-        /* ── HEADER ── */
-        .inv-header {
-            padding: 2.5rem 2.5rem 2rem;
-            border-bottom: 1px solid var(--cyan-border);
-            position: relative;
+        /* ── Action Bar (outside printable area) ── */
+        .action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+        .action-bar-left {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .action-bar-left span {
+            color: var(--gold);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 20px;
+            border-radius: 10px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all .2s ease;
+        }
+
+        .btn-download {
+            background: var(--gold);
+            color: var(--ink);
+        }
+
+        .btn-download:hover {
+            background: var(--gold-light);
+            color: var(--ink);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(201, 168, 76, .3);
+        }
+
+        .btn-dashboard {
+            background: var(--ink-3);
+            border: 1px solid rgba(255, 255, 255, .08);
+            color: var(--silver);
+        }
+
+        .btn-dashboard:hover {
+            color: var(--text);
+            border-color: rgba(255, 255, 255, .15);
+        }
+
+        /* ══ PRINTABLE CARD ══ */
+        .inv-card {
+            background: var(--ink-2);
+            border: 1px solid var(--gold-border);
+            border-radius: 24px;
             overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(201, 168, 76, .06),
+                0 48px 80px rgba(0, 0, 0, .7),
+                inset 0 1px 0 rgba(255, 255, 255, .04);
         }
 
-        .inv-header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% -30%, rgba(34, 211, 238, 0.12) 0%, transparent 70%);
-            pointer-events: none;
+        /* ── Decorative top strip ── */
+        .inv-crown {
+            height: 4px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    var(--gold-border) 15%,
+                    var(--gold) 40%,
+                    var(--gold-light) 50%,
+                    var(--gold) 60%,
+                    var(--gold-border) 85%,
+                    transparent 100%);
         }
 
-        .inv-status-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
+        /* ── Header ── */
+        .inv-header {
+            padding: 40px 48px 36px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: start;
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+            position: relative;
+        }
+
+        .inv-org {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .inv-org-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--gold-dim);
+            border: 1px solid var(--gold-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            margin: 0 auto 1.25rem;
+            font-size: 20px;
+            flex-shrink: 0;
         }
 
-        .inv-status-icon.success {
-            background: var(--green-dim);
-            border: 2px solid rgba(74, 222, 128, 0.4);
-            box-shadow: 0 0 24px rgba(74, 222, 128, 0.2);
-        }
-
-        .inv-status-icon.failed {
-            background: rgba(248, 113, 113, 0.1);
-            border: 2px solid rgba(248, 113, 113, 0.4);
-        }
-
-        .inv-event-badge {
-            display: inline-block;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            color: var(--cyan);
-            background: var(--cyan-dim);
-            border: 1px solid var(--cyan-border);
-            padding: 0.3rem 1rem;
-            border-radius: 999px;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-        }
-
-        .inv-headline {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 1.75rem;
-            color: #fff;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .inv-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
-            font-family: 'Space Mono', monospace;
-        }
-
-        /* ── PARTICIPANT ID BADGE ── */
-        .pid-badge {
-            margin: 1.5rem auto 0;
-            max-width: 340px;
-            background: linear-gradient(135deg, rgba(74, 222, 128, 0.08), rgba(34, 211, 238, 0.08));
-            border: 1px dashed rgba(74, 222, 128, 0.45);
-            border-radius: 1rem;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .pid-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        .pid-value {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.4rem;
+        .inv-org-name {
+            font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            color: var(--green);
-            letter-spacing: 0.08em;
-        }
-
-        /* ── BODY ── */
-        .inv-body {
-            padding: 2rem 2.5rem 2.5rem;
-        }
-
-        .inv-section-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 0.18em;
-            color: var(--cyan);
+            font-size: 15px;
+            color: var(--gold-light);
+            letter-spacing: .04em;
             text-transform: uppercase;
-            margin-bottom: 0.75rem;
-            border-left: 3px solid var(--cyan);
-            padding-left: 0.6rem;
         }
 
-        .inv-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-        }
-
-        .inv-table tr {
-            border-bottom: 1px solid rgba(34, 211, 238, 0.07);
-        }
-
-        .inv-table tr:last-child {
-            border-bottom: none;
-        }
-
-        .inv-table th {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.65rem;
+        .inv-org-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
             color: var(--text-muted);
+            letter-spacing: .08em;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0.75rem 0;
-            width: 38%;
+            margin-top: 2px;
+        }
+
+        .inv-title-block h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 36px;
             font-weight: 400;
-            vertical-align: top;
-        }
-
-        .inv-table td {
-            font-size: 0.85rem;
-            color: #e2e8f0;
-            padding: 0.75rem 0;
-            vertical-align: top;
-            font-family: 'Syne', sans-serif;
-            font-weight: 600;
-        }
-
-        /* ── TRANSACTION SUMMARY BOX ── */
-        .txn-box {
-            background: rgba(34, 211, 238, 0.04);
-            border: 1px solid var(--cyan-border);
-            border-radius: 1.25rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .txn-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 0;
-            border-bottom: 1px solid rgba(34, 211, 238, 0.07);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-        }
-
-        .txn-row:last-child {
-            border-bottom: none;
-        }
-
-        .txn-row .lbl {
-            color: var(--text-muted);
-        }
-
-        .txn-row .val {
-            color: #e2e8f0;
-        }
-
-        .txn-amount {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid var(--cyan-border);
-        }
-
-        .txn-amount .lbl {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 0.85rem;
             color: #fff;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .inv-title-block h1 em {
+            color: var(--gold-light);
+            font-style: italic;
+        }
+
+        .inv-event-tag {
+            display: inline-block;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gold);
+            background: var(--gold-dim);
+            border: 1px solid var(--gold-border);
+            padding: 4px 12px;
+            border-radius: 99px;
+            letter-spacing: .1em;
             text-transform: uppercase;
         }
 
-        .txn-amount .val {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--green);
+        /* Status badge — top right */
+        .inv-status-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
         }
 
-        /* ── STATUS PILL ── */
-        .status-pill {
-            display: inline-flex;
+        .status-stamp {
+            display: flex;
             align-items: center;
-            gap: 0.35rem;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.65rem;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .08em;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0.3rem 0.8rem;
-            border-radius: 999px;
         }
 
-        .status-pill.paid {
-            background: rgba(74, 222, 128, 0.12);
+        .status-stamp.paid {
+            background: var(--green-dim);
+            border: 1px solid rgba(74, 222, 128, .25);
             color: var(--green);
-            border: 1px solid rgba(74, 222, 128, 0.35);
         }
 
-        .status-pill::before {
-            content: '';
-            width: 6px;
-            height: 6px;
+        .status-stamp .dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: currentColor;
             animation: blink 1.4s ease infinite;
@@ -287,235 +292,648 @@
 
             0%,
             100% {
-                opacity: 1;
+                opacity: 1
             }
 
             50% {
-                opacity: 0.3;
+                opacity: .25
             }
         }
 
-        /* ── DIVIDER ── */
+        .inv-date {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: .06em;
+            text-align: right;
+        }
+
+        /* ── Participant ID hero ── */
+        .pid-hero {
+            margin: 0 48px;
+            margin-top: -1px;
+            background: linear-gradient(135deg, rgba(74, 222, 128, .06), rgba(201, 168, 76, .06));
+            border: 1px solid rgba(74, 222, 128, .2);
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .pid-hero-left {}
+
+        .pid-hero-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .pid-hero-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--green);
+            letter-spacing: .08em;
+        }
+
+        .pid-hero-right {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: right;
+            line-height: 1.7;
+        }
+
+        .pid-hero-right strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* ── Body ── */
+        .inv-body {
+            padding: 36px 48px 40px;
+        }
+
+        /* Two-column layout */
+        .inv-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .inv-section {
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid rgba(255, 255, 255, .06);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+        }
+
+        .inv-section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: .16em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inv-section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gold-border);
+            opacity: .5;
+        }
+
+        .info-list {}
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-item:first-child {
+            padding-top: 0;
+        }
+
+        .info-key {
+            font-family: 'DM Mono', monospace;
+            font-size: 9.5px;
+            color: var(--text-muted);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .info-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .info-val.mono {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* ── Transaction summary ── */
+        .txn-summary {
+            background: rgba(201, 168, 76, .04);
+            border: 1px solid var(--gold-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .txn-head {
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--gold-border);
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: rgba(201, 168, 76, .04);
+        }
+
+        .txn-rows {
+            padding: 8px 22px;
+        }
+
+        .txn-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            gap: 16px;
+        }
+
+        .txn-row:last-child {
+            border-bottom: none;
+        }
+
+        .txn-lbl {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .txn-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            color: var(--text);
+            text-align: right;
+        }
+
+        .txn-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 22px;
+            border-top: 1px solid var(--gold-border);
+            background: rgba(201, 168, 76, .03);
+        }
+
+        .txn-total-lbl {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .txn-total-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 26px;
+            font-weight: 500;
+            color: var(--green);
+            letter-spacing: .04em;
+        }
+
+        .txn-total-currency {
+            font-size: 14px;
+            opacity: .7;
+            margin-right: 2px;
+        }
+
+        /* ── Divider ── */
         .inv-divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--cyan-border), transparent);
-            margin: 1.75rem 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .06), transparent);
+            margin: 4px 0 28px;
         }
 
-        /* ── ACTIONS ── */
-        .inv-actions {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-inv-primary {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #000;
-            background: var(--cyan);
-            border: none;
-            padding: 0.8rem 1.75rem;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: opacity 0.2s, transform 0.2s;
-            font-weight: 700;
-        }
-
-        .btn-inv-primary:hover {
-            opacity: 0.85;
-            transform: translateY(-1px);
-            color: #000;
-        }
-
-        .btn-inv-outline {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--cyan);
-            background: transparent;
-            border: 1px solid var(--cyan-border);
-            padding: 0.8rem 1.75rem;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .btn-inv-outline:hover {
-            background: var(--cyan-dim);
-            transform: translateY(-1px);
-            color: var(--cyan);
-        }
-
-        /* ── FOOTER ── */
-        .inv-footer {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.6rem;
+        /* ── Note / QR area ── */
+        .inv-note {
+            background: rgba(255, 255, 255, .02);
+            border: 1px dashed rgba(255, 255, 255, .07);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
             color: var(--text-muted);
-            text-align: center;
-            padding: 1.25rem 2.5rem;
-            border-top: 1px solid var(--cyan-border);
-            letter-spacing: 0.08em;
+            line-height: 1.8;
+            letter-spacing: .03em;
+            margin-bottom: 28px;
+        }
+
+        .inv-note strong {
+            color: var(--gold-light);
+        }
+
+        /* ── Footer ── */
+        .inv-foot {
+            border-top: 1px solid rgba(255, 255, 255, .05);
+            padding: 20px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .inv-foot-brand {
+            font-family: 'Instrument Serif', serif;
+            font-size: 16px;
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .inv-foot-meta {
+            font-family: 'DM Mono', monospace;
+            font-size: 9.5px;
+            color: var(--text-muted);
+            letter-spacing: .07em;
+            text-align: right;
+            line-height: 1.8;
             text-transform: uppercase;
         }
 
-        /* ── FAILED STATE ── */
-        .inv-failed-msg {
-            text-align: center;
-            padding: 1rem;
-            color: var(--red);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-        }
-
+        /* ════════════════════════════════
+           PRINT STYLES
+           ════════════════════════════════ */
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
 
-            .inv-actions,
-            nav,
-            footer {
+            body,
+            html {
+                background: #fff !important;
+            }
+
+            .inv-page {
+                background: #fff !important;
+                padding: 0 !important;
+                display: block;
+            }
+
+            .inv-page::before,
+            .inv-page::after {
+                display: none;
+            }
+
+            .action-bar {
                 display: none !important;
             }
 
-            .inv-card {
-                box-shadow: none;
-                border: 1px solid #ccc;
+            .inv-doc {
+                max-width: 100% !important;
+                animation: none !important;
             }
 
-            body {
-                background: #fff;
+            .inv-card {
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border: 1px solid #e0d9c8 !important;
+                background: #fff !important;
+            }
+
+            /* Remap CSS vars for white background */
+            :root {
+                --ink-2: #fff;
+                --ink-3: #f8f6f0;
+                --text: #1a1a1a;
+                --text-muted: #666;
+                --gold: #8a6a1f;
+                --gold-light: #a07820;
+                --gold-dim: rgba(138, 106, 31, .08);
+                --gold-border: rgba(138, 106, 31, .2);
+                --green: #166534;
+                --green-dim: rgba(22, 101, 52, .08);
+            }
+
+            .inv-crown {
+                background: linear-gradient(90deg, transparent, #c9a84c, #e8c97a, #c9a84c, transparent) !important;
+                print-color-adjust: exact;
+            }
+
+            .inv-section {
+                background: #f9f7f2 !important;
+                border-color: #e5dfc8 !important;
+            }
+
+            .txn-summary {
+                background: #f9f7f0 !important;
+                border-color: #d4c090 !important;
+            }
+
+            .txn-total {
+                background: #f5f0e0 !important;
+            }
+
+            .pid-hero {
+                background: #f0f7f0 !important;
+                border-color: #90c090 !important;
+            }
+
+            nav,
+            footer,
+            .action-bar {
+                display: none !important;
+            }
+
+            a {
+                text-decoration: none !important;
+                color: inherit !important;
+            }
+
+            .inv-foot-brand {
+                color: #8a6a1f !important;
             }
         }
 
-        @media (max-width: 600px) {
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .inv-header {
+                padding: 28px 24px;
+                grid-template-columns: 1fr;
+            }
 
-            .inv-header,
             .inv-body {
-                padding: 1.5rem;
+                padding: 24px;
             }
 
-            .inv-headline {
-                font-size: 1.35rem;
-            }
-
-            .pid-badge {
+            .inv-foot {
+                padding: 18px 24px;
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .pid-hero {
+                margin: 0 24px;
+                padding: 16px 20px;
+                flex-direction: column;
+            }
+
+            .inv-cols {
+                grid-template-columns: 1fr;
+            }
+
+            .inv-status-badge {
+                align-items: flex-start;
+            }
+
+            .inv-date {
+                text-align: left;
+            }
+
+            .inv-title-block h1 {
+                font-size: 28px;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .action-btns {
+                flex-direction: column;
             }
         }
     </style>
 @endsection
 
 @section('content')
-    <div class="inv-wrap">
-        <div class="inv-card">
+    <div class="inv-page">
+        <div class="inv-doc">
 
             @if (in_array($payment_status, ['success', 'already_paid']))
 
-                {{-- ══ HEADER ══ --}}
-                <div class="inv-header text-center">
-                    <div class="inv-status-icon success mx-auto">✅</div>
-                    <div class="inv-event-badge">{{ strtoupper(str_replace('-', ' ', $slug)) }}</div>
-                    <h1 class="inv-headline">পেমেন্ট সফল</h1>
-                    <p class="inv-sub">{{ $message }}</p>
-
-                    {{-- Participant ID —  সবচেয়ে গুরুত্বপূর্ণ তথ্য, সবার আগে --}}
-                    @if ($registration->participant_id)
-                        <div class="pid-badge">
-                            <div>
-                                <div class="pid-label">Participant ID</div>
-                                <div class="pid-value">{{ $registration->participant_id }}</div>
-                            </div>
-                            <div style="font-size:1.5rem;">🎫</div>
-                        </div>
-                    @endif
-                </div>
-
-                {{-- ══ BODY ══ --}}
-                <div class="inv-body">
-
-                    {{-- Participant / Team Info --}}
-                    <div class="inv-section-label">Participant Info</div>
-                    <table class="inv-table">
-                        @if ($registration->team_name)
-                            <tr>
-                                <th>Team Name</th>
-                                <td>{{ $registration->team_name }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <th>Name</th>
-                            <td>{{ $registration->m1_name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ $registration->m1_email }}</td>
-                        </tr>
-                        <tr>
-                            <th>Phone</th>
-                            <td>{{ $registration->m1_phone }}</td>
-                        </tr>
-                        @if ($registration->university_name)
-                            <tr>
-                                <th>University</th>
-                                <td>{{ $registration->university_name }}</td>
-                            </tr>
-                        @endif
-                    </table>
-
-                    {{-- Transaction Details --}}
-                    @if ($transaction)
-                        <div class="inv-section-label">Transaction Details</div>
-                        <div class="txn-box">
-                            <div class="txn-row">
-                                <span class="lbl">Transaction ID</span>
-                                <span class="val">{{ $transaction->transaction_id }}</span>
-                            </div>
-                            <div class="txn-row">
-                                <span class="lbl">Payment Method</span>
-                                <span class="val">{{ $transaction->payment_method }}</span>
-                            </div>
-                            <div class="txn-row">
-                                <span class="lbl">Date & Time</span>
-                                <span class="val">{{ $transaction->created_at->format('d M Y, h:i A') }}</span>
-                            </div>
-                            <div class="txn-row">
-                                <span class="lbl">Status</span>
-                                <span class="val">
-                                    <span class="status-pill paid">{{ $transaction->status }}</span>
-                                </span>
-                            </div>
-                            <div class="txn-amount">
-                                <span class="lbl">Total Paid</span>
-                                <span class="val">৳ {{ number_format($transaction->amount, 2) }}</span>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="inv-divider"></div>
-
-                    {{-- Actions --}}
-                    <div class="inv-actions">
-                        <a href="{{ route('event.dashboard', $slug) }}" class="btn-inv-primary">
-                            Dashboard →
+                {{-- ── Action Bar ── --}}
+                <div class="action-bar no-print">
+                    <div class="action-bar-left">
+                        Invoice &nbsp;/&nbsp; <span>{{ strtoupper(str_replace('-', ' ', $slug)) }}</span>
+                        &nbsp;/&nbsp; {{ $registration->participant_id ?? 'Pending' }}
+                    </div>
+                    <div class="action-btns">
+                        <a href="{{ route('event.dashboard', $slug) }}" class="btn-action btn-dashboard">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                            Dashboard
                         </a>
-                        <button onclick="window.print()" class="btn-inv-outline">
-                            🖨️ Print Invoice
+                        <button onclick="window.print()" class="btn-action btn-download">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <polyline points="6,9 6,2 18,2 18,9" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M6,18H4a2 2 0 01-2-2V11a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <rect x="6" y="14" width="12" height="8" rx="1" stroke="currentColor"
+                                    stroke-width="2" />
+                            </svg>
+                            Print / Save PDF
                         </button>
                     </div>
                 </div>
 
-                {{-- ══ FOOTER ══ --}}
-                <div class="inv-footer">
-                    CSE Carnival &nbsp;·&nbsp; Keep this invoice for your records
+                {{-- ══ INVOICE CARD ══ --}}
+                <div class="inv-card">
+
+                    {{-- Gold crown ─ }}
+        <div class="inv-crown"></div>
+
+        {{-- ── Header ── --}}
+                    <div class="inv-header">
+                        <div>
+                            <div class="inv-org">
+                                <div class="inv-org-icon">🎓</div>
+                                <div>
+                                    <div class="inv-org-name">CSE Carnival</div>
+                                    <div class="inv-org-sub">DUET · Dept. of CSE</div>
+                                </div>
+                            </div>
+                            <div class="inv-title-block">
+                                <h1>Payment <em>Invoice</em></h1>
+                                <div style="margin-top:10px;">
+                                    <span class="inv-event-tag">{{ strtoupper(str_replace('-', ' ', $slug)) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="inv-status-badge">
+                            <div class="status-stamp paid">
+                                <span class="dot"></span>
+                                @if ($payment_status === 'already_paid')
+                                    Verified
+                                @else
+                                    Paid
+                                @endif
+                            </div>
+                            <div class="inv-date">
+                                @if ($transaction)
+                                    {{ $transaction->created_at->format('d M Y') }}<br>
+                                    {{ $transaction->created_at->format('h:i A') }}
+                                @else
+                                    {{ now()->format('d M Y') }}
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ── Participant ID Hero ── --}}
+                    @if ($registration->participant_id)
+                        <div class="pid-hero">
+                            <div class="pid-hero-left">
+                                <div class="pid-hero-label">Participant ID</div>
+                                <div class="pid-hero-value">{{ $registration->participant_id }}</div>
+                            </div>
+                            <div class="pid-hero-right">
+                                Present this ID at the event venue<br>
+                                <strong>Entry will not be allowed without ID</strong>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- ── Body ── --}}
+                    <div class="inv-body">
+
+                        {{-- Two columns: Participant + Event ── --}}
+                        <div class="inv-cols">
+
+                            {{-- Participant Info ── --}}
+                            <div class="inv-section">
+                                <div class="inv-section-label">Participant</div>
+                                <div class="info-list">
+                                    @if ($registration->team_name)
+                                        <div class="info-item">
+                                            <span class="info-key">Team Name</span>
+                                            <span class="info-val">{{ $registration->team_name }}</span>
+                                        </div>
+                                    @endif
+                                    <div class="info-item">
+                                        <span class="info-key">Name</span>
+                                        <span class="info-val">{{ $registration->m1_name }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-key">Email</span>
+                                        <span class="info-val mono">{{ $registration->m1_email }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-key">Phone</span>
+                                        <span class="info-val mono">{{ $registration->m1_phone }}</span>
+                                    </div>
+                                    @if ($registration->university_name)
+                                        <div class="info-item">
+                                            <span class="info-key">University</span>
+                                            <span class="info-val">{{ $registration->university_name }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Event Info ── --}}
+                            <div class="inv-section">
+                                <div class="inv-section-label">Event Details</div>
+                                <div class="info-list">
+                                    <div class="info-item">
+                                        <span class="info-key">Event</span>
+                                        <span
+                                            class="info-val">{{ optional($registration->event)->name ?? strtoupper(str_replace('-', ' ', $slug)) }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-key">Invoice No.</span>
+                                        <span
+                                            class="info-val mono">INV-{{ str_pad($registration->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-key">Order ID</span>
+                                        <span class="info-val mono"
+                                            style="font-size:11px;">{{ $registration->order_id ?? '—' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-key">Status</span>
+                                        <span class="info-val">
+                                            <span style="color:#4ade80; font-family:'DM Mono',monospace; font-size:12px;">●
+                                                Verified</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Transaction Summary ── --}}
+                        @if ($transaction)
+                            <div class="txn-summary">
+                                <div class="txn-head">Transaction Summary</div>
+                                <div class="txn-rows">
+                                    <div class="txn-row">
+                                        <span class="txn-lbl">Transaction ID</span>
+                                        <span class="txn-val">{{ $transaction->transaction_id }}</span>
+                                    </div>
+                                    <div class="txn-row">
+                                        <span class="txn-lbl">Payment Method</span>
+                                        <span class="txn-val">{{ $transaction->payment_method }}</span>
+                                    </div>
+                                    <div class="txn-row">
+                                        <span class="txn-lbl">Currency</span>
+                                        <span class="txn-val">{{ $transaction->currency ?? 'BDT' }}</span>
+                                    </div>
+                                    <div class="txn-row">
+                                        <span class="txn-lbl">Date & Time</span>
+                                        <span
+                                            class="txn-val">{{ $transaction->created_at->format('d M Y, h:i A') }}</span>
+                                    </div>
+                                </div>
+                                <div class="txn-total">
+                                    <span class="txn-total-lbl">Total Paid</span>
+                                    <span class="txn-total-val">
+                                        <span
+                                            class="txn-total-currency">৳</span>{{ number_format($transaction->amount, 2) }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Note ── --}}
+                        <div class="inv-note">
+                            <strong>Important:</strong> &nbsp;This invoice is your official payment confirmation for CSE
+                            Carnival.
+                            Please keep a printed or digital copy for entry at the venue. &nbsp;·&nbsp;
+                            For any queries, contact <strong>cse.carnival@duet.ac.bd</strong> &nbsp;·&nbsp;
+                            This document was generated automatically and is valid without a signature.
+                        </div>
+
+                    </div>
+
+                    {{-- ── Footer ── --}}
+                    <div class="inv-foot">
+                        <div class="inv-foot-brand">CSE Carnival</div>
+                        <div class="inv-foot-meta">
+                            Dhaka University of Engineering &amp; Technology<br>
+                            Dept. of Computer Science &amp; Engineering · Gazipur
+                        </div>
+                    </div>
+
                 </div>
+                {{-- end .inv-card --}}
             @else
-                {{-- FAILED --}}
                 @include('payment.failed', ['slug' => $slug, 'registration' => $registration ?? null])
             @endif
 

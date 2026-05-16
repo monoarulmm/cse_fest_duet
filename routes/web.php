@@ -3,10 +3,27 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('users.home');
-});
+// ১. হোম পেজ রাউট
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// ২. ড্যাশবোর্ড (শুধুমাত্র লগইন করা ইউজারদের জন্য মিডলওয়্যারসহ)
+Route::get('/dashboard', [HomeController::class, 'dashboard'])
+    ->middleware('auth')
+    ->name('dashboard');
+
+// ৩. অন্যান্য পেজের রাউটস
+Route::get('/cse-gallery', [HomeController::class, 'gallery'])->name('gallery');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/schedule', [HomeController::class, 'schedule'])->name('schedule');
+
+Route::post('/check-result', [HomeController::class, 'checkResult'])->name('check.result');
+
+
+
+
 
 
 Route::get('/login', function () {
@@ -15,19 +32,6 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
-Route::get('/cse-gallery', function () {
-    return view('users.gallery');
-});
-Route::get('/contact', function () {
-    return view('users.contact');
-});
-Route::get('/about', function () {
-    return view('users.about');
-});
-Route::get('/schedule', function () {
-    return view('users.schedule');
-});
-
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SettingController;
@@ -67,10 +71,6 @@ Route::get('password/reset/{token}', function ($token) {
     return view('auth.reset-form', ['token' => $token]);
 })->name('password.reset');
 
-// Dashboard (শুধুমাত্র লগইন করা ইউজাররা দেখতে পাবে)
-Route::get('/dashboard', function () {
-    return view('users.home');
-})->middleware('auth')->name('dashboard');
 
 
 
@@ -85,10 +85,23 @@ use App\Http\Controllers\RegistrationController;
 // Route::post('/iupc/register', [IupcController::class, 'store'])->name('iupc.store');
 Route::get('/register/{slug}', [RegistrationController::class, 'create'])->name('event.register');
 Route::post('/register/store', [RegistrationController::class, 'store'])->name('registration.store');
+Route::any('/payment/invoice', [RegistrationController::class, 'callback'])->name('payment.callback');
 
 
+// পেমেন্ট ইনিশিয়েট করার রাউট
+// Route::get('/payment/make/{registration_id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
+// পেমেন্ট রি-ট্রাই করার রাউট
+Route::get('/registration/retry-payment/{registration_id}', [RegistrationController::class, 'retryPayment'])->name('registration.retry_payment');
+// Route::get('/payment/make/{id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
+Route::any('/payment/callback', [RegistrationController::class, 'callback'])->name('payment.callback');
+// পেমেন্ট গেটওয়ে থেকে ফিরে আসার রাউট (Success/Fail)
+Route::post('/payment/success', [RegistrationController::class, 'success'])->name('payment.success');
+Route::post('/payment/fail', [RegistrationController::class, 'fail'])->name('payment.fail');
 
 
+Route::get('/registration-success', function () {
+    return view('users.iupc.success'); // আপনার সাকসেস ভিউ ফাইল
+})->name('success_page');
 
 
 
@@ -121,13 +134,21 @@ Route::get('/payment/make/{registration_id}', [PaymentController::class, 'makePa
 //  https://yourdomain.com/payment/callback
 Route::get('/payment/callback', [PaymentController::class, 'callback'])
     ->name('payment.callback');
-// Route::post('/payment/callback', [PaymentController::class, 'callback']);
+Route::post('/payment/callback', [PaymentController::class, 'callback']);
 // (ShurjoPay কখনো GET কখনো POST পাঠায়, তাই দুটোই রাখা)
 
 
 
 
 
+
+
+// Route::post('/verify-coupon', [IupcController::class, 'verifyCoupon'])->name('verify_coupon');
+// কুপন ভেরিফিকেশন এবং এডিট পেজ
+// Route::get('/iupc/final-step', [IupcController::class, 'finalStepForm'])->name('iupc.final.form');
+// Route::post('/iupc/verify-coupon', [IupcController::class, 'verifyCoupon'])->name('iupc.verify');
+
+// Route::post('/update-and-pay', [IupcController::class, 'updateAndPay'])->name('iupc.updateAndPay');
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
@@ -180,7 +201,10 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
 
     Route::delete('/admin/events/{id}/delete', [EventController::class, 'destroy'])->name('admin.events.destroy');
-
+    // Route::get('/event/{slug}', [EventController::class, 'showDashboard'])->name('event.dashboard');
+    // Route::get('/event/{slug}/pre-registered', [EventController::class, 'preRegistered'])->name('event.pre_registered');
+    // Route::get('/event/{slug}/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
+    // আরও রাউট যেমন: rulebook, seat-plan ইত্যাদি...
 
 
 
@@ -229,7 +253,8 @@ Route::prefix('event/{slug}')->group(function () {
     // Route::get('final-registration', [EventController::class, 'showFinalRegForm'])->name('iupc.final.reg.form');
     // সিলেকশন পেজ (এই নামটিই ড্যাশবোর্ড ও ট্যাবে ব্যবহার করুন)
     Route::get('/selected-teams', [EventController::class, 'selectedTeams'])->name('event.select_registered');
-
+    // Route::post('/verify-coupon', [EventController::class, 'verifyCoupon'])->name('event.verify_coupon');
+    // ফাইনাল রেজিস্টার্ড
     Route::get('/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
     // সঠিক রাউট ফরম্যাট
     Route::get('/schedule', [EventController::class, 'schedule'])->name('event.schedule');
@@ -249,22 +274,8 @@ Route::prefix('event/{slug}')->group(function () {
 
 
 
-
-// ঐচ্ছিক: কেউ যদি ভুল করে রিফ্রেশ দেয় বা সরাসরি লিঙ্কে ঢুকে তবে তাকে ফেরত পাঠানো
-Route::get('event/{slug}/verify-coupon', function ($slug) {
-    return redirect()->route('event.select_registered', $slug);
-});
-
-
-
 // Direct Final Registration for other events
 Route::get('event/{slug}/final-reg/{id}', [PaymentController::class, 'finalRegDirectPay'])->name('event.final_reg_direct');
-
-
-Route::post('/check-result', [EventController::class, 'checkResult'])->name('check.result');
-
-Route::get('/checkout', [PaymentController::class, 'pay']);
-Route::get('/shurjopay/callback', [PaymentController::class, 'callback']);
 
 
 Route::get('/event/{slug}/slots', [EventController::class, 'slot_list'])->name('event.slot_list');

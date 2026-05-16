@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\UniversitySlot;
-use App\Models\Result;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -383,20 +382,6 @@ class EventController extends Controller
 
 
 
-    public function checkResult(Request $request)
-    {
-        $request->validate([
-            'participant_id' => 'required|string'
-        ]);
-
-        $result = Result::where('participant_id', $request->participant_id)->first();
-
-        if (!$result) {
-            return back()->with('not_found', 'দুঃখিত, এই আইডির কোনো রেজাল্ট পাওয়া যায়নি।');
-        }
-
-        return view('results.index', compact('result'));
-    }
 
 
 
