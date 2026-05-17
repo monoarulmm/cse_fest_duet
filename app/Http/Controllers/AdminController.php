@@ -13,6 +13,7 @@ use App\Mail\AIHackathonContestLinkMai;
 use App\Mail\AIRegistrationStatusMail;
 use App\Exports\RegistrationExport;
 use App\Exports\TeamsExport;
+use App\Exports\CouponExport;
 use App\Exports\ResultTemplateExport;
 use App\Imports\ResultsImport;
 use App\Imports\CouponImport;
@@ -71,6 +72,14 @@ class AdminController extends Controller
     }
 
 
+
+    // কুপন ইমপোর্ট করার মেথড
+
+    // কুপন এক্সপোর্ট (ডাউনলোড) করার মেথড
+    public function export($eventId)
+    {
+        return Excel::download(new CouponExport($eventId), 'iupc_coupon_codes_' . time() . '.xlsx');
+    }
 
     public function dashboard(Request $request)
     {

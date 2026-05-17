@@ -573,8 +573,8 @@
         }
 
         /* ════════════════════════════════
-           PRINT STYLES
-           ════════════════════════════════ */
+               PRINT STYLES
+               ════════════════════════════════ */
         @media print {
             * {
                 -webkit-print-color-adjust: exact !important;

@@ -116,6 +116,11 @@
                             class="w-full bg-green-600 text-white py-2 rounded-xl text-[10px] font-bold uppercase">Generate
                             & Mail</button>
                     </form>
+
+
+                    <a href="{{ route('coupons.export', $selectedEvent->id) }}" class="btn btn-success">
+                        <i class="fa-solid fa-download"></i> Export Coupon Codes (Excel)
+                    </a>
                 </div>
 
                 {{-- ৩. কুপন স্ট্যাটাস টেবিল (শুধুমাত্র IUPC এর জন্য) --}}
