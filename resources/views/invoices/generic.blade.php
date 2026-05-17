@@ -194,7 +194,7 @@
         </div>
 
         <p class="no-print text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-4">
-            DUET CSE FEST 2026 • Powered by Department of CSE, DUET
+            DUET CSE CARANIVAL 2026 • Powered by Department of CSE, DUET
         </p>
     </div>
 

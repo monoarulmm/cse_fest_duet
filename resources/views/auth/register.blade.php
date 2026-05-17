@@ -45,7 +45,7 @@
                         INITIALIZE <span class="text-cyan-500">IDENTITY</span>
                     </h2>
                     <p class="text-slate-500 dark:text-slate-400 text-[10px] mt-2 tracking-[0.4em] uppercase">
-                        Create your unique profile for DUET CSE FEST
+                        Create your unique profile for DUET CARNIVAl
                     </p>
                 </div>
                 <!-- Registration Card -->

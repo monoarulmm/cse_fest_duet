@@ -637,7 +637,7 @@
 
             <div
                 class="pt-8 border-t border-cyan-500/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] font-bold uppercase tracking-[0.2em] opacity-60">
-                <p>&copy; 2026 DUET CSE FEST. All Rights Reserved.</p>
+                <p>&copy; 2026 DUET CARNIVAl. All Rights Reserved.</p>
                 <p>Developed by <span class="text-cyan-400">Monoar Islam</span></p>
             </div>
         </div>

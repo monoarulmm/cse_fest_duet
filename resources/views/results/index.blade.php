@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result & Seat Plan | DUET CSE FEST 2026</title>
+    <title>Result & Seat Plan | DUET CSE CARNIVAL 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap"
@@ -422,7 +422,7 @@
             <!-- Header -->
             <div class="card-header">
                 <div>
-                    <span class="fest-label">Official Digital Pass &middot; CSE Fest Portal</span>
+                    <span class="fest-label">Official Digital Pass &middot; CARNIVAl Portal</span>
                     <div class="fest-title">DUET <span>CSE</span> FEST</div>
                     <div class="uni-name">Dhaka University of Engineering &amp; Technology</div>
                 </div>

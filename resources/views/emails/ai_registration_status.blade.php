@@ -60,7 +60,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 style="margin:0; font-size: 20px; text-transform: uppercase;">DUET CSE FEST 2026</h1>
+            <h1 style="margin:0; font-size: 20px; text-transform: uppercase;">DUET CARNIVAl 2026</h1>
         </div>
         <div class="content">
             <h2 style="color: #0f172a;">Congratulations! 🎉</h2>

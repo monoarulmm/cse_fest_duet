@@ -82,7 +82,7 @@
 
 <body>
     <div class="container">
-        <h2 style="color: #00ebff;">DUET CSE FEST 2026</h2>
+        <h2 style="color: #00ebff;">DUET CARNIVAl 2026</h2>
         <h3>Hello Team {{ $registration->team_name }},</h3>
 
         <p>Your registration for the <strong>AI-Hackathon</strong> has been received. We are excited to invite you to

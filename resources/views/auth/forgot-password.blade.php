@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Reset Password | CSE FEST 2026')
+@section('title', 'Reset Password | CSE CARNIVAL 2026')
 
 @section('content')
     <div class="min-h-[80vh] flex items-center justify-center px-4 relative overflow-hidden">

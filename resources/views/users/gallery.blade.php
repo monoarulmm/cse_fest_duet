@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gallery | CSE FEST 2026')
+@section('title', 'Gallery | CARNIVAl 2026')
 
 @section('custom_css')
     <style>

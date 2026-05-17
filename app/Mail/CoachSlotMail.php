@@ -31,7 +31,7 @@ class CoachSlotMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'IUPC Registration Slot Codes - DUET CSE FEST',
+            subject: 'IUPC Registration Slot Codes - DUET CSE CARNIVAL',
         );
     }
 

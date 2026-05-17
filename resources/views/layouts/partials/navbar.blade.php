@@ -3,7 +3,7 @@
         <div class="flex items-center gap-4">
             <img src="https://www.duet.ac.bd/wp-content/uploads/2018/07/logo-1.png" alt="DUET" class="h-12">
             <div>
-                <h1 class="text-xl font-black text-slate-800">CSE FEST <span class="text-green-600">2K26</span></h1>
+                <h1 class="text-xl font-black text-slate-800">CARNIVAl <span class="text-green-600">2K26</span></h1>
             </div>
         </div>
 

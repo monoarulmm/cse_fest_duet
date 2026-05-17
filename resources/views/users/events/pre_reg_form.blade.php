@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $event->name . ' Registration | CSE FEST 2026')
+@section('title', $event->name . ' Registration | CARNIVAl 2026')
 
 @section('custom_css')
     <style>

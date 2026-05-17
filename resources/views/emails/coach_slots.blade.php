@@ -7,7 +7,7 @@
 
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
     <h2>Hello {{ $coachName }},</h2>
-    <p>Your registration slots for <strong>DUET CSE FEST IUPC</strong> have been approved.</p>
+    <p>Your registration slots for <strong>DUET CARNIVAl IUPC</strong> have been approved.</p>
     <p>Below are the unique coupon codes generated for your teams. Please share one code with each team for their final
         registration:</p>
 
@@ -23,7 +23,7 @@
     </table-slot>
 
     <p><em>Note: Each code can only be used once for a single team registration.</em></p>
-    <p>Best Regards,<br>University CSE Fest Committee<br>DUET, Gazipur.</p>
+    <p>Best Regards,<br>University CARNIVAl Committee<br>DUET, Gazipur.</p>
 </body>
 
 </html>

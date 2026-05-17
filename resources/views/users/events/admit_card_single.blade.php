@@ -167,7 +167,7 @@
                     <div class="text-right">
                         <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">AUTHORIZED BY</p>
                         <p class="text-[9px] font-black text-cyan-600 italic font-serif mt-0.5">
-                            Convener, DUET CSE FEST 2026
+                            Convener, DUET CSE CARNIVAL 2026
                         </p>
                     </div>
                 </div>
