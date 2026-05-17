@@ -47,7 +47,7 @@
 
             <p class="hero-tagline max-w-2xl mx-auto text-sm md:text-lg mb-10 border-l-2 px-6 py-2">
                 A two-day-long celebration of thrilling competitions and attractive science based activities, everything in
-                a festive atmosphere. </p>
+                aCARNIVAlive atmosphere. </p>
 
             {{-- Countdown --}}
             <div class="flex flex-wrap justify-center gap-4 mb-10" id="hero-countdown">

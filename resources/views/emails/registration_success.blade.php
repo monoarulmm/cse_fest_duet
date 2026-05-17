@@ -17,7 +17,7 @@
         <div style="padding: 30px; color: #334155; line-height: 1.6;">
             <p>Dear Participant,</p>
             <p>Your payment has been successfully processed. Your team/participation has been successfully registered
-                for the main event of the fest.</p>
+                for the main event of theCARNIVAl.</p>
 
             <div
                 style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin: 20px 0;">

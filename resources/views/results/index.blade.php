@@ -423,7 +423,7 @@
             <div class="card-header">
                 <div>
                     <span class="fest-label">Official Digital Pass &middot; CARNIVAl Portal</span>
-                    <div class="fest-title">DUET <span>CSE</span> FEST</div>
+                    <div class="fest-title">DUET <span>CSE</span>CARNIVAl</div>
                     <div class="uni-name">Dhaka University of Engineering &amp; Technology</div>
                 </div>
                 <div class="header-badge">

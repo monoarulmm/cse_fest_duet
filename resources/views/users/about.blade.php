@@ -28,7 +28,8 @@
 
                     <div class="content-glass p-8 space-y-6 bg-slate-900/40 border border-slate-800 rounded-xl">
                         <p class="text-slate-300 leading-relaxed italic border-l-2 border-cyan-500 pl-4 bg-cyan-500/5 py-2">
-                            "A national-level technology festival bringing together students, educators, and innovators on a
+                            "A national-level technologyCARNIVAlival bringing together students, educators, and innovators
+                            on a
                             dynamic platform of creativity and collaboration."
                         </p>
 
