@@ -42,7 +42,7 @@
             <form action="{{ url()->current() }}" method="GET" class="mb-10 flex justify-center">
                 <div class="relative w-full max-w-xl group">
                     <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Search Selected Team or Institute..."
+                        placeholder="Search Selected Team or Student ID."
                         class="w-full bg-slate-900/80 border border-purple-500/30 rounded-full px-8 py-4 text-white focus:outline-none focus:border-purple-500 transition-all shadow-xl">
                     <button type="submit"
                         class="absolute right-3 top-2.5 bottom-2.5 bg-purple-500 px-6 rounded-full text-white font-black hover:scale-105 transition-transform flex items-center gap-2">
@@ -134,7 +134,7 @@
                                 class="text-white font-bold italic"></span></p>
                     </div>
 
-                    <form id="couponForm" action="{{ route('event.verify_coupon', $event->slug) }}" method="POST">
+                    <form id="couponForm" action="{{ url('event.verify_coupon', $event->slug) }}" method="POST">
                         @csrf
                         <input type="hidden" name="team_name" id="hiddenTeamName">
 

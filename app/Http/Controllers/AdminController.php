@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
+
 use App\Models\Event;
 use App\Models\Registration; // আপনার কমন মডেল
 use Illuminate\Http\Request;
@@ -20,7 +22,7 @@ use App\Imports\CouponImport;
 use Maatwebsite\Excel\Facades\Excel;
 use DB;
 use App\Imports\UniversitySlotImport;
-
+use App\Models\UniversitySlot;
 
 class AdminController extends Controller
 {
@@ -70,6 +72,7 @@ class AdminController extends Controller
 
         return Excel::download(new RegistrationExport($eventId), $fileName);
     }
+
 
 
 
@@ -334,24 +337,39 @@ class AdminController extends Controller
     /**
      * একাধিক রেজিস্ট্রেশন একসাথে ডিলিট করার জন্য (Bulk Delete)
      */
+
     public function bulkDeleteRegistrations(Request $request)
     {
         // ব্লেড ফাইল থেকে পাঠানো 'ids' অ্যারে চেক করা
         $ids = $request->input('ids');
 
         if (!$ids || count($ids) == 0) {
-            return back()->with('error', 'কোন রেকর্ড সিলেক্ট করা হয়নি।');
+            return back()->with('error', 'কোন রেকর্ড সিলেক্ট করা হয়নি।');
         }
 
         try {
-            // একসাথে সব সিলেক্টেড আইডি ডিলিট করা
+            // ১. প্রথমে ডাটাবেজ থেকে ঐসব রেজিস্ট্রেশনের ফাইল পাথগুলো তুলে আনা
+            $registrations = Registration::whereIn('id', $ids)->get();
+
+            foreach ($registrations as $registration) {
+                // ২. আপনার কলামের নাম যদি 'abstract_file' বা অন্য কিছু হয়, সেটি চেক করুন
+                if ($registration->abstract_file) {
+                    // স্টোরেজে ফাইলটি থাকলে তা ডিলিট করে দেওয়া
+                    if (Storage::disk('public')->exists($registration->abstract_file)) {
+                        Storage::disk('public')->delete($registration->abstract_file);
+                    }
+                }
+            }
+
+            // ৩. ফাইল ডিলিট করার পর ডাটাবেজ থেকে রেকর্ডগুলো একসাথে ডিলিট করা
             Registration::whereIn('id', $ids)->delete();
-            return back()->with('success', count($ids) . ' টি রেজিস্ট্রেশন সফলভাবে ডিলিট হয়েছে।');
+
+            return back()->with('success', count($ids) . ' টি রেজিস্ট্রেশন এবং তাদের অবস্ট্রাক্ট ফাইল সফলভাবে ডিলিট হয়েছে।');
         } catch (\Exception $e) {
-            return back()->with('error', 'ডিলিট করতে সমস্যা হয়েছে: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Bulk Delete Error: ' . $e->getMessage());
+            return back()->with('error', 'ডিলিট করতে সমস্যা হয়েছে: ' . $e->getMessage());
         }
     }
-
     /**
      * ইমপোর্ট করা সিঙ্গেল রেজাল্ট ডিলিট করার জন্য
      */

@@ -159,7 +159,7 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::get('/admin/export-iupc-slots', [AdminController::class, 'exportIUPCTeams'])->name('admin.iupc.export');    // Route::get('/admin/export-excel/{event_id}', [AdminController::class, 'downloadExcel'])->name('admin.export.excel');
     // routes/web.php
     Route::post('/admin/event/{id}/import-coupons', [AdminController::class, 'import'])->name('admin.coupons.import');
-    // Route::post('/admin/coupons/import/{eventId}', [AdminController::class, 'import'])->name('coupons.import');
+    Route::delete('/admin/slots/bulk-delete', [AdminController::class, 'bulkDelete'])->name('admin.slots.bulkDelete');    // Route::post('/admin/coupons/import/{eventId}', [AdminController::class, 'import'])->name('coupons.import');
     Route::get('/admin/coupons/export/{eventId}', [AdminController::class, 'export'])->name('coupons.export');
 
     // অ্যাডমিন প্রোটেক্টেড গ্রুপের ভেতরে রাখা ভালো

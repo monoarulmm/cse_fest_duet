@@ -27,7 +27,7 @@
             <form action="{{ url()->current() }}" method="GET" class="mb-10 flex justify-center">
                 <div class="relative w-full max-w-xl group">
                     <input type="text" name="search" value="{{ request('search') }}" required
-                        placeholder="Enter Participant Name or Registration ID..."
+                        placeholder="Enter Participant ID or Student & Team ID"
                         class="w-full bg-slate-900/80 border border-green-500/30 rounded-full px-8 py-4 text-white focus:outline-none focus:border-green-500 transition-all shadow-xl">
                     <button type="submit"
                         class="absolute right-3 top-2.5 bottom-2.5 bg-green-500 px-6 rounded-full text-slate-900 font-black hover:scale-105 transition-transform flex items-center gap-2">

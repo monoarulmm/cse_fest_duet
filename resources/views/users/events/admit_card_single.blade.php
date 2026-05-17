@@ -5,12 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admit Card - {{ $team->participant_id }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        /* প্রিন্ট করার সময় ব্যাকগ্রাউন্ড কালার এবং ডিজাইন ঠিক রাখার জন্য */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+
         @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
             body {
-                background-color: #020617 !important;
+                background-color: #ffffff !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
@@ -19,121 +30,165 @@
                 display: none !important;
             }
 
-            .print-container {
+            #print-area {
+                width: 100% !important;
+                height: 100vh !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                height: 100vh;
             }
 
-            #id-card-wrap {
+            .id-card-body {
+                width: 460px !important;
+                height: 660px !important;
+                margin: 0 auto !important;
+                border: 2px solid #06b6d4 !important;
                 box-shadow: none !important;
-                border: none !important;
+                background-color: #ffffff !important;
             }
-        }
-
-        /* স্ক্রিন ভিউ এর জন্য কাস্টম ফন্ট বা স্টাইল */
-        body {
-            background-color: #020617;
         }
     </style>
+
+    @php
+
+        $setting = \App\Models\Setting::first();
+        $activeEvents = \App\Models\Event::where('is_active', true)->get();
+    @endphp
+    @if ($setting && $setting->favicon)
+        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
+        <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
+    @endif
 </head>
 
-<body class="antialiased">
+<body class="antialiased overflow-x-hidden text-slate-800">
 
-    <div class="min-h-screen py-12 px-4 flex flex-col items-center justify-center print-container">
-        <!-- লোডিং মেসেজ (শুধুমাত্র স্ক্রিনে দেখাবে) -->
-        <div class="mb-6 text-center no-print">
-            <p class="text-slate-500 font-bold animate-pulse text-xs uppercase tracking-widest">
-                Generating Your Admit Card...
-            </p>
-        </div>
+    <div class="no-print flex justify-center gap-4 py-8 relative z-50">
+        <button onclick="window.history.back()"
+            class="bg-slate-800 text-white px-6 py-2 rounded-xl text-xs font-bold hover:bg-slate-700 transition uppercase">
+            Back
+        </button>
+        <button onclick="window.print()"
+            class="bg-cyan-600 text-white px-8 py-2 rounded-xl text-xs font-black hover:bg-cyan-500 transition uppercase shadow-lg shadow-cyan-600/20">
+            Print Official ID Card
+        </button>
+    </div>
 
-        <!-- মেইন অ্যাডমিট কার্ড -->
-        <div id="id-card-wrap" class="max-w-[400px] w-full space-y-6">
-            <div
-                class="id-card-body relative bg-[#0f172a] border border-slate-700 rounded-[2rem] overflow-hidden shadow-2xl">
+    <div id="print-area" class="min-h-screen flex items-center justify-center p-4">
 
-                <!-- হেডার অংশ -->
-                <div class="pt-8 pb-4 text-center border-b border-white/5 bg-white/5">
-                    <h1 class="text-white text-2xl font-black tracking-tighter uppercase leading-none">DUET CSE FEST
-                    </h1>
-                    <p class="text-slate-500 text-[10px] font-bold tracking-[0.3em] mt-2 uppercase">Official Entry Pass
-                    </p>
-                </div>
+        <div
+            class="id-card-body relative bg-white border-2 border-cyan-500/40 rounded-[2.5rem] overflow-hidden shadow-2xl w-full max-w-[460px] h-[660px] flex flex-col justify-between">
 
-                <div class="p-8 text-center">
-                    <!-- নাম এবং আইডি -->
-                    <div class="mb-6">
-                        <div class="inline-block bg-white px-4 py-1 mb-2">
-                            <h2 class="text-black text-xl font-black uppercase">{{ $team->m1_name }}</h2>
-                        </div>
-                        <p class="text-cyan-500 text-xs font-black uppercase tracking-widest mt-1">
-                            ID: {{ $team->participant_id }}
+            <div class="bg-slate-950 p-6 flex justify-between items-center border-b-4 border-cyan-500 relative">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
+                        class="w-8 h-8 md:w-10 md:h-10 object-contain transition-transform duration-500 group-hover:scale-110">
+                    <div>
+                        <h1 class="text-lg font-black text-white leading-none tracking-tight uppercase">
+                            DUET CSE <span class="text-cyan-400">{{ $setting->site_name }}</span>
+                        </h1>
+                        <p class="text-cyan-400/80 font-bold tracking-[0.2em] text-[8px] mt-1 uppercase">DUET, Gazipur
                         </p>
                     </div>
-
-                    <!-- ইভেন্ট এবং প্রতিষ্ঠানের তথ্য -->
-                    <div class="space-y-3 text-left bg-black/20 p-5 rounded-2xl border border-white/5">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-black tracking-tighter">Event</span>
-                            <span class="text-[10px] text-white font-bold uppercase text-right leading-tight">
-                                {{ $event->name }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span
-                                class="text-[9px] text-slate-500 uppercase font-black tracking-tighter">Institution</span>
-                            <span class="text-[10px] text-white font-bold text-right leading-tight">
-                                {{ \Illuminate\Support\Str::limit($team->university_name, 25) }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- কিউআর কোড -->
-                    <div class="mt-8 flex flex-col items-center">
-                        <div class="bg-white p-2 rounded-xl mb-3 shadow-lg">
-                            {!! QrCode::size(100)->margin(1)->generate(url()->current()) !!}
-                        </div>
-                        <p class="text-[8px] text-slate-500 font-black uppercase">Scan to Verify Registration</p>
-                    </div>
                 </div>
-
-                <!-- ফুটার -->
-                <div class="bg-white/5 p-4 text-center border-t border-white/5">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                        VENUE: DUET CAMPUS, GAZIPUR
-                    </p>
+                <div class="text-right">
+                    <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">PARTICIPANT ID</div>
+                    <div class="text-base font-black text-cyan-400 italic">#{{ $team->participant_id ?? $team->id }}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- প্রিন্ট করার পর ইউজারকে ব্যাক করানোর বাটন (শুধুমাত্র স্ক্রিনে দেখাবে) -->
-        <div class="mt-8 no-print">
-            <button onclick="window.history.back()"
-                class="text-slate-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors">
-                ← Back to Dashboard
-            </button>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-slate-50 to-white">
+
+                <div class="flex justify-between items-start gap-4">
+                    <div>
+                        <span
+                            class="text-cyan-600 text-[9px] font-black uppercase tracking-widest mb-1 block border-l-2 border-cyan-500 pl-2">
+                            OFFICIAL ENTRY PASS
+                        </span>
+                        <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight">
+                            {{ $event->name ?? $team->event->name }}
+                        </h2>
+                    </div>
+                    <div class="bg-white p-2 rounded-2xl shadow-md border border-slate-200/60">
+                        {!! QrCode::size(85)->margin(1)->generate(route('event.final_registered', $team->id)) !!}
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-slate-900 pl-4 my-4">
+                    <label class="block text-[8px] uppercase text-slate-400 font-black tracking-widest mb-1">
+                        PARTICIPANT NAME
+                    </label>
+                    <p class="font-black text-2xl text-slate-900 uppercase leading-none tracking-tight">
+                        {{ $team->m1_name ?? $team->name }}
+                    </p>
+                    <p class="text-xs font-bold text-cyan-600 mt-1.5">{{ $team->university_name }}</p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 shadow-sm space-y-3">
+                    <div>
+                        <label class="block text-[8px] uppercase text-slate-400 font-black tracking-widest mb-0.5">
+                            EMAIL ADDRESS
+                        </label>
+                        <p class="text-xs font-bold text-slate-700 font-mono lowercase">
+                            {{ $team->m1_email ?? $team->email }}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 border-t border-slate-200/60 pt-2">
+                        <div>
+                            <label class="block text-[8px] uppercase text-slate-400 font-black tracking-widest mb-0.5">
+                                PHONE NUMBER
+                            </label>
+                            <p class="text-xs font-bold text-slate-700 font-mono">{{ $team->m1_phone ?? $team->phone }}
+                            </p>
+                        </div>
+                        @if (isset($team->m1_cf_handle) || isset($team->cf_handle))
+                            <div>
+                                <label
+                                    class="block text-[8px] uppercase text-cyan-600 font-black tracking-widest mb-0.5">
+                                    CODEFORCES
+                                </label>
+                                <p class="text-xs font-bold text-slate-800 font-mono">
+                                    {{ $team->m1_cf_handle ?? $team->cf_handle }}</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-200 flex justify-between items-end">
+                    <div class="space-y-1">
+                        <p class="text-[7.5px] text-slate-400 font-bold uppercase leading-tight">
+                            * Bring institute ID card for verification<br>
+                            * Reporting: 08:30 AM @ DUET Campus
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">AUTHORIZED BY</p>
+                        <p class="text-[9px] font-black text-cyan-600 italic font-serif mt-0.5">
+                            Convener, DUET CSE FEST 2026
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="h-2.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600"></div>
         </div>
     </div>
 
-    <!-- অটো প্রিন্ট স্ক্রিপ্ট -->
     <script>
         window.onload = function() {
-            // ইমেজ এবং কিউআর কোড পুরোপুরি লোড হওয়ার জন্য ১ সেকেন্ড সময় দেওয়া হয়েছে
             setTimeout(function() {
                 window.print();
             }, 1000);
 
-            // প্রিন্ট ডায়ালগ বন্ধ করলে বা প্রিন্ট হয়ে গেলে অটোমেটিক আগের পেজে ফিরে যাবে
             window.onafterprint = function() {
                 window.history.back();
             };
         };
     </script>
-
 </body>
 
 </html>

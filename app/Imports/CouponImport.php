@@ -85,10 +85,8 @@ class CouponImport implements ToCollection, WithHeadingRow
                         'university'   => $universityName,
                         'coach_name'   => $coachNamesString,  // সব কোচের নাম একসাথে থাকবে
                         'coach_email'  => $coachEmailsString, // সব কোচের ইমেইল একসাথে কমা দিয়ে থাকবে
-                        // 'coach_phone'  => $coachPhonesString, // সব ফোন নম্বর একসাথে থাকবে
                         'code'         => $code,
                         'event_id'     => $this->eventId,
-                        // 'status'       => 'active'
                     ]);
                 }
             }
