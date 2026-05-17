@@ -9,6 +9,7 @@ use App\Models\Registration;
 use App\Models\Transaction;
 use App\Models\Coupon;
 use Exception;
+use Throwable; // ✅ ADD
 
 use ShurjopayPlugin\Shurjopay;
 use ShurjopayPlugin\PaymentRequest;
@@ -23,28 +24,35 @@ class PaymentController extends Controller
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // HELPER: Phone normalize → valid 11-digit BD number
+    // HELPER: Phone normalize
     // ─────────────────────────────────────────────────────────────────────────
     private function normalizePhone(?string $phone): string
     {
-        if (empty($phone)) {
-            return '01700000000';
-        }
+        if (empty($phone)) return '01700000000';
 
         $digits = preg_replace('/[^0-9]/', '', $phone);
 
-        if (strlen($digits) === 13 && str_starts_with($digits, '880')) {
+        if (strlen($digits) === 13 && str_starts_with($digits, '880'))
             $digits = '0' . substr($digits, 3);
-        }
-        if (strlen($digits) === 12 && str_starts_with($digits, '88')) {
+        if (strlen($digits) === 12 && str_starts_with($digits, '88'))
             $digits = '0' . substr($digits, 2);
-        }
 
-        if (strlen($digits) !== 11 || !str_starts_with($digits, '01')) {
+        if (strlen($digits) !== 11 || !str_starts_with($digits, '01'))
             return '01700000000';
-        }
 
         return $digits;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // HELPER: Email normalize ✅ NEW
+    // ─────────────────────────────────────────────────────────────────────────
+    private function normalizeEmail(?string $email): string
+    {
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Log::warning('Invalid email normalized to fallback', ['original' => $email]);
+            return 'noreply@placeholder.com';
+        }
+        return $email;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -63,34 +71,29 @@ class PaymentController extends Controller
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // HELPER: ShurjoPay exception → friendly message
+    // HELPER: Throwable → friendly message ✅ FIXED signature
     // ─────────────────────────────────────────────────────────────────────────
-    private function friendlyError(Exception $e): string
+    private function friendlyError(Throwable $e): string
     {
-        $msg = strtolower($e->getMessage());
+        $msg = strtolower($e->getMessage() ?? '');
 
-        if (str_contains($msg, 'phone') || str_contains($msg, 'mobile')) {
+        if (str_contains($msg, 'phone') || str_contains($msg, 'mobile'))
             return 'ফোন নম্বর সঠিক নয়। সঠিক ১১ ডিজিটের বাংলাদেশী নম্বর দিন।';
-        }
-        if (str_contains($msg, 'amount')) {
+        if (str_contains($msg, 'amount'))
             return 'পেমেন্টের পরিমাণে সমস্যা হয়েছে।';
-        }
-        if (str_contains($msg, 'email')) {
-            return 'ইমেইল ঠিকানা সঠিক নয়।';
-        }
-        if (str_contains($msg, 'curl') || str_contains($msg, 'connection') || str_contains($msg, 'timeout')) {
+        if (str_contains($msg, 'email'))
+            return 'ইমেইল ঠিকানা সঠিক নয়। পেমেন্ট গেটওয়ে গ্রহণ করেনি।';
+        if (str_contains($msg, 'curl') || str_contains($msg, 'connection') || str_contains($msg, 'timeout'))
             return 'পেমেন্ট গেটওয়েতে সংযোগ সমস্যা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।';
-        }
-        if (str_contains($msg, 'unauthorized') || str_contains($msg, '401')) {
+        if (str_contains($msg, 'unauthorized') || str_contains($msg, '401'))
             return 'পেমেন্ট গেটওয়ে কনফিগারেশনে সমস্যা আছে। Admin কে জানান।';
-        }
-        if (str_contains($msg, 'internal server') || str_contains($msg, '500')) {
+        if (str_contains($msg, 'internal server') || str_contains($msg, '500'))
             return 'পেমেন্ট গেটওয়েতে সাময়িক সমস্যা হচ্ছে। কিছুক্ষণ পর আবার চেষ্টা করুন।';
-        }
+        if (str_contains($msg, 'null') || str_contains($msg, 'getmessage'))
+            return 'পেমেন্ট গেটওয়ে থেকে কোনো সাড়া পাওয়া যায়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।';
 
         return 'পেমেন্ট গেটওয়েতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
     }
-
 
     // ─────────────────────────────────────────────
     // 1. IUPC — form update + pay
@@ -127,59 +130,49 @@ class PaymentController extends Controller
             'm3_prev_ex'   => 'nullable|string',
         ]);
 
-        // ── 1. Coupon verify ──────────────────────────────────────────────────
         $coupon = Coupon::where('code', $request->coupon_code)
             ->where('event_id', $event->id)
             ->where('is_used', false)
             ->first();
 
-        if (! $coupon) {
+        if (! $coupon)
             return back()->with('error', 'Invalid or already used coupon code!');
-        }
 
-        if (strtolower($coupon->university) !== strtolower($team->university_name)) {
+        if (strtolower($coupon->university) !== strtolower($team->university_name))
             return back()->with('error', 'This coupon does not belong to your university!');
-        }
 
-        // ── 2. Already paid? Check BEFORE updating ────────────────────────────
-        //    (fresh() দিয়ে DB থেকে latest status আনো — stale model এড়াতে)
-        if ($team->fresh()->payment_status === 'paid') {
-            return redirect()->route('event.dashboard', 'iupc')
-                ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
-        }
+        if ($team->fresh()->payment_status === 'paid')
+            return redirect()->route('event.dashboard', 'iupc')->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
 
-        // ── 3. Form data update ───────────────────────────────────────────────
         $team->update($request->except(['_token', 'team_id', 'amount', 'coupon_code']));
 
-        // ── 4. Payment initiate ───────────────────────────────────────────────
         try {
             $order_id = 'IUPC-' . uniqid();
 
-            // coupon_id এখানেই save করো — callback এ reliable ভাবে পাওয়া যাবে
             $team->update([
                 'order_id'  => $order_id,
-                'coupon_id' => $coupon->id,   // ✅ KEY FIX: coupon_id DB তে save
+                'coupon_id' => $coupon->id,
             ]);
 
             $paymentRequest                  = new PaymentRequest();
             $paymentRequest->currency        = 'BDT';
             $paymentRequest->amount          = $event->reg_fee;
             $paymentRequest->orderId         = $order_id;
-            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name;
+            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name ?? 'Participant';
             $paymentRequest->customerPhone   = $this->normalizePhone($team->m1_phone);
-            $paymentRequest->customerEmail   = $team->m1_email;
+            $paymentRequest->customerEmail   = $this->normalizeEmail($team->m1_email); // ✅ FIXED
             $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
             $paymentRequest->customerCity    = 'Gazipur';
             $paymentRequest->value1          = $team->id;
-            $paymentRequest->value2          = $coupon->id; // backup হিসেবে রাখো
+            $paymentRequest->value2          = $coupon->id;
 
             return $this->shurjopay->makePayment($paymentRequest);
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // ✅ FIXED
             Log::error('IUPC Payment Error', [
                 'team_id' => $team->id,
-                'error'   => $e->getMessage(),
+                'error'   => $e->getMessage() ?? 'Unknown',
+                'trace'   => $e->getTraceAsString(),
             ]);
-
             return $this->paymentErrorView($this->friendlyError($e), $team, 'gateway_error');
         }
     }
@@ -192,10 +185,8 @@ class PaymentController extends Controller
         $team  = Registration::with('event')->findOrFail($id);
         $event = $team->event;
 
-        if ($team->fresh()->payment_status === 'paid') {
-            return redirect()->route('event.dashboard', $slug)
-                ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
-        }
+        if ($team->fresh()->payment_status === 'paid')
+            return redirect()->route('event.dashboard', $slug)->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
 
         try {
             $order_id = strtoupper($slug) . '-FIN-' . $team->id . '-' . uniqid();
@@ -205,36 +196,35 @@ class PaymentController extends Controller
             $paymentRequest->currency        = 'BDT';
             $paymentRequest->amount          = $event->reg_fee;
             $paymentRequest->orderId         = $order_id;
-            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name;
+            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name ?? 'Participant';
             $paymentRequest->customerPhone   = $this->normalizePhone($team->m1_phone);
-            $paymentRequest->customerEmail   = $team->m1_email;
+            $paymentRequest->customerEmail   = $this->normalizeEmail($team->m1_email); // ✅ FIXED
             $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
             $paymentRequest->customerCity    = 'Gazipur';
             $paymentRequest->value1          = $team->id;
 
             return $this->shurjopay->makePayment($paymentRequest);
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // ✅ FIXED
             Log::error('DirectPay Error', [
                 'slug'    => $slug,
                 'team_id' => $team->id,
-                'error'   => $e->getMessage(),
+                'error'   => $e->getMessage() ?? 'Unknown',
+                'trace'   => $e->getTraceAsString(),
             ]);
-
             return $this->paymentErrorView($this->friendlyError($e), $team, 'gateway_error');
         }
     }
 
     // ─────────────────────────────────────────────
-    // 3. ICT-Olympiad & অন্যান্য — single pay
+    // 3. ICT-Olympiad — single pay
     // ─────────────────────────────────────────────
     public function makePayment($registration_id)
     {
         $registration = Registration::with('event')->findOrFail($registration_id);
 
-        if ($registration->fresh()->payment_status === 'paid') {
+        if ($registration->fresh()->payment_status === 'paid')
             return redirect()->route('event.dashboard', $registration->event->slug)
                 ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
-        }
 
         try {
             $order_id = 'ICT-' . uniqid();
@@ -244,26 +234,26 @@ class PaymentController extends Controller
             $paymentRequest->currency        = 'BDT';
             $paymentRequest->amount          = $registration->event->reg_fee;
             $paymentRequest->orderId         = $order_id;
-            $paymentRequest->customerName    = $registration->m1_name;
+            $paymentRequest->customerName    = $registration->m1_name ?? 'Participant';
             $paymentRequest->customerPhone   = $this->normalizePhone($registration->m1_phone);
-            $paymentRequest->customerEmail   = $registration->m1_email;
+            $paymentRequest->customerEmail   = $this->normalizeEmail($registration->m1_email); // ✅ FIXED
             $paymentRequest->customerAddress = 'DUET, Gazipur';
             $paymentRequest->customerCity    = 'Gazipur';
             $paymentRequest->value1          = $registration->id;
 
             return $this->shurjopay->makePayment($paymentRequest);
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // ✅ FIXED
             Log::error('ICT Payment Error', [
                 'registration_id' => $registration_id,
-                'error'           => $e->getMessage(),
+                'error'           => $e->getMessage() ?? 'Unknown',
+                'trace'           => $e->getTraceAsString(),
             ]);
-
             return $this->paymentErrorView($this->friendlyError($e), $registration, 'gateway_error');
         }
     }
 
     // ─────────────────────────────────────────────
-    // 4. SINGLE CALLBACK — সব event এর জন্য একটাই
+    // 4. CALLBACK — সব event এর জন্য
     // ─────────────────────────────────────────────
     public function callback(Request $request)
     {
@@ -271,24 +261,39 @@ class PaymentController extends Controller
 
         try {
             $verification = $this->shurjopay->verifyPayment($order_id);
-            $data         = $verification[0];
 
-            // ── Payment FAILED / Cancelled ────────────────────────────────────
-            if ($data->sp_code !== '1000') {
+            // ✅ FIXED: empty response crash এড়ানো
+            if (empty($verification) || !isset($verification[0])) {
+                Log::error('Payment verification returned empty', ['order_id' => $order_id]);
+                return view('payment.failed', [
+                    'registration'   => null,
+                    'payment_status' => 'error',
+                    'message'        => 'পেমেন্ট যাচাই করা সম্ভব হয়নি। আমাদের সাথে যোগাযোগ করুন।',
+                    'slug'           => 'event',
+                ]);
+            }
+
+            $data   = $verification[0];
+            $spCode = $data->sp_code ?? null; // ✅ FIXED: null-safe
+
+            // ── FAILED ────────────────────────────────────────────────────────
+            if ($spCode !== '1000') {
                 $registration = Registration::where('order_id', $order_id)->first();
                 $slug         = optional($registration?->event)->slug ?? 'event';
 
                 return view('payment.failed', [
                     'registration'   => $registration,
                     'payment_status' => 'failed',
-                    'sp_code'        => $data->sp_code ?? 'N/A',
+                    'sp_code'        => $spCode ?? 'N/A',
                     'message'        => 'পেমেন্ট সফল হয়নি। আবার চেষ্টা করুন।',
                     'slug'           => $slug,
                 ]);
             }
 
-            // ── Payment SUCCESS ───────────────────────────────────────────────
-            $registration = Registration::with('event')->where('id', $data->value1)->first();
+            // ── SUCCESS ───────────────────────────────────────────────────────
+            $registration = Registration::with('event')
+                ->where('id', $data->value1 ?? null)
+                ->first();
 
             if (! $registration) {
                 return view('payment.failed', [
@@ -301,13 +306,13 @@ class PaymentController extends Controller
 
             $slug = $registration->event->slug;
 
-            // ── Already PAID — Idempotency ────────────────────────────────────
+            // ── Already PAID ──────────────────────────────────────────────────
             if ($registration->payment_status === 'paid') {
                 $transaction = Transaction::where('team_id', $registration->id)->latest()->first();
                 return $this->invoiceView($slug, $registration, $transaction, 'already_paid');
             }
 
-            // ── DB Transaction — Race Condition Protection ────────────────────
+            // ── DB Transaction ────────────────────────────────────────────────
             $registration = DB::transaction(function () use ($data, $registration, $slug) {
 
                 $locked = Registration::with('event')
@@ -315,12 +320,8 @@ class PaymentController extends Controller
                     ->lockForUpdate()
                     ->first();
 
-                // Double-check inside lock
-                if ($locked->payment_status === 'paid') {
-                    return $locked;
-                }
+                if ($locked->payment_status === 'paid') return $locked;
 
-                // ── Participant ID Generate ───────────────────────────────────
                 $prefix = $this->getParticipantPrefix($slug);
                 $last   = Registration::whereNotNull('participant_id')
                     ->where('participant_id', 'like', $prefix . '%')
@@ -328,14 +329,10 @@ class PaymentController extends Controller
                     ->lockForUpdate()
                     ->first();
 
-                if ($last) {
-                    $number = (int) str_replace($prefix, '', $last->participant_id);
-                    $newId  = $prefix . str_pad($number + 1, 2, '0', STR_PAD_LEFT);
-                } else {
-                    $newId = $prefix . '01';
-                }
+                $newId = $last
+                    ? $prefix . str_pad((int) str_replace($prefix, '', $last->participant_id) + 1, 2, '0', STR_PAD_LEFT)
+                    : $prefix . '01';
 
-                // ── Transaction Save (idempotent) ─────────────────────────────
                 Transaction::firstOrCreate(
                     ['transaction_id' => $data->bank_trx_id],
                     [
@@ -349,25 +346,20 @@ class PaymentController extends Controller
                     ]
                 );
 
-                // ── Coupon mark as used ───────────────────────────────────────
-                // ✅ KEY FIX: registration.coupon_id (DB তে save করা) প্রথমে চেক,
-                //    তারপর value2 (ShurjoPay এ পাঠানো) — দুটো মিলিয়ে reliable
                 $couponId = $locked->coupon_id ?? ($data->value2 ?? null);
-
                 if ($couponId) {
                     $updated = Coupon::where('id', $couponId)
-                        ->where('is_used', false)   // ✅ already-used হলে double update নয়
+                        ->where('is_used', false)
                         ->update(['is_used' => true]);
 
                     if (! $updated) {
                         Log::warning('Coupon already used or not found', [
-                            'coupon_id'   => $couponId,
-                            'team_id'     => $locked->id,
+                            'coupon_id' => $couponId,
+                            'team_id'   => $locked->id,
                         ]);
                     }
                 }
 
-                // ── Registration update ───────────────────────────────────────
                 $locked->update([
                     'participant_id' => $newId,
                     'transaction_id' => $data->bank_trx_id,
@@ -379,16 +371,13 @@ class PaymentController extends Controller
             });
 
             $transaction = Transaction::where('team_id', $registration->id)->latest()->first();
-
-            // wasChanged() শুধু Eloquent update এর পরে কাজ করে,
-            // তাই payment_status দিয়ে check করাই নির্ভরযোগ্য
             $invoiceType = ($registration->fresh()->payment_status === 'paid') ? 'success' : 'already_paid';
 
             return $this->invoiceView($slug, $registration, $transaction, $invoiceType);
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // ✅ FIXED
             Log::error('Payment callback error', [
                 'order_id' => $order_id ?? null,
-                'error'    => $e->getMessage(),
+                'error'    => $e->getMessage() ?? 'Unknown',
                 'trace'    => $e->getTraceAsString(),
             ]);
 
@@ -401,9 +390,8 @@ class PaymentController extends Controller
         }
     }
 
-
     // ─────────────────────────────────────────────
-    // Helper: slug → participant ID prefix
+    // Helpers
     // ─────────────────────────────────────────────
     private function getParticipantPrefix(string $slug): string
     {
@@ -416,9 +404,6 @@ class PaymentController extends Controller
         };
     }
 
-    // ─────────────────────────────────────────────
-    // Helper: slug → invoice view
-    // ─────────────────────────────────────────────
     private function invoiceView(string $slug, $registration, $transaction, string $status)
     {
         $viewMap = [

@@ -92,7 +92,7 @@ Route::post('/register/store', [RegistrationController::class, 'store'])->name('
 // Route::get('/payment/make/{registration_id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
 // পেমেন্ট রি-ট্রাই করার রাউট
 Route::get('/registration/retry-payment/{registration_id}', [RegistrationController::class, 'retryPayment'])->name('registration.retry_payment');
-// Route::get('/payment/make/{id}', [RegistrationController::class, 'makePayment'])->name('payment.make');
+
 Route::any('/payment/callback', [RegistrationController::class, 'callback'])->name('payment.callback');
 // পেমেন্ট গেটওয়ে থেকে ফিরে আসার রাউট (Success/Fail)
 Route::post('/payment/success', [RegistrationController::class, 'success'])->name('payment.success');
