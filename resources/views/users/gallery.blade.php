@@ -141,21 +141,9 @@
                         class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                         <div class="flex justify-between items-end">
                             <div>
-                                <h4 class="heading-font text-cyan-400 text-lg font-bold uppercase">
-                                    @php
-                                        $titles = [
-                                            'IUPC Arena',
-                                            'Cyber Hackathon',
-                                            'Project Demo',
-                                            'ICT Olympiad',
-                                            'Deep Learning',
-                                            'Tech Seminar',
-                                        ];
-                                        echo $titles[($i - 1) % count($titles)];
-                                    @endphp
-                                </h4>
+
                                 <p class="text-[10px] text-slate-400 font-mono uppercase">Node:
-                                    DUET_GALLERY_0{{ $i }}</p>
+                                    DUET_CSE_GALLERY_0{{ $i }}</p>
                             </div>
 
                             <!-- Expand Icon -->

@@ -9,6 +9,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap"
         rel="stylesheet">
+
     <style>
         *,
         *::before,
@@ -154,6 +155,7 @@
             color: #38bdf8;
             border: 2px solid #38bdf8;
             letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
         .part-tag {
@@ -214,21 +216,15 @@
             letter-spacing: 0.02em;
         }
 
-        .status-dot {
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            background: #22c55e;
-            border-radius: 50%;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-
         .status-val {
-            color: #16a34a;
+            color: #d97706;
+            /* Golden/Amber color for ranks */
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        /* Seat section */
+        /* Seat section updated for single column data */
         .seat-section {
             border: 2px solid #0e1829;
             border-radius: 10px;
@@ -249,54 +245,26 @@
             gap: 7px;
         }
 
-        .seat-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'Rajdhani', sans-serif;
-        }
-
-        .seat-table th {
-            background: #f1f5f9;
-            font-size: 9px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: #64748b;
-            font-weight: 700;
-            padding: 9px 14px;
-            border-bottom: 1px solid #e2e8f0;
-            border-right: 1px solid #e2e8f0;
+        .seat-display-box {
+            padding: 18px;
+            background: #f8fafc;
             text-align: center;
         }
 
-        .seat-table th:last-child {
-            border-right: none;
-        }
-
-        .seat-table td {
-            padding: 14px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 700;
-            color: #0f172a;
-            border-right: 1px solid #e2e8f0;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .seat-table td:last-child {
-            border-right: none;
-        }
-
-        .seat-no {
+        .seat-no-badge {
             font-family: 'Space Mono', monospace;
             font-size: 18px;
             font-weight: 700;
             color: #0e1829;
             background: #dbeafe;
-            border-radius: 5px;
-            padding: 3px 10px;
+            border-radius: 8px;
+            padding: 8px 16px;
             display: inline-block;
             border: 1.5px solid #bfdbfe;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            max-width: 100%;
+            word-break: break-word;
         }
 
         /* Notice */
@@ -391,23 +359,11 @@
                 display: flex !important;
             }
 
-            .stripe {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-
+            .stripe,
             .card-header,
-            .seat-header {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .avatar {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .seat-no {
+            .seat-header,
+            .avatar,
+            .seat-no-badge {
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
             }
@@ -419,11 +375,10 @@
     <div class="page-wrap">
         <div class="pass-card">
 
-            <!-- Header -->
             <div class="card-header">
                 <div>
-                    <span class="fest-label">Official Digital Pass &middot; CARNIVAl Portal</span>
-                    <div class="fest-title">DUET <span>CSE</span>CARNIVAl</div>
+                    <span class="fest-label">Official Digital Pass &middot; CARNIVAL Portal</span>
+                    <div class="fest-title">DUET <span>CSE</span> CARNIVAL</div>
                     <div class="uni-name">Dhaka University of Engineering &amp; Technology</div>
                 </div>
                 <div class="header-badge">
@@ -434,35 +389,39 @@
 
             <div class="stripe"></div>
 
-            <!-- Body -->
             <div class="card-body">
 
-                <!-- Participant -->
                 <div class="participant-block">
-                    <div class="avatar">TA</div>
+                    {{-- নামের প্রথম ২ টি অক্ষর ডাইনামিকালি জেনারেট করার জন্য লজিক --}}
+                    @php
+                        $name = $result->team_name ?? 'Team Alpha';
+                        $initials = strtoupper(substr($name, 0, 2));
+                    @endphp
+                    <div class="avatar">{{ $initials }}</div>
                     <div>
                         <div class="part-tag">Participant Identity</div>
-                        <div class="part-name">{{ $result->team_name ?? 'Team Alpha / Participant Name' }}</div>
+                        <div class="part-name">{{ $name }}</div>
                         <div class="part-id">ID: #{{ $result->participant_id ?? '2026-CSE-047' }}</div>
                     </div>
                 </div>
 
-                <!-- Info Grid -->
                 <div class="info-grid">
                     <div class="info-cell">
                         <div class="cell-label">Target Event</div>
                         <div class="cell-value">{{ $result->event_name ?? 'Programming Contest' }}</div>
                     </div>
                     <div class="info-cell">
-                        <div class="cell-label">Status</div>
+                        <div class="cell-label">Standing / Ranking</div>
                         <div class="cell-value">
-                            <span class="status-dot"></span>
-                            <span class="status-val">{{ $result->result_status ?? 'Selected' }}</span>
+                            <span class="status-val">
+                                <i class="fa-solid fa-trophy"></i>
+                                {{ $result->result_status ?? 'Participant' }}
+                            </span>
                         </div>
                     </div>
                     <div class="info-cell">
                         <div class="cell-label">Date</div>
-                        <div class="cell-value">18 May 2026</div>
+                        <div class="cell-value">26 June 2026</div>
                     </div>
                     <div class="info-cell">
                         <div class="cell-label">Report Time</div>
@@ -470,31 +429,19 @@
                     </div>
                 </div>
 
-                <!-- Seat Plan -->
                 <div class="seat-section">
                     <div class="seat-header">
                         <i class="fa-solid fa-map-location-dot"></i>
-                        Venue Details &amp; Seat Plan
+                        Allocated Seat &amp; Venue Details
                     </div>
-                    <table class="seat-table">
-                        <thead>
-                            <tr>
-                                <th>Lab / Room</th>
-                                <th>Seat / PC No.</th>
-                                <th>Floor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ $result->room_no ?? 'CSE-101' }}</td>
-                                <td><span class="seat-no">{{ $result->seat_no ?? 'PC-14' }}</span></td>
-                                <td>{{ $result->floor ?? '3rd Floor' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="seat-display-box">
+                        <span class="seat-no-badge">
+                            <i class="fa-solid fa-door-open" style="margin-right: 6px; color: #1e3a5f;"></i>
+                            {{ $result->seat_plan ?? 'Lab-3, PC-24, Old Building 2nd Floor' }}
+                        </span>
+                    </div>
                 </div>
 
-                <!-- Notice -->
                 <div class="notice">
                     <i class="fa-solid fa-circle-exclamation notice-icon"></i>
                     <p class="notice-text">
@@ -503,9 +450,7 @@
                     </p>
                 </div>
 
-            </div><!-- /card-body -->
-
-            <!-- Footer (hidden on print) -->
+            </div>
             <div class="card-footer">
                 <span class="dev-tag">Developed by DUET CSE Community</span>
                 <button class="print-btn" onclick="window.print()">
@@ -514,7 +459,7 @@
                 </button>
             </div>
 
-        </div><!-- /pass-card -->
+        </div>
     </div>
 </body>
 

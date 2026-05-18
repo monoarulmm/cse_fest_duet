@@ -170,9 +170,7 @@
 
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-left">
-                            <h4 class="heading-font text-cyan-400 text-lg font-bold uppercase tracking-tighter">
-                                {{ $titles[($i - 1) % count($titles)] }}
-                            </h4>
+
                             <p class="text-[9px] text-slate-400 font-mono mt-1">SNAPSHOT_0{{ $i }}</p>
                             <div class="mt-4 h-[1px] w-0 group-hover:w-full bg-cyan-400 transition-all duration-1000"></div>
                         </div>

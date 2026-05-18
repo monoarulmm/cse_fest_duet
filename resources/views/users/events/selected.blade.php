@@ -89,7 +89,7 @@
                                         {{-- Project Showcase বা Hackathon এর জন্য সরাসরি লিঙ্ক --}}
                                         <a href="{{ route('event.final_reg_direct', [$event->slug, $team->id]) }}"
                                             class="bg-green-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 transition-all">
-                                            Finalize Registration
+                                            Make Payment
                                         </a>
                                     @endif
                                 </td>

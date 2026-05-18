@@ -93,6 +93,8 @@ class Registration extends Model
         'm1_cf_handle',
         'm2_cf_handle',
         'm3_cf_handle',
+        'm3_tshirt',
+
         'coupon_code',
         'project_title',
         'domain',

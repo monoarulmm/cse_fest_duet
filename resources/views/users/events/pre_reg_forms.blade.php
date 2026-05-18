@@ -40,40 +40,11 @@
         .ts-control {
             background: rgba(34, 211, 238, 0.05) !important;
             border: 1px solid rgba(34, 211, 238, 0.2) !important;
-            color: #ffffff !important;
-            /* টাইপ করা টেক্সট সরাসরি উজ্জ্বল সাদা */
+            color: #e2e8f0 !important;
             border-radius: 12px !important;
             padding: 14px 16px !important;
-            font-weight: 600;
         }
 
-        /* ইনপুট বক্সের ভেতরের টাইপিং টেক্সট ও ফন্ট ফিক্স */
-        .ts-control input {
-            color: #ffffff !important;
-            font-weight: 600;
-        }
-
-        /* প্লেসহোল্ডার টেক্সট গ্লোয়িং এবং লাইটিং হোয়াইট করা */
-        .ts-control input::placeholder {
-            color: rgba(255, 255, 255, 0.9) !important;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-            /* গ্লোয়িং ইফেক্ট */
-        }
-
-        /* ওল্ডার ব্রাউজার সাপোর্টের জন্য প্লেসহোল্ডার ফিক্স */
-        .ts-control input::-webkit-input-placeholder {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-
-        .ts-control input::-moz-placeholder {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-
-        .ts-control input:-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-
-        /* ড্রপডাউন অপশনগুলোর স্টাইল আগের মতোই রাখা হলো */
         .ts-dropdown {
             background: #0f172a !important;
             color: #e2e8f0 !important;
@@ -94,7 +65,7 @@
                 <div class="h-1 w-32 bg-cyan-500 mx-auto mt-2 rounded-full"></div>
             </div>
 
-            <form action="{{ route('registration.store') }}" method="POST" enctype="multipart/form-data" id="regForm"
+            <form action="{{ route('registration.store') }}" method="POST" enctype="multipart/form-data"
                 class="form-glass rounded-[2.5rem] p-8 md:p-14 shadow-2xl">
                 @csrf
                 <input type="hidden" name="event_id" value="{{ $event->id }}">
@@ -115,10 +86,9 @@
                     @php
                         $slug = $event->slug;
                         $noStudentIdEvents = ['iupc', 'project-showcase', 'ai-hackathon'];
-                        $isTeamEvent = in_array($slug, $noStudentIdEvents);
                     @endphp
 
-                    @if ($isTeamEvent)
+                    @if (in_array($slug, $noStudentIdEvents))
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase text-cyan-400">Team Name*</label>
                             <input type="text" name="team_name" value="{{ old('team_name') }}" required
@@ -128,7 +98,7 @@
                         <div class="space-y-2">
                             <label class="block text-[10px] font-bold uppercase text-cyan-400">All-Female Team?*</label>
                             <select name="team_person" required class="input-field w-full rounded-xl px-4 py-4">
-                                <option value="Mixed" {{ old('team_person') == 'Mixed' ? 'selected' : '' }}>NO</option>
+                                <option value="Mixed" {{ old('team_person') == 'Mail' ? 'selected' : '' }}>NO</option>
                                 <option value="Femail" {{ old('team_person') == 'Femail' ? 'selected' : '' }}>YES</option>
                             </select>
                         </div>
@@ -141,8 +111,8 @@
                                 class="input-field w-full rounded-xl px-4 py-4">
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-[10px] font-bold uppercase text-cyan-400">Abstract (PDF)* Max
-                                3MB</label>
+                            <label class="block text-[10px] font-bold uppercase text-cyan-400">Abstract (PDF)* Max 3MB
+                            </label>
                             <input type="file" name="abstract_file" accept=".pdf" required
                                 class="input-field w-full rounded-xl px-4 py-3">
                         </div>
@@ -152,14 +122,10 @@
                                 class="block text-[10px] font-bold uppercase tracking-widest text-cyan-400">Domain*</label>
                             <select name="domain" required class="input-field w-full rounded-xl px-4 py-4">
                                 <option value="">Select Domain</option>
-                                <option value="AI & Data Science"
-                                    {{ old('domain') == 'AI & Data Science' ? 'selected' : '' }}>AI & Data Science</option>
-                                <option value="IoT" {{ old('domain') == 'IoT' ? 'selected' : '' }}>IoT & Embedded
-                                    Intelligence</option>
-                                <option value="Software" {{ old('domain') == 'Software' ? 'selected' : '' }}>Software &
-                                    Digital Platforms</option>
-                                <option value="Smart" {{ old('domain') == 'Smart' ? 'selected' : '' }}>Smart Solutions
-                                </option>
+                                <option value="AI & Data Science">AI & Data Science</option>
+                                <option value="IoT">IoT & Embedded Intelligence</option>
+                                <option value="Software">Software & Digital Platforms</option>
+                                <option value="Smart">Smart Solutions</option>
                             </select>
                         </div>
                     @endif
@@ -172,25 +138,26 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                         <input type="text" name="coach_name" required placeholder="Coach Name"
-                            value="{{ old('coach_name') }}" class="input-field rounded-xl px-4 py-4">
+                            class="input-field rounded-xl px-4 py-4">
                         <input type="email" name="coach_email" required placeholder="Coach Email"
-                            value="{{ old('coach_email') }}" class="input-field rounded-xl px-4 py-4">
+                            class="input-field rounded-xl px-4 py-4">
                         <input type="text" name="coach_phone" required placeholder="Coach Phone"
-                            value="{{ old('coach_phone') }}" class="input-field rounded-xl px-4 py-4">
+                            class="input-field rounded-xl px-4 py-4">
                         <input type="text" name="coach_designation" required placeholder="Designation"
-                            value="{{ old('coach_designation') }}" class="input-field rounded-xl px-4 py-4">
+                            class="input-field rounded-xl px-4 py-4">
                         <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4">
                             <option value="">T-Shirt Size</option>
-                            @foreach (['M', 'L', 'XL', 'XXL'] as $size)
-                                <option value="{{ $size }}" {{ old('coach_tshirt') == $size ? 'selected' : '' }}>
-                                    {{ $size }}</option>
-                            @endforeach
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
                         </select>
                     </div>
                 @endif
 
                 {{-- Step 3: Member Info --}}
                 @php
+                    $isTeamEvent = in_array($slug, $noStudentIdEvents);
                     $maxMembers = $isTeamEvent ? 3 : 1;
                     $minRequired = in_array($slug, ['iupc', 'ai-hackathon']) ? 2 : 1;
                 @endphp
@@ -221,12 +188,15 @@
                                 class="input-field rounded-xl px-4 py-4">
                                 <option value="">Previous Experience</option>
                                 <option value="YES" {{ old('m' . $i . '_prev_ex') == 'YES' ? 'selected' : '' }}>YES
-                                    (Previously Participated)</option>
+                                    (Previously Perticipated )
+                                </option>
                                 <option value="NO" {{ old('m' . $i . '_prev_ex') == 'NO' ? 'selected' : '' }}>No
-                                    (First time Participating)</option>
+                                    (First
+                                    time Participating)
+                                </option>
                             </select>
 
-                            {{-- Handles/Student ID Logic --}}
+                            {{-- Handles Logic --}}
                             @if ($slug === 'iupc')
                                 <input type="text" name="m{{ $i }}_cf_handle"
                                     {{ $i <= $minRequired ? 'required' : '' }} placeholder="Codeforces Handle"
@@ -235,66 +205,52 @@
                                 <input type="text" name="m{{ $i }}_cf_handle"
                                     {{ $i <= $minRequired ? 'required' : '' }} placeholder="Kaggle AC Link"
                                     class="input-field rounded-xl px-4 py-4" value="{{ old('m' . $i . '_cf_handle') }}">
-                            @elseif (!$isTeamEvent)
+                            @elseif (!in_array($slug, $noStudentIdEvents))
+                                {{-- শুধুমাত্র ICT বা অন্য সাধারণ ইভেন্টে (যেগুলো $noStudentIdEvents এ নেই) স্টুডেন্ট আইডি আসবে --}}
+                                {{-- অন্য সব ইভেন্টের জন্য স্টুডেন্ট আইডি/রোল --}}
                                 <input type="text" name="student_id" required placeholder="Student ID/Roll"
-                                    class="input-field rounded-xl px-4 py-4" value="{{ old('student_id') }}">
+                                    class="input-field rounded-xl px-4 py-4">
                             @endif
 
-                            {{-- ✅ আপনার নতুন রিকোয়েস্টের লজিক: শুধু টিম ইভেন্ট অথবা ICT এর জন্য টি-শার্ট শো করবে --}}
-                            @if ($isTeamEvent || $slug === 'ict-olympiad')
-                                <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
-                                    class="input-field rounded-xl px-4 py-4">
-                                    <option value="">T-Shirt Size</option>
-                                    @foreach (['M', 'L', 'XL', 'XXL'] as $size)
-                                        <option value="{{ $size }}"
-                                            {{ old('m' . $i . '_tshirt') == $size ? 'selected' : '' }}>{{ $size }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            @endif
+                            <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
+                                class="input-field rounded-xl px-4 py-4">
+                                <option value="">T-Shirt Size</option>
+                                @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                    <option value="{{ $size }}"
+                                        {{ old('m' . $i . '_tshirt') == $size ? 'selected' : '' }}>{{ $size }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 @endfor
 
                 <div class="mt-12">
-                    <button type="submit" id="submitBtn"
+                    <button type="submit"
                         class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-6 rounded-2xl transition-all shadow-[0_0_30px_rgba(34,211,238,0.4)] uppercase tracking-[0.2em] text-lg">
-                        {{ $isTeamEvent ? 'Submit Registration' : 'Submit & Pay' }}
+                        {{ $slug === 'ict-olympiad' ? 'Proceed to Payment' : 'Submit Registration' }}
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
+    {{-- Script remains same as before --}}
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // TomSelect Initialization
             new TomSelect("#uni_select", {
                 valueField: 'name',
                 labelField: 'name',
                 searchField: 'name',
                 create: true,
-                placeholder: "Search Institute...",
+                placeholder: "Search University...",
                 load: function(query, callback) {
                     fetch('/data/universities.json').then(res => res.json()).then(json => {
                         callback(json.map(item => ({
                             name: item
                         })));
                     }).catch(() => callback());
-                }
-            });
-
-            // DOUBLE SUBMISSION PREVENTER
-            const form = document.getElementById('regForm');
-            const submitBtn = document.getElementById('submitBtn');
-
-            form.addEventListener('submit', function(e) {
-                if (form.checkValidity()) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerText = "PROCESSING... PLEASE WAIT";
-                    submitBtn.style.opacity = "0.7";
-                    submitBtn.style.cursor = "not-allowed";
                 }
             });
         });

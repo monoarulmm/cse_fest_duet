@@ -52,20 +52,8 @@
                     </div>
                 </div>
 
-                {{-- Filter Hub --}}
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-5 relative z-10">
-                    <div class="space-y-2.5">
-                        <label
-                            class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Protocol/Category</label>
-                        <select id="categoryFilter"
-                            class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-300 focus:border-indigo-500/50 outline-none transition-all cursor-pointer appearance-none shadow-lg">
-                            <option value="all">Full Spectrum (All)</option>
-                            @foreach ($universitySlots->keys() as $category)
-                                <option value="{{ Str::slug($category) }}">{{ $category }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
+                {{-- Filter Hub (Grid Adjusted to 3 Columns) --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
                     <div class="space-y-2.5">
                         <label
                             class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Order/Priority</label>
@@ -110,37 +98,29 @@
                 </div>
 
                 {{-- Single List Container --}}
+                {{-- Single List Container --}}
                 <div id="slotsContainer">
-                    @foreach ($universitySlots as $category => $slots)
-                        @foreach ($slots as $slot)
-                            <div class="slot-item group flex items-center border-b border-slate-800/40 hover:bg-indigo-500/[0.03] transition-all duration-500"
-                                data-name="{{ strtolower($slot->university_name) }}" data-quota="{{ $slot->max_slots }}"
-                                data-cat="{{ Str::slug($category) }}">
+                    @foreach ($universitySlots as $slot)
+                        <div class="slot-item group flex items-center border-b border-slate-800/40 hover:bg-indigo-500/[0.03] transition-all duration-500"
+                            data-name="{{ strtolower($slot->university_name) }}" data-quota="{{ $slot->max_slots }}">
 
-                                <div class="flex-1 px-10 py-8">
-                                    <h5
-                                        class="text-slate-100 group-hover:text-indigo-400 font-bold text-xl tracking-tight transition-colors duration-300">
-                                        {{ $slot->university_name }}
-                                    </h5>
-                                    <div class="mt-3 flex items-center gap-3">
-                                        <span
-                                            class="text-[9px] font-black text-indigo-500/60 uppercase tracking-widest bg-indigo-500/10 px-3 py-1.5 rounded-lg border border-indigo-500/20">
-                                            Segment: {{ $category }}
-                                        </span>
-                                    </div>
-                                </div>
+                            <div class="flex-1 px-10 py-8">
+                                <h5
+                                    class="text-slate-100 group-hover:text-indigo-400 font-bold text-xl tracking-tight transition-colors duration-300">
+                                    {{ $slot->university_name }}
+                                </h5>
+                            </div>
 
-                                <div class="w-40 p-8 flex justify-center border-l border-slate-800/30">
-                                    <div
-                                        class="h-16 w-20 bg-slate-950/60 rounded-2xl flex items-center justify-center border border-slate-800 group-hover:border-indigo-500/40 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all">
-                                        <span
-                                            class="text-indigo-400 group-hover:text-indigo-300 font-mono font-black text-2xl tracking-tighter">
-                                            {{ sprintf('%02d', $slot->max_slots) }}
-                                        </span>
-                                    </div>
+                            <div class="w-40 p-8 flex justify-center border-l border-slate-800/30">
+                                <div
+                                    class="h-16 w-20 bg-slate-950/60 rounded-2xl flex items-center justify-center border border-slate-800 group-hover:border-indigo-500/40 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all">
+                                    <span
+                                        class="text-indigo-400 group-hover:text-indigo-300 font-mono font-black text-2xl tracking-tighter">
+                                        {{ sprintf('%02d', $slot->max_slots) }}
+                                    </span>
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -158,7 +138,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
-            const categoryFilter = document.getElementById('categoryFilter');
             const sortOrder = document.getElementById('sortOrder');
             const slotsContainer = document.getElementById('slotsContainer');
             const noResult = document.getElementById('noResult');
@@ -166,21 +145,17 @@
 
             function filterAndSort() {
                 const searchValue = searchInput.value.toLowerCase();
-                const catValue = categoryFilter.value;
                 const sortValue = sortOrder.value;
 
                 let items = Array.from(document.querySelectorAll('.slot-item'));
                 let visibleCount = 0;
 
-                // filtering
+                // Filtering (Category logic removed)
                 items.forEach(item => {
                     const name = item.getAttribute('data-name');
-                    const cat = item.getAttribute('data-cat');
-
                     const matchesSearch = name.includes(searchValue);
-                    const matchesCat = catValue === 'all' || cat === catValue;
 
-                    if (matchesSearch && matchesCat) {
+                    if (matchesSearch) {
                         item.style.display = 'flex';
                         visibleCount++;
                     } else {
@@ -188,7 +163,7 @@
                     }
                 });
 
-                // sorting
+                // Sorting
                 const visibleItems = items.filter(item => item.style.display !== 'none');
                 visibleItems.sort((a, b) => {
                     const nameA = a.getAttribute('data-name');
@@ -202,7 +177,7 @@
                     return 0;
                 });
 
-                // re-append sorted items
+                // Re-append sorted items
                 visibleItems.forEach(item => slotsContainer.appendChild(item));
 
                 // UI updates
@@ -211,7 +186,6 @@
             }
 
             searchInput.addEventListener('input', filterAndSort);
-            categoryFilter.addEventListener('change', filterAndSort);
             sortOrder.addEventListener('change', filterAndSort);
         });
     </script>

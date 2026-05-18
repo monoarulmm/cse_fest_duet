@@ -96,7 +96,8 @@
             <p>Dear <strong>{{ $registration->team_name ?? $registration->m1_name }}</strong>,</p>
             <p>We are happy to inform you that your registration for
                 <strong>{{ strtoupper(str_replace('-', ' ', $type)) }}</strong> has been <span
-                    class="highlight">Selected</span>.</p>
+                    class="highlight">Selected</span>.
+            </p>
             <p style="color: #94a3b8;">Please proceed with the payment (if applicable) to receive your official
                 Participant ID.</p>
         @endif

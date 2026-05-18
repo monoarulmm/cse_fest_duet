@@ -88,11 +88,11 @@
                                 <p class="text-muted text-[10px]">{{ $registration->{"m{$i}_phone"} }}</p>
                                 <div class="mt-3 flex justify-between items-center border-t border-white/5 pt-2">
                                     <span class="text-[9px] text-muted uppercase">Prev EX:
-                                        {{ $registration->{"m{$i}_prev_ex"} }}</span>
-                                    <span class="text-[9px] text-muted uppercase">Size:
+                                        {{ $registration->{"m{$i}_prev_ex"} }}</span> <br>
+                                    <span class="text-[9px] text-muted uppercase"> <br> Size:
                                         {{ $registration->{"m{$i}_tshirt"} }}</span>
                                     @if ($registration->{"m{$i}_cf_handle"})
-                                        <span class="text-[9px] text-cyan-500 font-mono">CF:
+                                        <span class="text-[9px] text-cyan-500 font-mono">CF/KC:
                                             {{ $registration->{"m{$i}_cf_handle"} }}</span>
                                     @endif
                                 </div>

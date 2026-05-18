@@ -306,10 +306,7 @@ class EventController extends Controller
         $event = Event::where('slug', $slug)->firstOrFail();
 
         // ক্যাটাগরি অনুযায়ী ডাটা গ্রুপ করা হচ্ছে
-        $universitySlots = UniversitySlot::orderBy('category')
-            ->orderBy('university_name')
-            ->get()
-            ->groupBy('category');
+        $universitySlots = UniversitySlot::orderBy('university_name', 'asc')->get();
 
         return view('users.events.slot_list', compact('event', 'universitySlots'));
     }

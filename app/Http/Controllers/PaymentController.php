@@ -337,7 +337,7 @@ class PaymentController extends Controller
                     ['transaction_id' => $data->bank_trx_id],
                     [
                         'event_id'       => $locked->event_id,
-                        'team_id'        => $locked->id,
+                        'team_id'        => $locked->team_id ?? null,
                         'student_id'     => $locked->student_id ?? null,
                         'amount'         => $data->amount,
                         'currency'       => $data->currency,

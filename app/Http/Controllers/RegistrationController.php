@@ -27,6 +27,34 @@ class RegistrationController extends Controller
     // HELPER: Payment error → professional view
     // =========================================================================
 
+    private function normalizePhone(?string $phone): string
+    {
+        if (empty($phone)) return '01700000000';
+
+        $digits = preg_replace('/[^0-9]/', '', $phone);
+
+        if (strlen($digits) === 13 && str_starts_with($digits, '880'))
+            $digits = '0' . substr($digits, 3);
+        if (strlen($digits) === 12 && str_starts_with($digits, '88'))
+            $digits = '0' . substr($digits, 2);
+
+        if (strlen($digits) !== 11 || !str_starts_with($digits, '01'))
+            return '01700000000';
+
+        return $digits;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // HELPER: Email normalize ✅ NEW
+    // ─────────────────────────────────────────────────────────────────────────
+    private function normalizeEmail(?string $email): string
+    {
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Log::warning('Invalid email normalized to fallback', ['original' => $email]);
+            return 'noreply@placeholder.com';
+        }
+        return $email;
+    }
 
     // =========================================================================
     // CREATE — Registration form দেখানো
@@ -98,6 +126,11 @@ class RegistrationController extends Controller
                 'm3_email'      => 'nullable|email',
                 'm3_phone'      => 'nullable|digits:11',
                 'm3_tshirt'     => 'nullable|string',
+                'm3_prev_ex'     => 'nullable|string',
+                'm2_prev_ex'     => 'nullable|string',
+                'm3_cf_handle'     => 'nullable|string', // kaggle account link 1
+                'm2_cf_handle'     => 'nullable|string',
+                'm1_cf_handle'     => 'nullable|string',
             ];
         }
 
@@ -148,7 +181,7 @@ class RegistrationController extends Controller
             return redirect()->back()->with('success', $msg);
         }
 
-        // ICT Olympiad ও অন্যান্য: সরাসরি payment এ
+
         // ⚠️ makePayment এর error এখানে আলাদাভাবে handle হবে
         return $this->makePayment($registration->id);
     }
