@@ -25,14 +25,10 @@ class RegistrationController extends Controller
     // =========================================================================
     public function store(Request $request)
     {
-        $event = Event::findOrFail($request->event_id);
-        $eventSlug = $event->slug;
-
-        // ── 1. Common validation rules ────────────────────────────────────────
-        $rules = [
+        // ১. Common validation rules
+        $commonRules = [
             'event_id'        => 'required|exists:events,id',
             'university_name' => 'required|string|max:255',
-            'other_university' => 'nullable|required_if:university_name,Others|string|max:255',
             'm1_name'         => 'required|string|max:255',
             'm1_email'        => 'required|email|max:255',
             'm1_phone'        => 'required|digits:11',
@@ -40,58 +36,62 @@ class RegistrationController extends Controller
             'm1_prev_ex'      => 'nullable|string',
         ];
 
-        // ── 2. Event-specific validation & Unique Constraints ──────────────────
+        $event     = Event::findOrFail($request->event_id);
+        $eventSlug = $event->slug;
+        $eventRules = [];
+
+        // ২. Event-specific validation
         if ($eventSlug === 'ict-olympiad') {
-            $rules['student_id'] = [
-                'required',
-                'string',
-                'max:50',
-                // একই ইভেন্টে যেন একই স্টুডেন্ট আইডি দ্বিতীয়বার রেজিস্টার্ড হতে না পারে
-                Rule::unique('registrations', 'student_id')->where(function ($query) use ($event) {
-                    return $query->where('event_id', $event->id);
-                })
+            $eventRules = [
+                'student_id' => 'required|string|max:50',
             ];
         } elseif ($eventSlug === 'iupc') {
-            $rules = array_merge($rules, [
+            $eventRules = [
                 'team_name'         => 'required|unique:registrations,team_name|max:255',
-                'coach_name'        => 'required|string|max:255',
-                'coach_email'       => 'required|email|max:255',
+                'coach_name'        => 'required|string',
+                'coach_email'       => 'required|email',
                 'coach_phone'       => 'required|digits:11',
-                'coach_designation' => 'required|string|max:255',
+                'coach_designation' => 'required|string',
                 'coach_tshirt'      => 'required|string',
-                'm1_cf_handle'      => 'required|string|max:255',
-                'm2_name'           => 'required|string|max:255',
-                'm2_email'          => 'required|email|max:255',
+                'm1_cf_handle'      => 'required|string',
+                'm2_name'           => 'required|string',
+                'm2_email'          => 'required|email',
                 'm2_phone'          => 'required|digits:11',
                 'm2_tshirt'         => 'required|string',
                 'm2_prev_ex'        => 'required|string',
-                'm2_cf_handle'      => 'required|string|max:255',
-                'm3_name'           => 'nullable|string|max:255',
-                'm3_email'          => 'nullable|email|max:255',
+                'm2_cf_handle'      => 'required|string',
+                'm3_name'           => 'nullable|string',
+                'm3_email'          => 'nullable|email',
                 'm3_phone'          => 'nullable|digits:11',
                 'm3_tshirt'         => 'nullable|string',
                 'm3_prev_ex'        => 'nullable|string',
-                'm3_cf_handle'      => 'nullable|string|max:255',
-            ]);
+                'm3_cf_handle'      => 'nullable|string',
+            ];
         } elseif (in_array($eventSlug, ['project-showcase', 'ai-hackathon'])) {
-            $rules = array_merge($rules, [
+            $eventRules = [
                 'team_name'     => 'required|unique:registrations,team_name|max:255',
                 'team_person'   => 'required|string',
-                'project_title' => $eventSlug === 'project-showcase' ? 'required|string|max:255' : 'nullable',
-                'abstract_file' => $eventSlug === 'project-showcase' ? 'required|mimes:pdf|max:5120' : 'nullable', // Max 5MB
-                'm2_name'       => 'required|string|max:255',
-                'm2_email'      => 'required|email|max:255',
+                'project_title' => $eventSlug === 'project-showcase' ? 'required|string' : 'nullable',
+                'abstract_file' => $eventSlug === 'project-showcase' ? 'required|mimes:pdf|max:3072' : 'nullable',
+                'm2_name'       => 'required|string',
+                'm2_email'      => 'required|email',
                 'm2_phone'      => 'required|digits:11',
                 'm2_tshirt'     => 'required|string',
-                'm3_name'       => 'nullable|string|max:255',
-                'm3_email'      => 'nullable|email|max:255',
+                'm3_name'       => 'nullable|string',
+                'm3_email'      => 'nullable|email',
                 'm3_phone'      => 'nullable|digits:11',
                 'm3_tshirt'     => 'nullable|string',
-            ]);
+                'm3_prev_ex'     => 'nullable|string',
+                'm2_prev_ex'     => 'nullable|string',
+                'm3_cf_handle'     => 'nullable|string', // kaggle account link 1
+                'm2_cf_handle'     => 'nullable|string',
+                'm1_cf_handle'     => 'nullable|string',
+            ];
         }
 
+
         // ভ্যালিডেশন রান করা
-        $validatedData = $request->validate($rules);
+        $validatedData = $request->validate(array_merge($commonRules, $eventRules));
 
         // ── 3. Registration DB save ───────────────────────────────────────────
         try {
