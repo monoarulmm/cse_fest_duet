@@ -2,96 +2,162 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <title>Registration Update | DUET CSE CARNIVAL 2026</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            line-height: 1.6;
+            background-color: #020617;
+            padding: 40px 20px;
+            margin: 0;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .header {
+        .card {
+            border: 1px solid #1e293b;
             background: #0f172a;
+            color: #f8fafc;
+            padding: 40px 35px;
+            border-radius: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .highlight {
             color: #22d3ee;
-            padding: 20px;
-            text-align: center;
+            font-weight: bold;
         }
 
-        .content {
-            padding: 30px;
-            background: #ffffff;
-        }
-
-        .project-info {
-            background: #f8fafc;
-            border-left: 4px solid #22d3ee;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        .btn {
+        .status-badge {
             display: inline-block;
-            background: #0891b2;
-            color: #ffffff !important;
-            padding: 12px 25px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .status-verified {
+            background: rgba(34, 211, 238, 0.1);
+            color: #22d3ee;
+            border: 1px solid rgba(34, 211, 238, 0.4);
+        }
+
+        .status-selected {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .id-container {
+            margin: 25px 0;
+            border: 1px dashed #22d3ee;
+            padding: 20px;
+            background: rgba(34, 211, 238, 0.03);
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .id-label {
+            font-size: 13px;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .id-badge {
+            color: #0f172a;
+            background: #22d3ee;
+            padding: 8px 24px;
             border-radius: 8px;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin: 30px 0 15px 0;
+        }
+
+        .btn-cyan {
+            display: inline-block;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: #ffffff !important;
+            padding: 13px 28px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 20px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 16px -4px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-green {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff !important;
+            padding: 13px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.3);
         }
 
         .footer {
-            background: #f1f5f9;
-            padding: 20px;
-            text-align: center;
+            margin-top: 30px;
             font-size: 12px;
             color: #64748b;
+            border-top: 1px solid #1e293b;
+            padding-top: 20px;
+            line-height: 1.5;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 style="margin:0; font-size: 20px; text-transform: uppercase;">DUET CARNIVAl 2026</h1>
-        </div>
-        <div class="content">
-            <h2 style="color: #0f172a;">Congratulations! 🎉</h2>
+    <div class="card">
+        <h1
+            style="margin: 0 0 25px 0; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #f8fafc; text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 15px;">
+            DUET CSE CARNIVAL 2026
+        </h1>
 
+        @if ($registration->status === 'verified')
+            <div class="status-badge status-verified">Registration Confirmed</div>
+            <h2 style="color: #22d3ee; margin-top: 0; font-size: 22px;">Congratulations! 🎉</h2>
+            <p>Dear <strong>{{ $registration->team_name ?? $registration->m1_name }}</strong>,</p>
+            <p>Your payment has been successfully verified. You are now a <span class="highlight">Confirmed
+                    Participant</span> for this event.</p>
 
-            <h2>Hello, {{ $registration->team_name ?? $registration->m1_name }}</h2>
+            <div class="id-container">
+                <span class="id-label">YOUR OFFICIAL PARTICIPANT ID</span>
+                <span class="id-badge">{{ $registration->participant_id }}</span>
+            </div>
 
-            @if ($status == 'selected')
-                <p>Congratulations! Your registration for the event has been <strong>Selected</strong>.</p>
-                <p>Please check your dashboard for further instructions and payment details.</p>
-            @elseif($status == 'rejected')
-                <p>We regret to inform you that your registration has been <strong>Rejected</strong> at this time.</p>
-                <p>Thank you for your interest in our event.</p>
-            @endif
+            <div class="btn-container">
+                <a href="{{ route('event.final_registered', ['slug' => $registration->event->slug ?? ($registration->event_slug ?? 'iupc')]) }}"
+                    class="btn-cyan">
+                    View Final Registered Teams
+                </a>
+            </div>
 
-
-            <p>To confirm your participation, please visit our website and complete the payment process.</p>
-
-            {{-- ওয়েবসাইটের লিঙ্ক --}}
-            <a href="{{ url('/') }}" class="btn">Visit Website & Pay</a>
-
-            <p style="margin-top: 25px;">If you have any questions, feel free to contact the organizing committee.</p>
-        </div>
-
-
-
-        <div class="footer">
-            <p>Department of Computer Science and Engineering<br>
-                Dhaka University of Engineering & Technology (DUET), Gazipur</p>
-        </div>
-    </div>
-</body>
-
-</html>
+            <p style="font-size: 13px; color: #94a3b8; margin-top: 20px;">* Please save this email securely. Your
+                Participant ID is required for on-spot check-in and receiving the participant kit.</p>
+        @elseif ($status == 'selected')
+            <div class="status-badge status-selected">Selected for Next Phase</div>
+            <h2 style="color: #10b981; margin-top: 0; font-size: 22px;">Selection Notification!</h2>
+            <p>Dear <strong>{{ $registration->team_name ?? $registration->m1_name }}</strong>,</

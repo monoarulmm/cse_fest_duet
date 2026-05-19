@@ -32,12 +32,11 @@
         }
     </style>
 
-
     @php
-
         $setting = \App\Models\Setting::first();
         $activeEvents = \App\Models\Event::where('is_active', true)->get();
-    @endphp ?>
+    @endphp
+
     @if ($setting && $setting->favicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
         <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
@@ -63,15 +62,29 @@
                 </div>
             @endif
 
-            <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div
+                class="flex flex-col sm:flex-row gap-3 justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                 <a href="{{ url('/') }}"
                     class="text-slate-600 hover:text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
                     ← Back to Home
                 </a>
-                <button onclick="window.print()"
-                    class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl uppercase tracking-wider transition-colors shadow-md shadow-cyan-600/10">
-                    Print Invoice / Save PDF
-                </button>
+
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('event.admit_card', ['slug' => $registration->event->slug ?? ($registration->event_slug ?? 'iupc'), 'id' => $registration->id]) }}"
+                        class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-extrabold text-xs px-6 py-2.5 rounded-xl uppercase tracking-wider transition-all shadow-md shadow-cyan-600/10 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        Get Admit Card
+                    </a>
+
+                    <button onclick="window.print()"
+                        class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-6 py-2.5 rounded-xl uppercase tracking-wider transition-colors shadow-sm">
+                        Print Money Receipt
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -85,12 +98,17 @@
 
             <div class="flex flex-col md:flex-row justify-between items-start gap-6 pb-8 border-b border-slate-100">
                 <div class="flex items-center gap-4">
-                    <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
-                        class="w-8 h-8 md:w-10 md:h-10 object-contain transition-transform duration-500 group-hover:scale-110">
+                    @if ($setting && $setting->logo)
+                        <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
+                            class="w-8 h-8 md:w-10 md:h-10 object-contain">
+                    @else
+                        <img src="{{ asset('duet-logo.png') }}" alt="DUET Logo"
+                            class="w-8 h-8 md:w-10 md:h-10 object-contain">
+                    @endif
                     <div>
-                        <h1 class="text-xl font-black text-slate-900 tracking-tight uppercase">DUET CSE CARANIVAL
-                            {{ $setting->site_name }}</h1>
-
+                        <h1 class="text-xl font-black text-slate-900 tracking-tight uppercase">
+                            DUET CSE CARNIVAL {{ $setting->site_name ?? '2026' }}
+                        </h1>
                     </div>
                 </div>
                 <div class="text-left md:text-right md:ml-auto">
@@ -148,7 +166,7 @@
                         <tr>
                             <td class="p-4 pl-6">
                                 <span
-                                    class="text-slate-900 font-bold uppercase block">{{ $registration->event->name }}</span>
+                                    class="text-slate-900 font-bold uppercase block">{{ $registration->event->name ?? 'Event Registration' }}</span>
                                 <span class="text-xs text-slate-400 font-medium mt-0.5 block">Access Pass for All
                                     Keynote Events & Sub-Segments</span>
                             </td>
@@ -174,8 +192,9 @@
                     <div
                         class="flex justify-between text-base font-black text-slate-900 border-t border-slate-200 pt-2">
                         <span>Total Paid:</span>
-                        <span class="font-mono text-cyan-600">{{ number_format($transaction->amount ?? 0, 2) }}
-                            {{ $transaction->currency ?? 'BDT' }}</span>
+                        <span class="font-mono text-cyan-600">
+                            {{ number_format($transaction->amount ?? 0, 2) }} {{ $transaction->currency ?? 'BDT' }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -183,8 +202,9 @@
             <div
                 class="mt-12 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
                 <p class="text-[10px] text-slate-400 font-semibold leading-relaxed max-w-sm">
-                    * এটি একটি অটো-জেনারেটেড ইলেকট্রনিক মানি রিসিট, কোনো ম্যানুয়াল সিগনেচারের প্রয়োজন নেই। অনুগ্রহ করে
-                    ইভেন্টে প্রবেশের সময় আপনার <span class="text-slate-600 font-bold">Admit Card</span> টি সাথে রাখুন।
+                    * This is an automated electronic money receipt; no manual signature is required. Please secure your
+                    official <span class="text-slate-600 font-bold">Admit Card / Entry Pass</span> using the dynamic
+                    action panel above prior to venue check-in.
                 </p>
                 <div class="text-slate-300 font-serif italic text-sm select-none">
                     Thank You!
@@ -194,7 +214,7 @@
         </div>
 
         <p class="no-print text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-4">
-            DUET CSE CARANIVAL 2026 • Powered by Department of CSE, DUET
+            DUET CSE CARNIVAL 2026 • Powered by Department of CSE, DUET
         </p>
     </div>
 

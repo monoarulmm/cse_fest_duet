@@ -125,45 +125,67 @@
 
                 {{-- ৩. কুপন স্ট্যাটাস টেবিল (শুধুমাত্র IUPC এর জন্য) --}}
                 <div class="p-8 bg-slate-900/50 border border-slate-800 rounded-[2rem] mb-8">
-                    <h2 class="text-xl font-black text-cyan-400 mb-6 uppercase flex items-center gap-2">
-                        <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
-                        Coupon Status Tracker
-                    </h2>
-                    <div class="max-h-64 overflow-y-auto custom-scrollbar">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="text-slate-500 border-b border-slate-800 uppercase">
-                                    <th class="py-3 px-2">University</th>
-                                    <th class="py-3 px-2">Coach</th>
-                                    <th class="py-3 px-2">Code</th>
-                                    <th class="py-3 px-2">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-slate-400">
-                                @forelse ($coupons as $coupon)
-                                    <tr class="border-b border-slate-800/50 hover:bg-white/5">
-                                        <td class="py-3 px-2">{{ $coupon->university }}</td>
-                                        <td class="py-3 px-2">{{ $coupon->coach_name }}</td>
-                                        <td class="py-3 px-2 font-mono text-cyan-400">{{ $coupon->code }}</td>
-                                        <td class="py-3 px-2">
-                                            @if ($coupon->is_used)
-                                                <span class="text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Used</span>
-                                            @else
-                                                <span
-                                                    class="text-green-500 bg-green-500/10 px-2 py-0.5 rounded">Active</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center py-4 text-slate-600 italic">No coupons
-                                            generated
-                                            yet.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h2 class="text-xl font-black text-cyan-400 uppercase flex items-center gap-2">
+                            <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
+                            Coupon Status Tracker
+                        </h2>
+
+                        {{-- মাল্টিপল ডিলিট বাটন --}}
+                        <button type="button" id="delete-selected-btn" disabled
+                            class="px-4 py-2 bg-red-600/20 border border-red-500/40 text-red-400 hover:bg-red-600 hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 opacity-50 cursor-not-allowed flex items-center gap-2">
+                            <i class="fa-solid fa-trash-can"></i> Delete Selected (<span id="selected-count">0</span>)
+                        </button>
                     </div>
+
+                    {{-- বাল্ক ডিলিট ফরম --}}
+                    <form id="bulk-delete-form" action="{{ route('coupons.bulkDelete') }}" method="POST">
+                        @csrf
+                        <div class="max-h-64 overflow-y-auto custom-scrollbar">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="text-slate-500 border-b border-slate-800 uppercase">
+                                        <th class="py-3 px-2 w-10">
+                                            <input type="checkbox" id="select-all-coupons"
+                                                class="rounded border-slate-700 bg-slate-800 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-900 w-4 h-4 cursor-pointer">
+                                        </th>
+                                        <th class="py-3 px-2">University</th>
+                                        <th class="py-3 px-2">Coach</th>
+                                        <th class="py-3 px-2">Code</th>
+                                        <th class="py-3 px-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-slate-400">
+                                    @forelse ($coupons as $coupon)
+                                        <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                            <td class="py-3 px-2">
+                                                <input type="checkbox" name="coupon_ids[]" value="{{ $coupon->id }}"
+                                                    class="coupon-checkbox rounded border-slate-700 bg-slate-800 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-900 w-4 h-4 cursor-pointer">
+                                            </td>
+                                            <td class="py-3 px-2">{{ $coupon->university }}</td>
+                                            <td class="py-3 px-2">{{ $coupon->coach_name }}</td>
+                                            <td class="py-3 px-2 font-mono text-cyan-400">{{ $coupon->code }}</td>
+                                            <td class="py-3 px-2">
+                                                @if ($coupon->is_used)
+                                                    <span
+                                                        class="text-red-500 bg-red-500/10 px-2 py-0.5 rounded font-medium">Used</span>
+                                                @else
+                                                    <span
+                                                        class="text-green-500 bg-green-500/10 px-2 py-0.5 rounded font-medium">Active</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center py-8 text-slate-600 italic">
+                                                No coupons generated yet.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
             @else
                 <div
@@ -187,7 +209,8 @@
             {{-- Stats Sidebar --}}
             <div class="w-full lg:w-1/4 space-y-6">
                 <div class="admin-card p-6 rounded-3xl">
-                    <h4 class="text-white text-[10px] font-black uppercase mb-4 border-b border-white/5 pb-2">Uni Stats</h4>
+                    <h4 class="text-white text-[10px] font-black uppercase mb-4 border-b border-white/5 pb-2">Uni Stats
+                    </h4>
                     <div class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
                         @foreach ($stats as $stat)
                             <div class="flex justify-between items-center text-[10px]">
@@ -306,5 +329,62 @@
             const anyChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
             bulkBtn.classList.toggle('hidden', !anyChecked);
         }
+    </script>
+
+    {{-- ফ্রন্টএন্ড চেকবক্স এবং বাটন কন্ট্রোল স্ক্রিপ্ট --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAll = document.getElementById('select-all-coupons');
+            const checkboxes = document.querySelectorAll('.coupon-checkbox');
+            const deleteBtn = document.getElementById('delete-selected-btn');
+            const countSpan = document.getElementById('selected-count');
+            const deleteForm = document.getElementById('bulk-delete-form');
+
+            // বাটনের স্ট্যাটাস ও সংখ্যা আপডেট করার ফাংশন
+            function updateButtonState() {
+                const checkedCount = document.querySelectorAll('.coupon-checkbox:checked').length;
+                countSpan.textContent = checkedCount;
+
+                if (checkedCount > 0) {
+                    deleteBtn.removeAttribute('disabled');
+                    deleteBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    deleteBtn.classList.add('hover:scale-105');
+                } else {
+                    deleteBtn.setAttribute('disabled', 'true');
+                    deleteBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    deleteBtn.classList.remove('hover:scale-105');
+                }
+            }
+
+            // 'Select All' চেকবক্স টগল লজিক
+            if (selectAll) {
+                selectAll.addEventListener('change', function() {
+                    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+                    updateButtonState();
+                });
+            }
+
+            // সিঙ্গেল চেকবক্স ক্লিক লজিক
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const totalChecked = document.querySelectorAll('.coupon-checkbox:checked')
+                        .length;
+                    if (selectAll) {
+                        selectAll.checked = (totalChecked === checkboxes.length);
+                    }
+                    updateButtonState();
+                });
+            });
+
+            // ডিলিট সাবমিট করার আগে কনফার্মেশন প্রম্পট
+            deleteBtn.addEventListener('click', function() {
+                const finalCount = document.querySelectorAll('.coupon-checkbox:checked').length;
+                if (finalCount === 0) return;
+
+                if (confirm(`আপনি কি নিশ্চিত যে এই ${finalCount}টি কুপন মুছে ফেলতে চান?`)) {
+                    deleteForm.submit();
+                }
+            });
+        });
     </script>
 @endsection

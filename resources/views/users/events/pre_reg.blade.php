@@ -100,7 +100,7 @@
 
                                         {{-- ৩. ICT Olympiad এবং অন্যান্য (যেখানে সরাসরি পেমেন্ট হবে) --}}
                                     @elseif($slug !== 'project-showcase' && $slug !== 'ai-hackathon')
-                                        <a href="{{ route('payment.make', $team->id) }}"
+                                        <a href="{{ route('payment.retry', $team->id) }}"
                                             class="inline-block bg-green-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 hover:shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-all">
                                             <i class="fa-solid fa-credit-card mr-1"></i> Make Payment
                                         </a>

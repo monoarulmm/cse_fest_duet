@@ -41,26 +41,21 @@
             background: rgba(34, 211, 238, 0.05) !important;
             border: 1px solid rgba(34, 211, 238, 0.2) !important;
             color: #ffffff !important;
-            /* টাইপ করা টেক্সট সরাসরি উজ্জ্বল সাদা */
             border-radius: 12px !important;
             padding: 14px 16px !important;
             font-weight: 600;
         }
 
-        /* ইনপুট বক্সের ভেতরের টাইপিং টেক্সট ও ফন্ট ফিক্স */
         .ts-control input {
             color: #ffffff !important;
             font-weight: 600;
         }
 
-        /* প্লেসহোল্ডার টেক্সট গ্লোয়িং এবং লাইটিং হোয়াইট করা */
         .ts-control input::placeholder {
             color: rgba(255, 255, 255, 0.9) !important;
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-            /* গ্লোয়িং ইফেক্ট */
         }
 
-        /* ওল্ডার ব্রাউজার সাপোর্টের জন্য প্লেসহোল্ডার ফিক্স */
         .ts-control input::-webkit-input-placeholder {
             color: rgba(255, 255, 255, 0.9) !important;
         }
@@ -73,7 +68,6 @@
             color: rgba(255, 255, 255, 0.9) !important;
         }
 
-        /* ড্রপডাউন অপশনগুলোর স্টাইল আগের মতোই রাখা হলো */
         .ts-dropdown {
             background: #0f172a !important;
             color: #e2e8f0 !important;
@@ -240,7 +234,7 @@
                                     class="input-field rounded-xl px-4 py-4" value="{{ old('student_id') }}">
                             @endif
 
-                            {{-- ✅ আপনার নতুন রিকোয়েস্টের লজিক: শুধু টিম ইভেন্ট অথবা ICT এর জন্য টি-শার্ট শো করবে --}}
+                            {{-- T-Shirt Visibility Logics --}}
                             @if ($isTeamEvent || $slug === 'ict-olympiad')
                                 <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
                                     class="input-field rounded-xl px-4 py-4">
@@ -285,16 +279,31 @@
                 }
             });
 
-            // DOUBLE SUBMISSION PREVENTER
+            // 🛠️ PERFECT DOUBLE SUBMISSION PREVENTER
             const form = document.getElementById('regForm');
             const submitBtn = document.getElementById('submitBtn');
+            let isSubmitting = false; // সাবমিট ট্র্যাক করার জন্য ফ্ল্যাগ ভেরিয়েবল
 
             form.addEventListener('submit', function(e) {
+                // ১. যদি অলরেডি সাবমিট প্রসেসিংয়ে থাকে, তবে ইভেন্ট আটকে দেবে
+                if (isSubmitting) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // ২. ফর্ম ভ্যালিড হলে সাবমিটিং ট্রু করে বাটন লক করবে
                 if (form.checkValidity()) {
-                    submitBtn.disabled = true;
+                    isSubmitting = true;
+
+                    // ইউজার এক্সপেরিয়েন্স সুন্দর করার জন্য ইনস্ট্যান্ট টেক্সট চেঞ্জ
                     submitBtn.innerText = "PROCESSING... PLEASE WAIT";
-                    submitBtn.style.opacity = "0.7";
+                    submitBtn.style.opacity = "0.6";
                     submitBtn.style.cursor = "not-allowed";
+
+                    // ব্রাউজার ইভেন্ট ফায়ার শেষ করার কুইক বাফারিংয়ের পর ডিজেবল প্রোপার্টি অ্যাসাইন
+                    setTimeout(() => {
+                        submitBtn.disabled = true;
+                    }, 50);
                 }
             });
         });

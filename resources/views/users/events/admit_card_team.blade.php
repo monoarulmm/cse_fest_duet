@@ -16,6 +16,12 @@
 
         @php $setting =\App\Models\Setting::first();
         $activeEvents =\App\Models\Event::where('is_active', true)->get();
+        $eventName =$event->name ?? ($team->event->name ?? 'N/A');
+        $teamOrParticipantName =$team->team_name ?? ($team->m1_name ?? 'INDIVIDUAL PARTICIPANT');
+        $participantId =$team->participant_id ?? $team->id;
+
+        // QR কোডের জন্য প্লেইন টেক্সট ডাটা ফরম্যাট করা হলো
+        $qrData = "Event: " . $eventName . "\n" . "ID: #" . $participantId . "\n" . "Name: " . $teamOrParticipantName . "\n" . "Institution: " . ($team->university_name ?? 'N/A');
         @endphp
 
         @media print {
@@ -54,7 +60,6 @@
             }
         }
     </style>
-
 
     @if ($setting && $setting->favicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
@@ -96,8 +101,7 @@
                 </div>
                 <div class="text-right">
                     <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">ID NO</div>
-                    <div class="text-base font-black text-cyan-400 italic">#{{ $team->participant_id ?? $team->id }}
-                    </div>
+                    <div class="text-base font-black text-cyan-400 italic">#{{ $participantId }}</div>
                 </div>
             </div>
 
@@ -110,11 +114,12 @@
                             OFFICIAL ENTRY PASS
                         </span>
                         <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight">
-                            {{ $event->name ?? $team->event->name }}
+                            {{ $eventName }}
                         </h2>
                     </div>
                     <div class="bg-white p-2 rounded-2xl shadow-md border border-slate-200/60 no-print-bg">
-                        {!! QrCode::size(85)->margin(1)->generate(route('event.final_registered', $team->id)) !!}
+                        {{-- QR কোডের ভেতরে এখন লিঙ্কের বদলে সরাসরি ডিটেইলস টেক্সট জেনারেট হবে --}}
+                        {!! QrCode::size(85)->margin(1)->generate($qrData) !!}
                     </div>
                 </div>
 

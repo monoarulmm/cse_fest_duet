@@ -76,10 +76,12 @@
                     Final <span class="text-cyan-400">Registration</span>
                 </h1>
                 <div class="flex items-center justify-center gap-3 mt-4">
-                    <span class="step-badge px-4 py-1 rounded-full text-[10px] font-bold uppercase italic">Team:
-                        {{ $team->team_name }}</span>
-                    <span class="step-badge px-4 py-1 rounded-full text-[10px] font-bold uppercase italic">ID:
-                        #{{ $team->id }}</span>
+                    <span class="step-badge px-4 py-1 rounded-full text-[10px] font-bold uppercase italic">
+                        Team: {{ $team->team_name }}
+                    </span>
+                    <span class="step-badge px-4 py-1 rounded-full text-[10px] font-bold uppercase italic">
+                        ID: #{{ $team->id }}
+                    </span>
                 </div>
             </div>
 
@@ -93,11 +95,12 @@
                     <h3 class="section-title heading-font text-sm font-bold mb-4 uppercase">Verification & Payment</h3>
                     <div class="max-w-md">
                         <label for="coupon_code"
-                            class="block text-cyan-400 text-[10px] font-bold mb-2 uppercase tracking-widest">University
-                            Coupon Code</label>
+                            class="block text-cyan-400 text-[10px] font-bold mb-2 uppercase tracking-widest">
+                            University Coupon Code
+                        </label>
                         <input type="text" name="coupon_code" id="coupon_code" required value="{{ old('coupon_code') }}"
                             class="input-field w-full rounded-xl px-4 py-3 text-white focus:border-cyan-400 @error('coupon_code') border-red-500 @enderror"
-                            placeholder="Ex: DUET-2026-XXXX">
+                            placeholder="Ex: XXXXXX">
                         <p class="text-[10px] text-slate-500 mt-2 italic">* কুপন ভুল হলে পেমেন্ট প্রসেস শুরু হবে না।</p>
                     </div>
                 </div>
@@ -119,8 +122,11 @@
                     <div class="space-y-2">
                         <label class="block text-[10px] font-bold uppercase text-cyan-400">All-Female Team?*</label>
                         <select name="team_person" required class="input-field w-full rounded-xl px-4 py-4">
-                            <option value="Mixed" {{ old('team_person') == 'Mail' ? 'selected' : '' }}>NO</option>
-                            <option value="Femail" {{ old('team_person') == 'Femail' ? 'selected' : '' }}>YES</option>
+                            <option value="Mixed"
+                                {{ old('team_person', $team->team_person) == 'Mixed' || old('team_person', $team->team_person) == 'Mail' ? 'selected' : '' }}>
+                                NO</option>
+                            <option value="Femail"
+                                {{ old('team_person', $team->team_person) == 'Femail' ? 'selected' : '' }}>YES</option>
                         </select>
                     </div>
                 </div>
@@ -150,62 +156,85 @@
                             class="input-field rounded-xl px-4 py-4 text-xs">
                     </div>
 
-                    <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4">
-                        <option value="">T-Shirt Size</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                    </select>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[9px] uppercase text-slate-500 font-bold ml-2">Coach T-Shirt Size</label>
+                        <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4 text-xs">
+                            <option value="">T-Shirt Size</option>
+                            @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                <option value="{{ $size }}"
+                                    {{ old('coach_tshirt', $team->coach_tshirt) == $size ? 'selected' : '' }}>
+                                    {{ $size }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 {{-- Members Info --}}
                 @for ($i = 1; $i <= 3; $i++)
                     @php
-                        $name = "m{$i}_name";
-                        $email = "m{$i}_email";
-                        $phone = "m{$i}_phone";
-                        $cf = "m{$i}_cf_handle";
-                        $cf = "m{$i}_cf_handle";
-                        $prev_ex = "m{$i}_prev_ex";
-                        $tshirt = "m{$i}_tshirt";
+                        $nameKey = "m{$i}_name";
+                        $emailKey = "m{$i}_email";
+                        $phoneKey = "m{$i}_phone";
+                        $cfKey = "m{$i}_cf_handle";
+                        $prevExKey = "m{$i}_prev_ex";
+                        $tshirtKey = "m{$i}_tshirt";
+
+                        // মেম্বার ৩ অপশনাল, ১ এবং ২ রিকোয়ার্ড
+                        $isFieldsRequired = $i < 3 ? 'required' : '';
                     @endphp
+
                     <div class="mb-12">
-                        <h3 class="section-title heading-font text-sm font-bold mb-6 uppercase">Member {{ $i }}
-                            <span
-                                class="text-[10px] lowercase text-slate-500 italic">{{ $i == 1 ? '(Leader)' : ($i == 3 ? '(Optional)' : '') }}</span>
+                        <h3 class="section-title heading-font text-sm font-bold mb-6 uppercase">
+                            Member {{ $i }}
+                            <span class="text-[10px] lowercase text-slate-500 italic">
+                                {{ $i == 1 ? '(Leader)' : ($i == 3 ? '(Optional)' : '') }}
+                            </span>
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                            {{-- Name --}}
                             <input type="text" name="m{{ $i }}_name"
-                                value="{{ old("m{$i}_name", $team->$name) }}" {{ $i < 3 ? 'required' : '' }}
+                                value="{{ old("m{$i}_name", $team->$nameKey) }}" {{ $isFieldsRequired }}
                                 class="input-field rounded-xl px-4 py-4 text-xs" placeholder="Name">
+
+                            {{-- Email --}}
                             <input type="email" name="m{{ $i }}_email"
-                                value="{{ old("m{$i}_email", $team->$email) }}" {{ $i < 3 ? 'required' : '' }}
+                                value="{{ old("m{$i}_email", $team->$emailKey) }}" {{ $isFieldsRequired }}
                                 class="input-field rounded-xl px-4 py-4 text-xs" placeholder="Email">
+
+                            {{-- Phone --}}
                             <input type="text" name="m{{ $i }}_phone"
-                                value="{{ old("m{$i}_phone", $team->$phone) }}" {{ $i < 3 ? 'required' : '' }}
+                                value="{{ old("m{$i}_phone", $team->$phoneKey) }}" {{ $isFieldsRequired }}
                                 class="input-field rounded-xl px-4 py-4 text-xs" placeholder="Phone">
+
+                            {{-- CF Handle --}}
                             <input type="text" name="m{{ $i }}_cf_handle"
-                                value="{{ old("m{$i}_cf_handle", $team->$cf) }}"
+                                value="{{ old("m{$i}_cf_handle", $team->$cfKey) }}" {{ $isFieldsRequired }}
                                 class="input-field rounded-xl px-4 py-4 text-xs" placeholder="CF Handle">
 
-                            <select name="m{{ $i }}_prev_ex" {{ 'required' }}
-                                class="input-field rounded-xl px-4 py-4">
+                            {{-- Previous Experience Dropdown --}}
+                            <select name="m{{ $i }}_prev_ex" {{ $isFieldsRequired }}
+                                class="input-field rounded-xl px-4 py-4 text-xs">
                                 <option value="">Previous Experience</option>
-                                <option value="YES" {{ old('m' . $i . '_prev_ex') == 'YES' ? 'selected' : '' }}>YES
-                                    (Previously Perticipated )
+                                <option value="YES"
+                                    {{ old("m{$i}_prev_ex", $team->$prevExKey) == 'YES' ? 'selected' : '' }}>
+                                    YES (Previously Participated)
                                 </option>
-                                <option value="NO" {{ old('m' . $i . '_prev_ex') == 'NO' ? 'selected' : '' }}>No
-                                    (First
-                                    time Participating)
+                                <option value="NO"
+                                    {{ old("m{$i}_prev_ex", $team->$prevExKey) == 'NO' ? 'selected' : '' }}>
+                                    NO (First time Participating)
                                 </option>
                             </select>
-                            <select name="m{{ $i }}_tshirt" {{ 'required' }}
-                                class="input-field rounded-xl px-4 py-4">
+
+                            {{-- T-Shirt Size Dropdown --}}
+                            <select name="m{{ $i }}_tshirt" {{ $isFieldsRequired }}
+                                class="input-field rounded-xl px-4 py-4 text-xs">
                                 <option value="">T-Shirt Size</option>
                                 @foreach (['M', 'L', 'XL', 'XXL'] as $size)
                                     <option value="{{ $size }}"
-                                        {{ old('m' . $i . '_tshirt') == $size ? 'selected' : '' }}>{{ $size }}
+                                        {{ old("m{$i}_tshirt", $team->$tshirtKey) == $size ? 'selected' : '' }}>
+                                        {{ $size }}
                                     </option>
                                 @endforeach
                             </select>
@@ -219,8 +248,9 @@
                     <div class="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
                         <div>
                             <h3 class="heading-font text-xl text-white uppercase italic">Registration Fee</h3>
-                            <p class="text-3xl font-black text-cyan-400 mt-2">{{ number_format($team->event->reg_fee) }}
-                                BDT</p>
+                            <p class="text-3xl font-black text-cyan-400 mt-2">
+                                {{ number_format($team->event->reg_fee) }} BDT
+                            </p>
                             <p class="text-[9px] text-slate-500 uppercase mt-1 italic">* পেমেন্ট গেটওয়ে চার্জ প্রযোজ্য হতে
                                 পারে</p>
                         </div>

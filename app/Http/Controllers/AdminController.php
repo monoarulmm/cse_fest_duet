@@ -23,6 +23,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use DB;
 use App\Imports\UniversitySlotImport;
 use App\Models\UniversitySlot;
+use App\Models\Coupon;
 
 class AdminController extends Controller
 {
@@ -52,10 +53,33 @@ class AdminController extends Controller
 
         Excel::import(new CouponImport($eventId), $request->file('excel_file'));
 
-        return back()->with('success', 'Coupons generated and emails sent successfully!');
+        return back()->with('success', 'Coupons generated   successfully! Now Export and Manually Send CoachEmail');
     }
 
 
+
+    public function bulkDelete(Request $request)
+    {
+        // ১. ইনপুট ভ্যালিডেশন
+        $request->validate([
+            'coupon_ids'   => 'required|array',
+            'coupon_ids.*' => 'exists:coupons,id', // 'coupons' আপনার কুপন টেবিল নাম অনুযায়ী পরিবর্তন করতে পারেন
+        ]);
+
+        try {
+            $selectedIds = $request->coupon_ids;
+            $deletedCount = count($selectedIds);
+
+            // ২. ডাটাবেজ থেকে একসাথে ডিলিট
+            Coupon::whereIn('id', $selectedIds)->delete();
+
+            return redirect()->back()->with('success', "সফলভাবে {$deletedCount}টি কুপন ডিলিট করা হয়েছে।");
+        } catch (\Exception $e) {
+            // কোনো এরর হলে লগ ফাইলে ধরা পড়বে
+            \Log::error('Coupon bulk delete failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'কুপন ডিলিট করার সময় ইন্টারনাল সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+        }
+    }
 
 
     public function downloadResultTemplate($eventId)
