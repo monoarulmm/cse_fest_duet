@@ -261,6 +261,10 @@
                                                     class="px-2 py-0.5 rounded-[4px] text-[9px] uppercase font-bold {{ $team->status == 'verified' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500' }}">
                                                     {{ $team->status }}
                                                 </span>
+                                                <span
+                                                    class="px-2 py-0.5 rounded-[4px] text-[9px] uppercase font-bold {{ $team->status == 'verified' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500' }}">
+                                                    {{ $team->team_id }}
+                                                </span>
                                             </td>
                                             <td class="p-4 text-right">
                                                 <a href="{{ route('admin.registration.show', $team->id) }}"

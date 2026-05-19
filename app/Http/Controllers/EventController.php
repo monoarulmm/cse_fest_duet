@@ -191,12 +191,14 @@ class EventController extends Controller
 
         return view('users.events.final_reg_form', compact('team', 'finalAmount'));
     }
-    /**
-     * Pre-registered টিমের লিস্ট (সার্চ সুবিধাসহ)
-     */
+
+
+// =========================================================================
+// এই তিনটা method আপনার controller-এ replace করুন
+// =========================================================================
 
     /**
-     * Pre-registered Teams: যাদের স্ট্যাটাস 'pending'
+     * Pre-Registered Teams
      */
     public function preRegistered(Request $request, $slug)
     {
@@ -205,15 +207,24 @@ class EventController extends Controller
         $query = Registration::where('event_id', $event->id)
             ->where('status', 'pre-registered');
 
-        $this->applySearch($query, $request);
+        // ✅ FIX: search থাকলে filter, না থাকলে সব data দেখাবে
+        if ($request->filled('search')) {
+            $this->applyIdOnlySearch($query, $request);
+        }
 
         $teams = $query->latest()->paginate(20);
 
-        return view('users.events.pre_reg', compact('event', 'teams'));
+        $counts = [
+            'pending'  => Registration::where('event_id', $event->id)->where('status', 'pending')->count(),
+            'selected' => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
+            'verified' => Registration::where('event_id', $event->id)->where('status', 'verified')->count(),
+        ];
+
+        return view('users.events.pre_reg', compact('event', 'teams', 'counts'));
     }
 
-    /**
-     * Selected Teams: যাদের স্ট্যাটাস 'selected'
+    /*    *
+     * Selected Teams
      */
     public function selectedTeams(Request $request, $slug)
     {
@@ -222,40 +233,39 @@ class EventController extends Controller
         $query = Registration::where('event_id', $event->id)
             ->where('status', 'selected');
 
-        $this->applySearch($query, $request);
+        // ✅ FIX: search থাকলে filter, না থাকলে সব data দেখাবে
+        if ($request->filled('search')) {
+            $this->applyIdOnlySearch($query, $request);
+        }
 
         $teams = $query->latest()->paginate(20);
 
-        return view('users.events.selected', compact('event', 'teams'));
+        $counts = [
+            'pending'  => Registration::where('event_id', $event->id)->where('status', 'pending')->count(),
+            'selected' => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
+            'verified' => Registration::where('event_id', $event->id)->where('status', 'verified')->count(),
+        ];
+
+        return view('users.events.selected', compact('event', 'teams', 'counts'));
     }
 
     /**
-     * Final Registered: যাদের স্ট্যাটাস 'verified' (পেমেন্ট সম্পন্ন)
-     */
-    /**
-     * Final Registered: যাদের স্ট্যাটাস 'verified' (পেমেন্ট সম্পন্ন)
+     * Final Registered (Paid)
      */
     public function finalRegistered(Request $request, $slug)
     {
-        // ১. ইভেন্ট খুঁজে বের করা
         $event = Event::where('slug', $slug)->firstOrFail();
 
-        // ২. কুয়েরি বিল্ডার শুরু করা (শুধুমাত্র পেইড মেম্বারদের জন্য)
         $query = Registration::where('event_id', $event->id)
             ->where('payment_status', 'paid');
 
-        // ৩. শুধুমাত্র সার্চ ইনপুট থাকলে এবং সেটি আইডি ভিত্তিক হলে ডাটা প্রসেস করা
+        // ✅ FIX: search থাকলে filter, না থাকলে সব data দেখাবে
         if ($request->filled('search')) {
-            // শুধুমাত্র আইডি ভিত্তিক সার্চ অ্যাপ্লাই করা
             $this->applyIdOnlySearch($query, $request);
-
-            $teams = $query->latest()->paginate(20);
-        } else {
-            // সার্চ না করলে খালি কালেকশন পাঠানো
-            $teams = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
         }
 
-        // ৪. কাউন্ট ডেটা
+        $teams = $query->latest()->paginate(20);
+
         $counts = [
             'pending'  => Registration::where('event_id', $event->id)->where('status', 'pending')->count(),
             'selected' => Registration::where('event_id', $event->id)->where('status', 'selected')->count(),
@@ -266,39 +276,23 @@ class EventController extends Controller
     }
 
     /**
-     * শুধুমাত্র ID ভিত্তিক সার্চের জন্য নতুন মেথড
+     * Search filter — আগের মতোই, পরিবর্তন নেই
      */
     private function applyIdOnlySearch($query, $request)
     {
-        $searchTerm = $request->search;
-
-        // #00005 বা 00005 থেকে মূল সংখ্যা (5) বের করা
-        $numericSearch = ltrim($searchTerm, '#');
-        $numericSearch = ltrim($numericSearch, '0');
+        $searchTerm    = $request->search;
+        $numericSearch = ltrim(ltrim($searchTerm, '#'), '0');
 
         $query->where(function ($q) use ($searchTerm, $numericSearch) {
-            $q->where('id', $numericSearch) // ডাটাবেজ প্রাইমারি আইডি (Registration ID)
-                ->orWhere('team_id', $searchTerm) // ইউনিক টিম আইডি (Exact Match)
-                ->orWhere('participant_id', 'LIKE', "%{$searchTerm}%") // যদি আলাদা রেজিস্ট্রেশন আইডি কলাম থাকে
-                ->orWhere('team_name', 'LIKE', "%{$searchTerm}%") // যদি আলাদা রেজিস্ট্রেশন আইডি কলাম থাকে
-                ->orWhere('student_id', 'LIKE', "%{$searchTerm}%"); // যদি আলাদা রেজিস্ট্রেশন আইডি কলাম থাকে
+            $q->where('id', $numericSearch)
+                ->orWhere('team_id', $searchTerm)
+                ->orWhere('participant_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('team_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('team_name', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('student_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('university_name', 'LIKE', "%{$searchTerm}%") // ✅ university search যোগ করা
+                ->orWhere('m1_name', 'LIKE', "%{$searchTerm}%");        // ✅ participant name search যোগ করা
         });
-    }
-
-    /**
-     * সাধারণ সার্চ (নাম, ভার্সিটি ইত্যাদি) যা অন্য মেথডে ব্যবহার হবে
-     */
-    private function applySearch($query, $request)
-    {
-        if ($request->filled('search')) {
-            $searchTerm = $request->search;
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('m1_name', 'LIKE', "%{$searchTerm}%")
-                    ->orWhere('university_name', 'LIKE', "%{$searchTerm}%")
-                    ->orWhere('student_id', 'LIKE', "%{$searchTerm}%")
-                    ->orWhere('team_id', 'LIKE', "%{$searchTerm}%");
-            });
-        }
     }
 
     public function slot_list($slug)

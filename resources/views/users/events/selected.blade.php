@@ -1,127 +1,145 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mx-auto px-4 py-10">
+    <div class="container mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <div class="max-w-6xl mx-auto">
 
             {{-- ইভেন্ট হেডার --}}
-            <div class="text-center mb-10">
-                <h1 class="text-4xl font-black text-white uppercase tracking-tight">{{ $event->name }}</h1>
-                <p class="text-purple-400 tracking-[0.2em] mt-1 text-sm font-bold uppercase">Selection Phase</p>
+            <div class="mb-8 text-center">
+                <h1 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-wider">{{ $event->name }}</h1>
+                <p class="text-purple-400 tracking-[0.2em] mt-1 text-xs sm:text-sm font-bold uppercase">Selection Phase</p>
             </div>
 
-
-            {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
-            <button onclick="window.history.back()"
-                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
-                <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
-                    Back to previous
-                </span>
-            </button>
-
-            {{-- ডাইনামিক ট্যাব মেনু (কাউন্ট সহ) --}}
-            {{-- <div class="flex flex-wrap justify-center gap-4 mb-10">
-                <a href="{{ route('event.pre_registered', $event->slug) }}"
-                    class="px-6 py-3 rounded-2xl border transition-all duration-300 bg-slate-900/50 text-cyan-400 border-cyan-500/20 hover:border-cyan-500/50">
-                    Pre-Registered ({{ $counts['pre-registered'] ?? 0 }})
-                </a>
-
-                <a href="{{ route('event.select_registered', $event->slug) }}"
-                    class="px-6 py-3 rounded-2xl border transition-all duration-300 bg-purple-500 text-white font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)]">
-                    Selected ({{ $counts['selected'] ?? 0 }})
-                </a>
-
-                <a href="{{ route('event.final_registered', $event->slug) }}"
-                    class="px-6 py-3 rounded-2xl border transition-all duration-300 bg-slate-900/50 text-green-400 border-green-500/20 hover:border-green-500/50">
-                    Final Verified ({{ $counts['verified'] ?? 0 }})
-                </a>
-            </div> --}}
+            {{-- জাভাস্ক্রিপ্ট ব্যাক বাটন --}}
+            <div class="mb-6">
+                <button onclick="window.history.back()"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                    <i
+                        class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform text-xs"></i>
+                    <span
+                        class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.15em]">Back</span>
+                </button>
+            </div>
 
             {{-- প্রফেশনাল সার্চ ফরম --}}
-            <form action="{{ url()->current() }}" method="GET" class="mb-10 flex justify-center">
+            <form action="{{ url()->current() }}" method="GET" class="mb-6 flex justify-center px-1">
                 <div class="relative w-full max-w-xl group">
-                    <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Search Selected Team or Student ID."
-                        class="w-full bg-slate-900/80 border border-purple-500/30 rounded-full px-8 py-4 text-white focus:outline-none focus:border-purple-500 transition-all shadow-xl">
+                    <input type="text" name="search" value="{{ request('search') }}" required
+                        placeholder="Search Selected Team or Student ID..."
+                        class="w-full bg-slate-900/80 border border-purple-500/30 rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm text-white focus:outline-none focus:border-purple-500 transition-all pr-28 sm:pr-36 shadow-xl">
                     <button type="submit"
-                        class="absolute right-3 top-2.5 bottom-2.5 bg-purple-500 px-6 rounded-full text-white font-black hover:scale-105 transition-transform flex items-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span class="hidden md:inline text-xs">SEARCH</span>
+                        class="absolute right-2 top-1.5 bottom-1.5 sm:top-2 sm:bottom-2 bg-purple-500 px-4 sm:px-6 rounded-full text-white font-black hover:scale-105 transition-transform flex items-center gap-1.5 text-sm">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        <span class="hidden sm:inline text-xs font-black uppercase tracking-wider">Search</span>
                     </button>
                 </div>
             </form>
 
-            {{-- ডেটা টেবিল --}}
-            <div
-                class="form-glass rounded-3xl overflow-hidden shadow-2xl border border-purple-500/20 bg-slate-900/40 backdrop-blur-md">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-purple-500/10 text-purple-400 heading-font text-xs uppercase tracking-widest">
-                        <tr>
-                            <th class="p-6">Team / Participant</th>
-                            <th class="p-6">University / Institute</th>
-                            <th class="p-6">Status</th>
-                            <th class="p-6 text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-slate-300 text-sm">
-                        @forelse ($teams as $team)
-                            <tr class="border-b border-purple-500/10 hover:bg-purple-500/5 transition duration-300">
-                                <td class="p-6 font-bold text-white">
-                                    {{ $team->team_name ?? 'Participant: ' . $team->m1_name }}
-                                </td>
-                                <td class="p-6">{{ $team->university_name }}</td>
-                                <td class="p-6">
-                                    <span
-                                        class="px-3 py-1 rounded-full text-[10px] uppercase font-black bg-green-500/20 text-green-400 border border-green-500/30">
-                                        {{ $team->status }}
-                                    </span>
-                                </td>
-                                {{-- টেবিলের ভেতরের অ্যাকশন বাটন --}}
-                                <td class="p-6 text-right">
-                                    @if ($event->slug == 'iupc')
-                                        {{-- শুধুমাত্র IUPC এর জন্য মোডাল ওপেন হবে --}}
-                                        <button onclick="openCouponModal('{{ $team->team_name ?? $team->m1_name }}')"
-                                            class="bg-cyan-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 transition-all">
-                                            Verify Coupon
-                                        </button>
-                                    @else
-                                        {{-- Project Showcase বা Hackathon এর জন্য সরাসরি লিঙ্ক --}}
-                                        <a href="{{ route('event.final_reg_direct', [$event->slug, $team->id]) }}"
-                                            class="bg-green-500 text-slate-900 px-5 py-2 rounded-full text-[10px] font-black uppercase hover:scale-110 transition-all">
-                                            Make Payment
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="p-10 text-center text-slate-500 italic">
-                                    No selected teams found for this event.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+            {{-- ডেটা পার্ট: শুধুমাত্র সার্চ করা হলেই টেবিল বা ফিল্টার রেজাল্ট দেখাবে --}}
+            @if (request('search'))
+                <div class="mb-3 px-1 flex items-center justify-between text-slate-400 text-xs">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-purple-500"></i>
+                        <span>Results for: <strong class="text-purple-400">"{{ request('search') }}"</strong></span>
+                    </div>
+                    <a href="{{ url()->current() }}"
+                        class="text-red-400 hover:text-red-300 underline underline-offset-2 font-bold uppercase text-[10px] tracking-wider">Clear
+                        Search</a>
+                </div>
 
-            {{-- প্যাজিনেশন --}}
-            <div class="mt-8">
-                {{ $teams->appends(request()->input())->links() }}
-            </div>
+                {{-- টেবিল স্ট্রাকচার --}}
+                <div
+                    class="rounded-2xl sm:rounded-3xl border border-purple-500/20 bg-slate-900/40 backdrop-blur-md shadow-2xl">
+                    <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
+                        <table class="text-left border-collapse" style="width: 100%; min-width: 560px;">
+                            <thead
+                                class="bg-purple-500/10 text-purple-400 text-[10px] sm:text-xs uppercase tracking-widest">
+                                <tr>
+                                    <th class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold">Team / Participant</th>
+                                    <th class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold">University / Institute</th>
+                                    <th class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold">Status</th>
+                                    <th class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-300 text-sm divide-y divide-purple-500/10">
+                                @forelse ($teams as $team)
+                                    <tr class="hover:bg-purple-500/5 transition duration-200">
+                                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold text-white">
+                                            {{ $team->team_name ?? 'Participant: ' . $team->m1_name }}
+                                        </td>
+                                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-xs text-slate-300">
+                                            {{ $team->university_name }}
+                                        </td>
+                                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-2.5 py-1 rounded-full text-[9px] uppercase font-black tracking-wider bg-green-500/20 text-green-400 border border-green-500/30">
+                                                {{ $team->status }}
+                                            </span>
+                                        </td>
+                                        {{-- টেবিলের ভেতরের অ্যাকশন বাটন --}}
+                                        <td class="px-4 sm:px-6 py-4 text-right whitespace-nowrap">
+                                            @if ($event->slug == 'iupc')
+                                                {{-- শুধুমাত্র IUPC এর জন্য মোডাল ওপেন হবে --}}
+                                                <button
+                                                    onclick="openCouponModal('{{ $team->team_name ?? $team->m1_name }}')"
+                                                    class="bg-cyan-500 text-slate-900 px-3 sm:px-4 py-1.5 rounded-full text-[10px] font-black uppercase hover:scale-105 transition-all">
+                                                    Verify Coupon
+                                                </button>
+                                            @else
+                                                {{-- Project Showcase বা Hackathon এর জন্য সরাসরি লিঙ্ক --}}
+                                                <a href="{{ route('event.final_reg_direct', [$event->slug, $team->id]) }}"
+                                                    class="inline-flex items-center bg-green-500 text-slate-900 px-3 sm:px-4 py-1.5 rounded-full text-[10px] font-black uppercase hover:scale-105 transition-all">
+                                                    Make Payment
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-12 text-center text-slate-400 text-sm">
+                                            <i class="fa-solid fa-magnifying-glass text-slate-600 text-2xl mb-3 block"></i>
+                                            No selected teams found for <strong
+                                                class="text-white">"{{ request('search') }}"</strong>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- Scroll hint — only mobile --}}
+                @if ($teams->count() > 0)
+                    <p class="sm:hidden text-center text-slate-600 text-[10px] mt-2 italic">
+                        <i class="fa-solid fa-arrows-left-right mr-1"></i> বাম/ডানে স্ক্রল করুন
+                    </p>
+                @endif
+
+                {{-- প্যাজিনেশন --}}
+                @if ($teams->hasPages())
+                    <div class="mt-6">
+                        {{ $teams->appends(request()->input())->links() }}
+                    </div>
+                @endif
+            @else
+                {{-- সার্চ করার আগের সুন্দর ফাঁকা স্টেট মেসেজ --}}
+                <div class="text-center py-20 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/10 px-4">
+                    <i class="fa-solid fa-magnifying-glass text-5xl text-slate-700 mb-4 block"></i>
+                    <h3 class="text-slate-500 text-xs sm:text-sm font-bold uppercase tracking-widest">Enter your Team Name
+                        or Student ID to Check Selection Status</h3>
+                    <p class="text-slate-600 text-[10px] sm:text-xs mt-2 italic">Search to check if your team is selected
+                        and proceed with the next steps.</p>
+                </div>
+            @endif
         </div>
     </div>
 
-    {{-- কুপন ভেরিফিকেশন মোডাল (যদি আলাদা ফাইলে না থাকে তবে এখানে যুক্ত করুন) --}}
-    {{-- @include('users.events.partials.coupon_modal') --}}
-
+    {{-- কুপন ভেরিফিকেশন মোডাল --}}
     <div id="couponModal"
         class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4">
         <div class="relative w-full max-w-md transform transition-all">
-
             <div
                 class="bg-slate-900 border border-cyan-500/30 rounded-[2.5rem] overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.15)]">
-
                 <div class="bg-cyan-500 p-6 text-center">
                     <h3 class="text-slate-900 font-black uppercase tracking-tighter text-xl">Finalize Registration</h3>
                     <p class="text-slate-900/70 text-[10px] font-bold uppercase tracking-widest mt-1">Verify your team with
@@ -161,7 +179,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -170,7 +187,6 @@
             document.getElementById('hiddenTeamName').value = teamName;
             const modal = document.getElementById('couponModal');
             modal.classList.remove('hidden');
-            // Animation
             modal.querySelector('.transform').classList.add('scale-100', 'opacity-100');
         }
 

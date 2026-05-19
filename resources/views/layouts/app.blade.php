@@ -658,7 +658,7 @@
             <div class="relative -top-6 flex-1 flex justify-center">
                 <div
                     class="bg-cyan-500 w-12 h-12 rounded-2xl rotate-45 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.6)] border-4 border-[#020617]">
-                    <i class="fa-solid fa-plus text-slate-900 text-xl -rotate-45"></i>
+                    <a href="/"> <i class="fa-solid fa-plus text-slate-900 text-xl -rotate-45"></i></a>
                 </div>
             </div>
             <a href="/about" class="mobile-link flex flex-col items-center flex-1">

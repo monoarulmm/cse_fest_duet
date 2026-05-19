@@ -160,7 +160,7 @@
                         <label class="text-[9px] uppercase text-slate-500 font-bold ml-2">Coach T-Shirt Size</label>
                         <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4 text-xs">
                             <option value="">T-Shirt Size</option>
-                            @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                            @foreach (['M', 'L', 'XL', 'XXL', 'XXXL'] as $size)
                                 <option value="{{ $size }}"
                                     {{ old('coach_tshirt', $team->coach_tshirt) == $size ? 'selected' : '' }}>
                                     {{ $size }}
@@ -231,7 +231,7 @@
                             <select name="m{{ $i }}_tshirt" {{ $isFieldsRequired }}
                                 class="input-field rounded-xl px-4 py-4 text-xs">
                                 <option value="">T-Shirt Size</option>
-                                @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                @foreach (['M', 'L', 'XL', 'XXL', 'XXXL'] as $size)
                                     <option value="{{ $size }}"
                                         {{ old("m{$i}_tshirt", $team->$tshirtKey) == $size ? 'selected' : '' }}>
                                         {{ $size }}

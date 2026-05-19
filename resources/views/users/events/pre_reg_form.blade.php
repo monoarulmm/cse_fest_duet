@@ -175,7 +175,7 @@
                             value="{{ old('coach_designation') }}" class="input-field rounded-xl px-4 py-4">
                         <select name="coach_tshirt" required class="input-field rounded-xl px-4 py-4">
                             <option value="">T-Shirt Size</option>
-                            @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                            @foreach (['M', 'L', 'XL', 'XXL', 'XXXL'] as $size)
                                 <option value="{{ $size }}" {{ old('coach_tshirt') == $size ? 'selected' : '' }}>
                                     {{ $size }}</option>
                             @endforeach
@@ -239,7 +239,7 @@
                                 <select name="m{{ $i }}_tshirt" {{ $i <= $minRequired ? 'required' : '' }}
                                     class="input-field rounded-xl px-4 py-4">
                                     <option value="">T-Shirt Size</option>
-                                    @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                    @foreach (['M', 'L', 'XL', 'XXL', 'XXXL'] as $size)
                                         <option value="{{ $size }}"
                                             {{ old('m' . $i . '_tshirt') == $size ? 'selected' : '' }}>{{ $size }}
                                         </option>
