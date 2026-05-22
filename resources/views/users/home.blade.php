@@ -46,8 +46,7 @@
             </h1>
 
             <p class="hero-tagline max-w-2xl mx-auto text-sm md:text-lg mb-10 border-l-2 px-6 py-2">
-                A two-day-long celebration of thrilling competitions and attractive science based activities, everything in
-                aCARNIVAlive atmosphere. </p>
+                A two-day-long celebration of thrilling competitions and attractive science-based activities, everything in a festive atmosphere. </p>
 
             {{-- Countdown --}}
             <div class="flex flex-wrap justify-center gap-4 mb-10" id="hero-countdown">
@@ -91,7 +90,6 @@
                 </h2>
                 <div class="flex justify-center items-center gap-3 mt-4">
                     <span class="h-px w-8 bg-cyan-500"></span>
-                    <p class="text-slate-500 font-mono text-xs uppercase tracking-[0.3em]">Partnership_Protocols_Active</p>
                     <span class="h-px w-8 bg-cyan-500"></span>
                 </div>
             </div>
@@ -140,7 +138,6 @@
                 <h2 class="heading-font text-4xl md:text-6xl font-black uppercase ">
                     Event <span class="text-cyan-500">Gallery</span>
                 </h2>
-                <p class="text-slate-500 font-mono text-xs mt-4 tracking-[0.2em]">>> VISUAL_ARCHIVE_ACCESS_GRANTED</p>
 
                 <div class="mt-8 flex justify-center">
                     <a href="{{ url('cse-gallery') }}"

@@ -108,7 +108,7 @@
             <div class="bg-green-700 p-6 flex justify-between items-center border-b-4 border-cyan-500 relative">
                 <div class="flex items-center gap-3">
                     @if ($setting && $setting->logo)
-                        <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
+                        <img src="{{ asset('logo.png') }}" alt="{{ $setting->site_name ?? 'Logo' }}"
                             class="w-8 h-8 md:w-10 md:h-10 object-contain">
                     @else
                         <img src="{{ asset('duet-logo.png') }}" alt="DUET Logo"
@@ -196,9 +196,8 @@
                         </p>
                     </div>
                     <div class="text-right">
-                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">AUTHORIZED BY</p>
                         <p class="text-[9px] font-black text-cyan-600 italic font-serif mt-0.5">
-                            Convener, DUET CSE CARNIVAL 2026
+                             DUET CSE CARNIVAL 2026
                         </p>
                     </div>
                 </div>

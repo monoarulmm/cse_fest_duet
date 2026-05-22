@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'CSE CARNIVAL 2026 | DUET')</title>
+    <title>@yield('title', 'DUET CSE CARNIVAL 2026 ')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -757,12 +757,12 @@
                            onmouseover="this.style.color='var(--text-primary)'" 
                            onmouseout="this.style.color='var(--text-muted)'">
                             <i class="fa-brands fa-facebook mr-2 shrink-0" style="color:var(--accent)"></i>
-                            Facebook Page
+                            DUET CSE CARNIVAL 
                         </a>
                     </li>
 
                     {{-- 4. YouTube --}}
-                    <li>
+                    <!-- <li>
                         <a href="{{ $setting->youtube_link ?? 'https://youtube.com/@duetcsecarnival' }}" 
                            target="_blank" rel="noopener noreferrer" 
                            class="hover:underline transition-all flex items-center" 
@@ -772,7 +772,7 @@
                             <i class="fa-brands fa-youtube mr-2 shrink-0" style="color:var(--accent)"></i>
                             YouTube Channel
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 
@@ -802,58 +802,19 @@
                         @endif
                     </div>
                     
-                    {{-- WhatsApp Support Button --}}
-                    <div>
-                        @php
-                            $whatsappNumber = $setting->whatsapp_link ?? '8801700000000'; 
-                            $cleanNumber = preg_replace('/[^0-9]/', '', $whatsappNumber);
-                        @endphp
-                        <a href="https://wa.me/{{ $cleanNumber }}" 
-                            target="_blank" rel="noopener noreferrer" 
-                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-mono transition-all duration-300" 
-                            style="border: 1px dashed var(--border-accent); color: var(--text-secondary); background: rgba(var(--bg-elevated), 0.3)"
-                            onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)'"
-                            onmouseout="this.style.borderColor='var(--border-accent)'; this.style.color='var(--text-secondary)'">
-                            <i class="fa-brands fa-whatsapp text-xs"></i>
-                            <span>Secure Node: WhatsApp Support</span>
-                        </a>
-                    </div>
+                 
+                    
                 </div>
             </div>
 
         </div>
 
-        {{-- ROW 2: System Status & Core Terminal Banner --}}
-        <div class="mb-12">
-            <div class="p-5 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4" 
-                 style="background:var(--bg-elevated); border:1px solid var(--border-accent)">
-                <div class="space-y-1.5">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-black uppercase tracking-widest" style="color:var(--text-muted)">System Core</span>
-                        <span class="flex h-1.5 w-1.5 rounded-full animate-ping" style="background:var(--accent)"></span>
-                    </div>
-                    <p class="text-[9px] font-mono leading-relaxed" style="color:var(--text-muted)">
-                        Console: login_success... <span class="ml-2 text-emerald-400">● Live Stack Integrity</span><br>
-                        Ready for DUET CSE CARNIVAL_2026
-                    </p>
-                </div>
-                
-                <div class="w-full md:w-48 space-y-1">
-                    <div class="flex justify-between text-[10px] font-mono">
-                        <span style="color:var(--text-secondary)">Runtime Engine</span>
-                        <span style="color:var(--accent)">v{{ app()->version() }}</span>
-                    </div>
-                    <div class="w-full h-1 rounded-full overflow-hidden" style="background:var(--border-soft)">
-                        <div class="w-[70%] h-full rounded-full" style="background:var(--accent)"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+     
 
         {{-- Bottom Copyright Section --}}
         <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em]"
             style="border-top:1px solid var(--border-soft); color:var(--text-muted)">
-            <p>&copy; 2026 DUET CARNIVAL. All Rights Reserved.</p>
+            <p>&copy; DUET CSE CARNIVAL. All Rights Reserved.</p>
             <p>Developed by <span style="color:var(--accent)">Monoarul Islam</span></p>
         </div>
     </div>
@@ -869,22 +830,20 @@
                 <i class="fa-solid fa-house-chimney text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Home</span>
             </a>
+{{-- Schedule --}}
+<a href="/schedule" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
+    <i class="fa-solid fa-calendar-days text-xl"></i>
+    <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Schedule</span>
+</a>
 
-            {{-- Schedule --}}
-            <a href="{{ url('/schedule') }}" 
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('schedule*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
-                <i class="fa-solid fa-calendar-star text-[18px]"></i> {{-- শিডিউল/টাইমলাইন আইকন --}}
-                <span class="text-[8px] font-black uppercase tracking-wider">Schedule</span>
-            </a>
+{{-- Gallery --}}
+<a href="/cse-gallery" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
+    <i class="fa-solid fa-images text-xl"></i>
+    <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Gallery</span>
+</a>
 
             {{-- Center FAB (Quick Join / Dashboard / Plus) --}}
-            <div class="flex-1 flex justify-center relative -mt-6">
-                <a href="{{ url('/') }}"
-                    class="w-12 h-12 rounded-2xl rotate-45 flex items-center justify-center transition-all active:scale-95 group hover:shadow-[0_0_25px_rgba(34,211,238,0.7)]"
-                    style="background:var(--accent, #22d3ee); border:3px solid var(--bg-base, #0f172a); box-shadow:0 0 20px rgba(34,211,238,0.5)">
-                    <i class="fa-solid fa-plus text-lg -rotate-45 text-slate-950"></i>
-                </a>
-            </div>
+            
 
             {{-- About --}}
             <a href="{{ url('/about') }}" 

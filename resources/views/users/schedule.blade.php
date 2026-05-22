@@ -14,20 +14,24 @@
             </div>
 
             <!-- Day Selector Tabs -->
-            <div class="flex p-1  border border-slate-800 rounded-lg shadow-xl">
-                <button @click="activeDay = 1"
-                    :class="activeDay === 1 ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]' :
-                        'text-slate-500 hover:'"
-                    class="px-8 py-2 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 rounded-md">
-                    26 June (Day 01)
-                </button>
-                <button @click="activeDay = 2"
-                    :class="activeDay === 2 ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]' :
-                        'text-slate-500 hover:'"
-                    class="px-8 py-2 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 rounded-md">
-                    27 June (Day 02)
-                </button>
-            </div>
+            <!-- Day Selector Tabs -->
+<div class="flex p-1  border border-slate-800 rounded-lg shadow-xl max-w-md mx-auto">
+    <button @click="activeDay = 1"
+        :class="activeDay === 1 ? 
+            'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)] font-extrabold' : 
+            'text-slate-400 hover:text-cyan-400 hover:bg-slate-800/60'"
+        class="flex-1 cursor-pointer px-4 py-2.5 text-[11px] uppercase tracking-widest transition-all duration-300 rounded-md font-bold">
+        26 June (Day 01)
+    </button>
+    
+    <button @click="activeDay = 2"
+        :class="activeDay === 2 ? 
+            'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)] font-extrabold' : 
+            'text-slate-400 hover:text-cyan-400 hover:bg-slate-800/60'"
+        class="flex-1 cursor-pointer px-4 py-2.5 text-[11px] uppercase tracking-widest transition-all duration-300 rounded-md font-bold">
+        27 June (Day 02)
+    </button>
+</div>
         </div>
 
         <!-- Pre-Event Special Mention (AI Hackathon Preliminary) -->
@@ -106,8 +110,7 @@
                         <div class="md:col-span-3">
                             <div
                                 class=" border border-slate-800 p-6 rounded-xl border-l-4 border-l-cyan-500">
-                                <h3 class=" font-bold uppercase tracking-wider text-xl mb-2">Project Demonstration
-                                </h3>
+                                <h3 class=" font-bold uppercase tracking-wider text-xl mb-2">Project Showcasing                                </h3>
                                 <p class="text-slate-400 text-sm">Interactive project showcase and judging (Initial Session
                                     until 01:00 PM).</p>
                             </div>
@@ -128,8 +131,7 @@
                         <div class="md:col-span-3">
                             <div
                                 class=" border border-slate-800 p-6 rounded-xl border-l-4 border-l-cyan-500">
-                                <h3 class=" font-bold uppercase tracking-wider text-xl mb-2">Project Demonstration
-                                    (Contd.)</h3>
+                                <h3 class=" font-bold uppercase tracking-wider text-xl mb-2">Project Showcasing                                    (Contd.)</h3>
                                 <p class="text-slate-400 text-sm">Continued showcase and final evaluation (02:30 PM – 03:30
                                     PM).</p>
                             </div>

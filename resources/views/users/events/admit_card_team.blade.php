@@ -87,9 +87,9 @@
         <div
             class="id-card-body relative bg-white border-2 border-cyan-500/40 rounded-[2.5rem] overflow-hidden shadow-2xl w-full max-w-[460px] h-[660px] flex flex-col justify-between">
 
-            <div class="bg-slate-950 p-6 flex justify-between items-center border-b-4 border-cyan-500 relative">
+            <div class="bg-green-700 p-6 flex justify-between items-center border-b-4 border-cyan-500 relative">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
+                    <img src="{{ asset('logo.png' }}" alt="{{ $setting->site_name ?? 'Logo' }}"
                         class="w-8 h-8 md:w-10 md:h-10 object-contain transition-transform duration-500 group-hover:scale-110">
                     <div>
                         <h1 class="text-lg font-black text-white leading-none tracking-tight uppercase">
@@ -161,7 +161,6 @@
                         <div
                             class="bg-white border border-slate-200/80 px-3 py-1.5 rounded-xl text-[10px] font-bold text-slate-700 flex justify-between">
                             <span>01. {{ $team->m1_name }}</span>
-                            <span class="text-[8px] text-slate-400 uppercase">Leader</span>
                         </div>
                         @if ($team->m2_name)
                             <div
@@ -185,9 +184,8 @@
                         </p>
                     </div>
                     <div class="text-right">
-                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">AUTHORIZED BY</p>
                         <p class="text-[9px] font-black text-cyan-600 italic font-serif mt-0.5">
-                            Convener, DUET CSE CARNIVAL 2026
+                             DUET CSE CARNIVAL 2026
                         </p>
                     </div>
                 </div>

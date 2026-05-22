@@ -150,7 +150,7 @@
                         <button disabled
                             class="px-8 py-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl
                                opacity-50 flex items-center gap-2 uppercase text-sm font-bold cursor-not-allowed">
-                            <i class="fa-solid fa-lock"></i> Admission Closed
+                            <i class="fa-solid fa-lock"></i> Registration Will Open Soon
                         </button>
                     @endif
 
@@ -175,7 +175,7 @@
                         @endphp
 
                         <a href="{{ $url }}"
-                            class="px-6 py-3 rounded-xl border {{ request()->is('payment/*') ? 'bg-cyan-500 text-slate-900 font-bold' : 'bg-slate-900 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/10 transition-all' }}">
+                            class="px-6 py-3 rounded-xl border {{ request()->is('payment/*') ? ' font-bold' : 'bg-slate-900 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/10 transition-all' }}">
                             <i class="fa-solid fa-pen-to-square mr-1"></i>
                             Final Register Now
                         </a>
@@ -281,7 +281,7 @@
                     {{-- Countdown --}}
                     <div class="text-center md:text-left">
                         <p class="text-slate-500 text-[10px] font-black tracking-[0.3em] mb-4 uppercase">
-                            System Countdown
+                            Time Remaining to Registered
                         </p>
 
                         <div class="flex gap-3 justify-center md:justify-start" id="countdown-wrapper">
@@ -312,7 +312,7 @@
                                     {{ number_format($totalRegistered) }}
                                 </span>
                                 <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">
-                                    Enrolled
+                                     Registered
                                 </span>
                             </div>
                         </div>
@@ -320,8 +320,8 @@
 
                     {{-- Event Date --}}
                     <div class="text-center md:text-right">
-                        <p class="text-slate-500 text-[10px] font-black tracking-[0.3em] mb-4 uppercase">
-                            Main Deployment
+                        <p class=" text-[10px]  tracking-[0.3em] mb-4 uppercase">
+                            Registration Deadline
                         </p>
                         <div class="inline-block px-10 py-5 glass-card rounded-[2rem] border-red-500/20">
                             <i class="fa-solid fa-calendar-check text-red-500 mr-2"></i>

@@ -19,13 +19,13 @@
                             </div>
                             <div>
                                 <h2 class="text-3xl md:text-4xl font-black  uppercase tracking-tighter italic">
-                                    Institution <span class="text-indigo-500">Quotas</span>
+                                    Institution <span class="text-indigo-500">Slots</span>
                                 </h2>
                                 <p
                                     class="text-emerald-500 text-[10px] uppercase font-mono tracking-[0.4em] flex items-center gap-2 mt-1">
                                     <span
                                         class="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></span>
-                                    Status: Live_Data_Synchronized
+                                    To be Declared later
                                 </p>
                             </div>
                         </div>
@@ -33,12 +33,11 @@
 
                     <div class="flex items-center gap-5">
                         <div class="px-7 py-3  border border-slate-800 rounded-2xl shadow-inner">
-                            <p class="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Capacity
+                            <p class="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Institutes
                             </p>
                             <p class=" font-mono text-2xl leading-none font-bold">
                                 <span id="totalCount"
                                     class="text-indigo-400">{{ $universitySlots->flatten()->count() }}</span>
-                                <span class="text-[10px] text-slate-600 uppercase ml-1">Units</span>
                             </p>
                         </div>
 
@@ -69,7 +68,7 @@
                         <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Global
                             Query</label>
                         <div class="relative group">
-                            <input type="text" id="searchInput" placeholder="Search ID or Name..."
+                            <input type="text" id="searchInput" placeholder="Search by Institute  Name..."
                                 class="w-full  border border-slate-800 rounded-xl p-4 pl-12 text-sm text-slate-200 focus:border-indigo-500/50 outline-none placeholder:text-slate-700 transition-all shadow-lg">
                             <i
                                 class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-500 transition-colors"></i>
@@ -87,17 +86,16 @@
 
             {{-- 2. Data Registry Table --}}
             <div
-                class="rounded-[2.5rem] overflow-hidden border border-slate-800/60 shadow-2xl  backdrop-blur-sm">
+                class="rounded-[2.5rem] overflow-hidden border  shadow-2xl  backdrop-blur-sm">
                 {{-- Table Header --}}
-                <div class="flex items-center bg-indigo-600 px-10 py-6">
+                <div class="flex items-center bg-cyan-600 px-10 py-6">
                     <div class="flex-1  font-black text-[11px] uppercase tracking-[0.4em] italic">
-                        Registry_Identification</div>
+                        Institute</div>
                     <div
                         class="w-40  font-black text-[11px] uppercase tracking-[0.4em] text-center border-l border-white/20 italic">
-                        Allocation</div>
+                        No. of Slots </div>
                 </div>
 
-                {{-- Single List Container --}}
                 {{-- Single List Container --}}
                 <div id="slotsContainer">
                     @foreach ($universitySlots as $slot)
@@ -106,7 +104,7 @@
 
                             <div class="flex-1 px-10 py-8">
                                 <h5
-                                    class="text-slate-100 group-hover:text-indigo-400 font-bold text-xl tracking-tight transition-colors duration-300">
+                                    class=" group-hover:text-indigo-400 font-bold text-xl tracking-tight transition-colors duration-300">
                                     {{ $slot->university_name }}
                                 </h5>
                             </div>

@@ -63,9 +63,7 @@
         background-position: right 14px center;
         padding-right: 38px;
     }
-    [data-theme="light"] .reg-select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230891b2' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    }
+   
 
     /* Native select option colours */
     .reg-select option {
@@ -353,7 +351,12 @@
                         <label class="reg-label">Domain*</label>
                         <select name="domain" required class="reg-select">
                             <option value="">Select Domain</option>
-                            @foreach (['AI & Data Science' => 'AI & Data Science', 'IoT' => 'IoT & Embedded Intelligence', 'Software' => 'Software & Digital Platforms', 'Smart' => 'Smart Solutions'] as $val => $label)
+                            @foreach (['AI & Data Science' => 'AI & Data Science', 
+                            'IoT' => 'IoT & Embedded Intelligence',
+                             'web' => 'Web & Mobile Applications',
+                             'robotics' => 'Robotics & Automation',
+                             'Cybersecurity' => 'Cybersecurity & Networking',
+                              'green tech' => 'Green Technology & Sustainability'] as $val => $label)
                                 <option value="{{ $val }}" {{ old('domain') == $val ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>

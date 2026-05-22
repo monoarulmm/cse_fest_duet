@@ -100,19 +100,14 @@
             class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-800 pb-8 mb-10">
 
             {{-- ১. বড় প্রফেশনাল টাইটেল --}}
-            <div>
-                <h2 class="text-4xl md:text-5xl font-black  uppercase tracking-tighter">
-                    CSE <span class="text-cyan-400">Family</span>
-                </h2>
-                <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
-            </div>
+          
 
             {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
             <button onclick="window.history.back()"
                 class="flex items-center gap-3 px-6 py-3  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
                 <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
                 <span class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.2em]">
-                    Back to previous
+                    Back 
                 </span>
             </button>
 
@@ -123,7 +118,6 @@
             </h2>
 
 
-            <p class="text-slate-500 font-mono text-sm mt-2 tracking-widest">>> ENCRYPTED_MEMORIES_2026.SYS</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

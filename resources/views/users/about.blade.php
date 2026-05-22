@@ -76,16 +76,9 @@
                             class="w-full rounded-md grayscale group-hover:grayscale-0 transition duration-700 transform group-hover:scale-105 shadow-2xl"
                             onerror="this.src='https://via.placeholder.com/800x1000/0f172a/22d3ee?text=CSE+CARNIVAL+2026'">
 
-                        <div
-                            class="absolute top-6 right-6 bg-cyan-500 text-black font-black px-4 py-1 text-[11px] uppercase tracking-tighter skew-x-[-12deg] shadow-lg">
-                            2026 EDITION
-                        </div>
+                        
 
-                        <div class="absolute bottom-6 left-6 bg-black/90 backdrop-blur px-4 py-2 border border-cyan-500/40">
-                            <p class="text-cyan-400 font-mono text-[10px] font-bold tracking-tighter">
-                                <span class="animate-pulse">●</span> LOC: DUET_CAMPUS_GAZIPUR
-                            </p>
-                        </div>
+                        
                     </div>
                 </div>
             </section>
