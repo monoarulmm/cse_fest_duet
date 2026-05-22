@@ -7,17 +7,17 @@
             {{-- ব্যাক বাটন --}}
             <div class="mb-6">
                 <button onclick="window.history.back()"
-                    class="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                    class="flex items-center gap-2 px-4 py-2 border  rounded-xl hover:border-cyan-500 group transition-all">
                     <i
                         class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform text-xs"></i>
                     <span
-                        class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.15em]">Back</span>
+                        class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.15em]">Back</span>
                 </button>
             </div>
 
             {{-- ইভেন্ট হেডার --}}
             <div class="text-center mb-8">
-                <h1 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-wider">{{ $event->name }}</h1>
+                <h1 class="text-2xl sm:text-4xl font-black  uppercase tracking-wider">{{ $event->name }}</h1>
                 <div class="flex justify-center items-center gap-3 mt-2">
                     <span class="h-[2px] w-6 bg-green-500 opacity-50"></span>
                     <p class="text-green-400 tracking-[0.15em] text-xs sm:text-sm font-bold uppercase">Search & Download
@@ -31,7 +31,7 @@
                 <div class="relative w-full max-w-xl group">
                     <input type="text" name="search" value="{{ request('search') }}" required
                         placeholder="Enter Participant ID or Student & Team ID..."
-                        class="w-full bg-slate-900/80 border border-green-500/30 rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm text-white focus:outline-none focus:border-green-500 transition-all pr-28 sm:pr-36 shadow-xl">
+                        class="w-full  border rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm  focus:outline-none focus:border-green-500 transition-all pr-28 sm:pr-36 shadow-xl">
                     <button type="submit"
                         class="absolute right-2 top-1.5 bottom-1.5 sm:top-2 sm:bottom-2 bg-green-500 px-4 sm:px-6 rounded-full text-slate-900 font-black hover:scale-105 transition-transform flex items-center gap-1.5 text-sm">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
@@ -44,7 +44,7 @@
             @if (request('search'))
                 {{-- ✅ FIX: রেসপন্সিভ মোবাইল স্ক্রলবার লেআউট স্ট্রাকচার --}}
                 <div
-                    class="rounded-2xl sm:rounded-3xl border border-green-500/20 bg-slate-900/40 backdrop-blur-md shadow-2xl">
+                    class="rounded-2xl sm:rounded-3xl border border-green-500/20  backdrop-blur-md shadow-2xl">
                     <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                         <table class="text-left border-collapse" style="width: 100%; min-width: 650px;">
                             <thead class="bg-green-500/10 text-green-400 text-[10px] sm:text-xs uppercase tracking-widest">
@@ -60,7 +60,7 @@
                                 @forelse ($teams as $team)
                                     <tr class="hover:bg-green-500/5 transition duration-200">
                                         <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                            <div class="font-bold text-white text-sm">
+                                            <div class="font-bold  text-sm">
                                                 {{ $team->team_name ?? $team->m1_name }}</div>
                                             <div class="text-[10px] text-slate-500 uppercase mt-0.5 font-mono">Confirmed
                                                 Participant</div>
@@ -87,7 +87,7 @@
                                             <div class="flex justify-center">
                                                 <a href="{{ route('event.admit_card', [$event->slug, $team->id]) }}"
                                                     target="_blank"
-                                                    class="inline-flex items-center gap-1.5 bg-cyan-500/10 hover:bg-cyan-500 border border-cyan-500/30 py-1.5 px-3 rounded-xl text-[10px] font-bold uppercase text-cyan-400 hover:text-white transition-all group">
+                                                    class="inline-flex items-center gap-1.5 bg-cyan-500/10 hover:bg-cyan-500 border border-cyan-500/30 py-1.5 px-3 rounded-xl text-[10px] font-bold uppercase text-cyan-400 hover: transition-all group">
                                                     <i class="fas fa-download text-[9px]"></i> Admit Card
                                                 </a>
                                             </div>
@@ -95,7 +95,7 @@
 
                                         <td
                                             class="px-4 sm:px-6 py-4 whitespace-nowrap text-right font-mono text-cyan-400 font-bold text-xs">
-                                            <span class="bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                                            <span class="bg-slate-800 px-2.5 py-1 rounded-lg border ">
                                                 #{{ str_pad($team->id, 5, '0', STR_PAD_LEFT) }}
                                             </span>
                                         </td>

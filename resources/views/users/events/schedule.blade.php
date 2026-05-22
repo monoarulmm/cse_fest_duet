@@ -6,7 +6,7 @@
 
             {{-- Main Container --}}
             <div
-                class="relative overflow-hidden bg-slate-900/40 backdrop-blur-2xl border border-slate-800/50 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl">
+                class="relative overflow-hidden  backdrop-blur-2xl border border-slate-800/50 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl">
 
                 {{-- Decorative Glow --}}
                 <div class="absolute -top-24 -left-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px]"></div>
@@ -17,31 +17,19 @@
                     {{-- Header Section --}}
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                         <div class="space-y-2">
-                            <span
-                                class="text-cyan-500 font-mono text-[10px] uppercase tracking-[0.5em] block italic opacity-80">
-                                Event_Briefing_Protocol // {{ date('Y') }}
-                            </span>
-                            <h1 class="text-3xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight">
+                           
+                            <h1 class="text-3xl md:text-6xl font-black  uppercase tracking-tighter leading-tight">
                                 {{ $event->name }}
                             </h1>
                         </div>
 
-                        {{-- Status Badge --}}
-                        <div
-                            class="px-5 py-2 bg-slate-950/40 border border-cyan-500/30 rounded-full backdrop-blur-xl shadow-[0_0_15px_rgba(34,211,238,0.1)]">
-                            <span
-                                class="text-cyan-400 font-bold text-[10px] uppercase tracking-widest flex items-center gap-2">
-                                <span class="h-2 w-2 bg-cyan-400 rounded-full animate-ping"></span>
-                                <span class="h-1.5 w-1.5 bg-cyan-400 rounded-full absolute"></span>
-                                Mission_Active
-                            </span>
-                        </div>
+
                     </div>
 
                     {{-- Dynamic Content Section --}}
                     <div
                         class="prose prose-invert max-w-none 
-                                prose-headings:text-white prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight
+                                prose-headings: prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight
                                 prose-p:text-slate-400 prose-p:leading-relaxed
                                 prose-strong:text-cyan-400 prose-strong:font-bold
                                 custom-event-content">
@@ -56,7 +44,7 @@
                             <i
                                 class="fa-solid fa-arrow-left-long text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
                             <span
-                                class="text-[10px] font-black text-slate-400 group-hover:text-white uppercase tracking-[0.3em]">
+                                class="text-[10px] font-black text-slate-400 group-hover: uppercase tracking-[0.3em]">
                                 Return to Hub
                             </span>
                         </a>

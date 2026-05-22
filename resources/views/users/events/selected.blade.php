@@ -6,18 +6,18 @@
 
             {{-- ইভেন্ট হেডার --}}
             <div class="mb-8 text-center">
-                <h1 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-wider">{{ $event->name }}</h1>
+                <h1 class="text-2xl sm:text-4xl font-black  uppercase tracking-wider">{{ $event->name }}</h1>
                 <p class="text-purple-400 tracking-[0.2em] mt-1 text-xs sm:text-sm font-bold uppercase">Selection Phase</p>
             </div>
 
             {{-- জাভাস্ক্রিপ্ট ব্যাক বাটন --}}
             <div class="mb-6">
                 <button onclick="window.history.back()"
-                    class="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                    class="flex items-center gap-2 px-4 py-2  border  rounded-xl hover:border-cyan-500 group transition-all">
                     <i
                         class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform text-xs"></i>
                     <span
-                        class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.15em]">Back</span>
+                        class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.15em]">Back</span>
                 </button>
             </div>
 
@@ -26,9 +26,9 @@
                 <div class="relative w-full max-w-xl group">
                     <input type="text" name="search" value="{{ request('search') }}" required
                         placeholder="Search Selected Team or Student ID..."
-                        class="w-full bg-slate-900/80 border border-purple-500/30 rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm text-white focus:outline-none focus:border-purple-500 transition-all pr-28 sm:pr-36 shadow-xl">
+                        class="w-full  border border-purple-500/30 rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm  focus:outline-none focus:border-purple-500 transition-all pr-28 sm:pr-36 shadow-xl">
                     <button type="submit"
-                        class="absolute right-2 top-1.5 bottom-1.5 sm:top-2 sm:bottom-2 bg-purple-500 px-4 sm:px-6 rounded-full text-white font-black hover:scale-105 transition-transform flex items-center gap-1.5 text-sm">
+                        class="absolute right-2 top-1.5 bottom-1.5 sm:top-2 sm:bottom-2 bg-purple-500 px-4 sm:px-6 rounded-full  font-black hover:scale-105 transition-transform flex items-center gap-1.5 text-sm">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         <span class="hidden sm:inline text-xs font-black uppercase tracking-wider">Search</span>
                     </button>
@@ -49,7 +49,7 @@
 
                 {{-- টেবিল স্ট্রাকচার --}}
                 <div
-                    class="rounded-2xl sm:rounded-3xl border border-purple-500/20 bg-slate-900/40 backdrop-blur-md shadow-2xl">
+                    class="rounded-2xl sm:rounded-3xl border border-purple-500/20  backdrop-blur-md shadow-2xl">
                     <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                         <table class="text-left border-collapse" style="width: 100%; min-width: 560px;">
                             <thead
@@ -64,7 +64,7 @@
                             <tbody class="text-slate-300 text-sm divide-y divide-purple-500/10">
                                 @forelse ($teams as $team)
                                     <tr class="hover:bg-purple-500/5 transition duration-200">
-                                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold text-white">
+                                        <td class="px-4 sm:px-6 py-4 whitespace-nowrap font-bold ">
                                             {{ $team->team_name ?? 'Participant: ' . $team->m1_name }}
                                         </td>
                                         <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-xs text-slate-300">
@@ -99,7 +99,7 @@
                                         <td colspan="4" class="px-6 py-12 text-center text-slate-400 text-sm">
                                             <i class="fa-solid fa-magnifying-glass text-slate-600 text-2xl mb-3 block"></i>
                                             No selected teams found for <strong
-                                                class="text-white">"{{ request('search') }}"</strong>
+                                                class="">"{{ request('search') }}"</strong>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -149,7 +149,7 @@
                 <div class="p-8">
                     <div class="mb-6 text-center">
                         <p class="text-slate-400 text-sm">Team: <span id="modalTeamName"
-                                class="text-white font-bold italic"></span></p>
+                                class=" font-bold italic"></span></p>
                     </div>
 
                     <form id="couponForm" action="{{ url('event.verify_coupon', $event->slug) }}" method="POST">
@@ -158,7 +158,7 @@
 
                         <div class="relative group">
                             <input type="text" name="coupon_code" required placeholder="ENTER COUPON CODE"
-                                class="w-full bg-slate-800 border border-slate-700 rounded-2xl px-6 py-4 text-white text-center font-mono tracking-[0.3em] focus:outline-none focus:border-cyan-500 transition-all placeholder:text-slate-600 uppercase">
+                                class="w-full  border  rounded-2xl px-6 py-4  text-center font-mono tracking-[0.3em] focus:outline-none focus:border-cyan-500 transition-all placeholder:text-slate-600 uppercase">
                             <div
                                 class="absolute inset-0 rounded-2xl bg-cyan-500/5 blur-xl group-hover:bg-cyan-500/10 transition-all -z-10">
                             </div>
@@ -171,7 +171,7 @@
                             </button>
 
                             <button type="button" onclick="closeCouponModal()"
-                                class="w-full bg-transparent text-slate-500 font-bold py-3 rounded-2xl uppercase text-[10px] hover:text-white transition-colors">
+                                class="w-full bg-transparent text-slate-500 font-bold py-3 rounded-2xl uppercase text-[10px] hover: transition-colors">
                                 Maybe Later
                             </button>
                         </div>

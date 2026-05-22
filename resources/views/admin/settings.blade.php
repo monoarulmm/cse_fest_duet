@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-[#080a11] py-12 px-6 lg:px-16 text-white">
+    <div class="min-h-screen  py-12 px-6 lg:px-16 ">
 
         {{-- Top Header Section --}}
         <div
@@ -9,7 +9,7 @@
 
             {{-- ১. বড় প্রফেশনাল টাইটেল --}}
             <div>
-                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
+                <h2 class="text-4xl md:text-5xl font-black  uppercase tracking-tighter">
                     Settings <span class="text-cyan-400">Details</span>
                 </h2>
                 <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
@@ -17,9 +17,9 @@
 
             {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
             <button onclick="window.history.back()"
-                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                class="flex items-center gap-3 px-6 py-3  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
                 <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                <span class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.2em]">
                     Back to previous
                 </span>
             </button>
@@ -48,8 +48,8 @@
                 @csrf
 
                 {{-- 01. Core Identity & Branding --}}
-                <div class="bg-[#111421] border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -top-10 -right-10 text-[12rem] font-black text-white/5 italic select-none">01</div>
+                <div class=" border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 text-[12rem] font-black /5 italic select-none">01</div>
                     <h2 class="text-xl font-black uppercase italic mb-10 flex items-center gap-4 relative z-10">
                         <span
                             class="w-10 h-10 bg-yellow-500 text-black rounded-2xl flex items-center justify-center not-italic">1</span>
@@ -61,7 +61,7 @@
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 block">Website
                                 Official Title</label>
                             <input type="text" name="site_name" value="{{ old('site_name', $setting->site_name ?? '') }}"
-                                class="w-full bg-[#080a11] border {{ $errors->has('site_name') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-6 py-5 focus:border-yellow-500 outline-none transition-all font-bold text-lg">
+                                class="w-full  border {{ $errors->has('site_name') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-6 py-5 focus:border-yellow-500 outline-none transition-all font-bold text-lg">
                         </div>
 
                         {{-- Logo Upload --}}
@@ -69,7 +69,7 @@
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Main
                                 Logo</label>
                             <div
-                                class="bg-[#080a11] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
+                                class=" p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
                                 <div class="h-24 flex items-center justify-center overflow-hidden">
                                     @if (!empty($setting->logo))
                                         <img id="logo-preview" src="{{ asset('storage/' . $setting->logo) }}"
@@ -90,7 +90,7 @@
                             <label
                                 class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Favicon</label>
                             <div
-                                class="bg-[#080a11] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
+                                class=" p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
                                 <div class="h-24 flex items-center justify-center">
                                     @if (!empty($setting->favicon))
                                         <img id="favicon-preview" src="{{ asset('storage/' . $setting->favicon) }}"
@@ -111,7 +111,7 @@
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Hero Banner
                                 1</label>
                             <div
-                                class="bg-[#080a11] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
+                                class=" p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
                                 <div class="h-24 w-full overflow-hidden rounded-xl">
                                     @if (!empty($setting->main_banner1))
                                         <img id="banner1-preview" src="{{ asset('storage/' . $setting->main_banner1) }}"
@@ -132,7 +132,7 @@
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Hero Banner
                                 2</label>
                             <div
-                                class="bg-[#080a11] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
+                                class=" p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
                                 <div class="h-24 w-full overflow-hidden rounded-xl">
                                     @if (!empty($setting->main_banner2))
                                         <img id="banner2-preview" src="{{ asset('storage/' . $setting->main_banner2) }}"
@@ -153,7 +153,7 @@
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Hero Banner
                                 3</label>
                             <div
-                                class="bg-[#080a11] p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
+                                class=" p-8 rounded-[2rem] border border-white/5 flex flex-col items-center justify-center gap-6">
                                 <div class="h-24 w-full overflow-hidden rounded-xl">
                                     @if (!empty($setting->main_banner3))
                                         <img id="banner3-preview" src="{{ asset('storage/' . $setting->main_banner3) }}"
@@ -173,12 +173,12 @@
                 </div>
 
                 {{-- 02. Sponsor Management --}}
-                <div class="bg-[#111421] border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -top-10 -right-10 text-[12rem] font-black text-white/5 italic select-none">02
+                <div class="border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 text-[12rem] font-black /5 italic select-none">02
                     </div>
                     <h2 class="text-xl font-black uppercase italic mb-10 flex items-center gap-4 relative z-10">
                         <span
-                            class="w-10 h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center not-italic">2</span>
+                            class="w-10 h-10 bg-indigo-600  rounded-2xl flex items-center justify-center not-italic">2</span>
                         Sponsor Management
                     </h2>
 
@@ -186,7 +186,7 @@
                         <input type="file" name="sponsor_banner[]" multiple
                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                         <div
-                            class="bg-[#080a11] border-2 border-dashed border-white/10 rounded-[2.5rem] py-16 text-center group-hover:border-indigo-500 transition-all duration-500">
+                            class=" border-2 border-dashed border-white/10 rounded-[2.5rem] py-16 text-center group-hover:border-indigo-500 transition-all duration-500">
                             <div class="text-4xl mb-4">📤</div>
                             <p class="text-gray-500 font-bold uppercase text-xs tracking-widest">Click or Drag images to
                                 upload sponsors</p>
@@ -203,7 +203,7 @@
                         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 relative z-10">
                             @foreach ($sponsors as $index => $path)
                                 <div
-                                    class="group relative aspect-square rounded-[1.5rem] overflow-hidden border border-white/5 bg-[#080a11]">
+                                    class="group relative aspect-square rounded-[1.5rem] overflow-hidden border border-white/5 ">
                                     <img src="{{ asset('storage/' . $path) }}"
                                         class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-700">
                                     <label class="absolute inset-0 flex items-center justify-center cursor-pointer">
@@ -216,7 +216,7 @@
                                                 Delete</span>
                                         </div>
                                         <div
-                                            class="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-xl opacity-0 group-hover:opacity-100 peer-checked:bg-white peer-checked:text-red-600 transition-all">
+                                            class="absolute top-3 right-3 bg-red-500  p-2 rounded-xl opacity-0 group-hover:opacity-100 peer-checked:bg-white peer-checked:text-red-600 transition-all">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -232,12 +232,12 @@
                 </div>
 
                 {{-- 03. Global Connectivity --}}
-                <div class="bg-[#111421] border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -top-10 -right-10 text-[12rem] font-black text-white/5 italic select-none">03
+                <div class="border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 text-[12rem] font-black /5 italic select-none">03
                     </div>
                     <h2 class="text-xl font-black uppercase italic mb-10 flex items-center gap-4 relative z-10">
                         <span
-                            class="w-10 h-10 bg-emerald-600 text-white rounded-2xl flex items-center justify-center not-italic">3</span>
+                            class="w-10 h-10 bg-emerald-600  rounded-2xl flex items-center justify-center not-italic">3</span>
                         Global Connectivity
                     </h2>
 
@@ -247,46 +247,46 @@
                                 Phone</label>
                             <input type="text" name="phone_primary"
                                 value="{{ old('phone_primary', $setting->phone_primary ?? '') }}"
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-4 focus:border-emerald-500 outline-none transition-colors">
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-4 focus:border-emerald-500 outline-none transition-colors">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Secondary
                                 Phone</label>
                             <input type="text" name="phone_secondary"
                                 value="{{ old('phone_secondary', $setting->phone_secondary ?? '') }}"
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-4 focus:border-white/20 outline-none transition-colors">
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-4 focus:border-white/20 outline-none transition-colors">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Official
                                 Email</label>
                             <input type="email" name="email" value="{{ old('email', $setting->email ?? '') }}"
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none transition-colors">
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none transition-colors">
                         </div>
                         <div class="md:col-span-3 space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Head Office
                                 Address</label>
                             <textarea name="address" rows="3"
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-5 focus:border-yellow-500 outline-none transition-colors">{{ old('address', $setting->address ?? '') }}</textarea>
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-5 focus:border-yellow-500 outline-none transition-colors">{{ old('address', $setting->address ?? '') }}</textarea>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Facebook</label>
                             <input type="text" name="fb_link" value="{{ old('fb_link', $setting->fb_link ?? '') }}"
                                 placeholder="https://..."
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none">
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-red-500 uppercase tracking-widest">YouTube</label>
                             <input type="text" name="youtube_link"
                                 value="{{ old('youtube_link', $setting->youtube_link ?? '') }}" placeholder="https://..."
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-4 focus:border-red-500 outline-none">
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-4 focus:border-red-500 outline-none">
                         </div>
                         <div class="space-y-2">
                             <label
                                 class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">WhatsApp</label>
                             <input type="text" name="whatsapp_link"
                                 value="{{ old('whatsapp_link', $setting->whatsapp_link ?? '') }}" placeholder="+880..."
-                                class="w-full bg-[#080a11] border border-white/10 rounded-2xl px-6 py-4 focus:border-emerald-500 outline-none">
+                                class="w-full  border border-white/10 rounded-2xl px-6 py-4 focus:border-emerald-500 outline-none">
                         </div>
                     </div>
                 </div>
@@ -294,7 +294,7 @@
                 {{-- Buttons --}}
                 <div class="flex items-center justify-end gap-8 pt-10 pb-20">
                     <button type="reset"
-                        class="text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] hover:text-white transition-colors">Discard
+                        class="text-[10px] font-black text-gray-600 uppercase tracking-[0.3em] hover: transition-colors">Discard
                         Changes</button>
                     <button type="submit" id="submit-btn"
                         class="bg-yellow-500 text-black px-16 py-6 rounded-3xl font-black uppercase text-xs tracking-widest shadow-xl hover:scale-[1.05] active:scale-95 transition-all duration-300 flex items-center gap-3 group">

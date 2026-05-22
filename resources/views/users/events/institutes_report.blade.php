@@ -5,35 +5,33 @@
         <div class="mb-8 flex justify-between items-center">
 
             <button onclick="window.history.back()"
-                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                class="flex items-center gap-3 px-6 py-3  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
                 <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
                 <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
                     Back to previous
                 </span>
             </button>
 
-            <div class="bg-slate-900 border border-slate-800 px-6 py-2 rounded-2xl">
+            <div class=" border border-slate-800 px-6 py-2 rounded-2xl">
                 <span class="text-slate-400 text-sm">Total Unique Institutes:</span>
                 <span class="text-purple-400 font-bold ml-2">{{ $institutes->count() }}</span>
             </div>
         </div>
 
-        <div class="overflow-hidden rounded-[2rem] border border-slate-800 bg-slate-900/50 shadow-xl">
+        <div class="overflow-hidden rounded-[2rem] border border-slate-800  shadow-xl">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-800/50">
+                    <tr class="">
                         <th class="p-6 text-slate-400 font-bold uppercase text-xs tracking-widest">Institution Name</th>
                         <th class="p-6 text-slate-400 font-bold uppercase text-xs tracking-widest text-center">Total Teams
                         </th>
-                        <th class="p-6 text-slate-400 font-bold uppercase text-xs tracking-widest text-center">Total
-                            Participants</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-800">
                     @forelse($institutes as $institute)
                         <tr class="hover:bg-slate-800/30 transition-colors group">
                             <td class="p-6">
-                                <span class="text-slate-200 font-semibold group-hover:text-purple-400 transition-colors">
+                                <span class=" font-semibold group-hover:text-purple-400 transition-colors">
                                     {{ $institute->university_name }}
                                 </span>
                             </td>
@@ -43,9 +41,7 @@
                                     {{ $institute->total_teams }}
                                 </span>
                             </td>
-                            <td class="p-6 text-center">
-                                <span class="text-slate-300 font-mono italic">{{ $institute->total_registrations }}</span>
-                            </td>
+                            
                         </tr>
                     @empty
                         <tr>

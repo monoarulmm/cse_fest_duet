@@ -1,44 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="relative min-h-screen flex items-center justify-center py-24 overflow-hidden">
+    <section class="relative min-h-screen flex items-center justify-center py-20 overflow-hidden">
+        <!-- Background Logic (Decorations) -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96  rounded-full blur-[120px] animate-pulse"></div>
+            <div
+                class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-700">
+            </div>
+        </div>
+
         <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-xl mx-auto">
-                @if (session('success'))
-                    <script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'সফল!',
-                            text: "{{ session('success') }}",
-                            confirmButtonText: 'ঠিক আছে'
-                        });
-                    </script>
-                @endif
+            <div class="max-w-md mx-auto">
 
-                @if (session('error'))
-                    <script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'দুঃখিত!',
-                            text: "{{ session('error') }}",
-                            confirmButtonText: 'আবার চেষ্টা করুন'
-                        });
-                    </script>
-                @endif
-
-                {{-- ভ্যালিডেশন এরর দেখানোর জন্য (যেমন: ইমেইল অলরেডি আছে) --}}
-                @if ($errors->any())
-                    <script>
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'ভুল হয়েছে!',
-                            html: '{!! implode('<br>', $errors->all()) !!}',
-                            confirmButtonText: 'ঠিক আছে'
-                        });
-                    </script>
-                @endif
-                <!-- Header -->
-                 <!-- Branding/Logo Area -->
+                <!-- Branding/Logo Area -->
                 <div class="text-center mb-10">
                     <div
                         class="inline-flex items-center justify-center w-16 h-16 bg-slate-900 border border-cyan-500/50 rounded-2xl rotate-45 mb-6 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
@@ -137,7 +112,24 @@
                         <i class="fa-solid fa-arrow-left-long"></i> Return to Terminal
                     </a>
                 </div>
+
             </div>
         </div>
     </section>
+
+    <style>
+        /* অতিরিক্ত গ্লাস ইফেক্ট যদি app.css এ না থাকে */
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: white;
+            -webkit-box-shadow: 0 0 0px 1000px #020617 inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
 @endsection

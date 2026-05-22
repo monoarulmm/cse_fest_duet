@@ -8,7 +8,7 @@
 
             {{-- ১. বড় প্রফেশনাল টাইটেল --}}
             <div>
-                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
+                <h2 class="text-4xl md:text-5xl font-black  uppercase tracking-tighter">
                     Event Management <span class="text-cyan-400">Details</span>
                 </h2>
                 <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
@@ -16,9 +16,9 @@
 
             {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
             <button onclick="window.history.back()"
-                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                class="flex items-center gap-3 px-6 py-3  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
                 <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                <span class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.2em]">
                     Back to previous
                 </span>
             </button>
@@ -26,10 +26,10 @@
         </div>
 
         {{-- Create New Event Section --}}
-        <div class="admin-card p-8 rounded-3xl border border-cyan-500/20 bg-slate-900/50 mb-10 shadow-2xl">
+        <div class="admin-card p-8 rounded-3xl border border-cyan-500/20  mb-10 shadow-2xl">
             <div class="flex items-center gap-3 mb-6">
                 <div class="h-8 w-1 bg-cyan-500 shadow-[0_0_15px_rgba(34,211,238,0.8)]"></div>
-                <h2 class="heading-font text-xl text-white uppercase font-black tracking-tighter">Create New <span
+                <h2 class="heading-font text-xl  uppercase font-black tracking-tighter">Create New <span
                         class="text-cyan-400">Event Segment</span></h2>
             </div>
 
@@ -41,39 +41,39 @@
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Event
                             Name</label>
                         <input type="text" name="name" required
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition shadow-inner">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
                     </div>
 
                     <div class="space-y-1">
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Slug</label>
                         <input type="text" name="slug" required
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition shadow-inner">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
                     </div>
 
                     <div class="space-y-1">
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Reg Fee</label>
                         <input type="number" name="reg_fee" required
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition shadow-inner">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
                     </div>
 
                     <div class="space-y-1">
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Deadline</label>
                         <input type="datetime-local" name="end_date" required
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition shadow-inner invert-[0.1]">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner invert-[0.1]">
                     </div>
 
                     <div class="space-y-1">
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Min
                             Members</label>
                         <input type="number" name="min_members" value="1"
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition shadow-inner">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
                     </div>
 
                     <div class="space-y-1">
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Max
                             Members</label>
                         <input type="number" name="max_members" value="3"
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition shadow-inner">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
                     </div>
 
                     {{-- CKEditor for Description Only --}}
@@ -90,7 +90,7 @@
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Rules &
                             Regulations</label>
                         <input type="text" name="rules"
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition">
                     </div>
 
                     <div class="md:col-span-2 space-y-1">
@@ -98,7 +98,7 @@
                             (Multiple)</label>
                         <div class="relative group">
                             <input type="file" name="images[]" multiple
-                                class="w-full bg-[#1e2636] border border-cyan-500/10 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:bg-cyan-500 file:text-slate-900 file:border-0 file:px-4 file:py-1.5 file:rounded-lg file:mr-4 file:font-black file:uppercase file:cursor-pointer">
+                                class="w-full  border border-cyan-500/10 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:bg-cyan-500 file:text-slate-900 file:border-0 file:px-4 file:py-1.5 file:rounded-lg file:mr-4 file:font-black file:uppercase file:cursor-pointer">
                         </div>
                     </div>
 
@@ -106,27 +106,27 @@
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Result
                             URL</label>
                         <input type="text" name="result"
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition">
                     </div>
 
                     <div class="space-y-1">
                         <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Seat Plan
                             URL</label>
                         <input type="text" name="seatplan"
-                            class="w-full bg-[#1e2636] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none transition">
+                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition">
                     </div>
 
                     <div class="flex items-center space-x-3 lg:col-span-3">
                         <input type="checkbox" name="needs_coach" id="needs_coach" value="1"
-                            class="w-5 h-5 accent-cyan-500 bg-[#1e2636] border-white/10 rounded">
+                            class="w-5 h-5 accent-cyan-500  border-white/10 rounded">
                         <label for="needs_coach"
-                            class="text-[10px] text-white uppercase font-black cursor-pointer tracking-wider">Requires
+                            class="text-[10px]  uppercase font-black cursor-pointer tracking-wider">Requires
                             Coach?</label>
                     </div>
 
                     <div class="lg:col-span-1">
                         <button type="submit"
-                            class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 py-3 rounded-xl font-black uppercase text-[11px] transition transform hover:scale-[1.02] shadow-[0_4px_20px_rgba(34,211,238,0.4)]">
+                            class="w-full  hover:bg-cyan-400 text-slate-900 py-3 rounded-xl font-black uppercase text-[11px] transition transform hover:scale-[1.02] shadow-[0_4px_20px_rgba(34,211,238,0.4)]">
                             + Add Segment
                         </button>
                     </div>
@@ -136,10 +136,10 @@
 
         {{-- Table Section (Simplified for management) --}}
         {{-- Existing Segments Table --}}
-        <div class="admin-card p-8 rounded-3xl border border-cyan-500/20 bg-slate-900/50">
+        <div class="admin-card p-8 rounded-3xl border border-cyan-500/20 ">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="heading-font text-xl text-cyan-400 uppercase font-black">Existing <span
-                        class="text-white">Segments</span></h2>
+                        class="">Segments</span></h2>
                 <span class="text-[10px] text-slate-500 uppercase tracking-widest">Total: {{ count($events) }}</span>
             </div>
 
@@ -154,34 +154,34 @@
                             <th class="px-4 pb-2 text-right">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="text-white text-sm">
+                    <tbody class=" text-sm">
                         @foreach ($events as $event)
                             <tr class="bg-white/5 hover:bg-white/10 transition group">
 
                                 <td class="p-4 rounded-l-xl">
                                     <input type="text" name="" value="{{ $event->name }} " readonly
-                                        class="bg-transparent border-b border-white/10 focus:border-cyan-500 outline-none w-full font-bold text-white mb-1">
+                                        class=" border-b border-white/10 focus:border-cyan-500 outline-none w-full font-bold  mb-1">
                                     <input type="text" name="" value="{{ $event->slug }}" readonly
-                                        class="bg-transparent border-b border-white/10 focus:border-cyan-500 outline-none w-full text-[10px] text-cyan-500 uppercase tracking-widest">
+                                        class=" border-b border-white/10 focus:border-cyan-500 outline-none w-full text-[10px] text-cyan-500 uppercase tracking-widest">
                                 </td>
                                 <td class="p-4">
                                     <input type="number" name="reg_fee" value="{{ $event->reg_fee }}" readonly
-                                        class="bg-slate-800 border border-white/10 rounded px-2 py-1.5 w-20 text-cyan-400 focus:border-cyan-500 outline-none">
+                                        class="border border-white/10 rounded px-2 py-1.5 w-20 text-cyan-400 focus:border-cyan-500 outline-none">
                                 </td>
                                 <td class="p-4">
                                     <input type="datetime-local" name="end_date"
                                         value="{{ $event->end_date->format('Y-m-d\TH:i') }}" readonly
-                                        class="bg-slate-800 border border-white/10 rounded px-2 py-1.5 text-[10px] focus:border-cyan-500 outline-none">
+                                        class="border border-white/10 rounded px-2 py-1.5 text-[10px] focus:border-cyan-500 outline-none">
                                 </td>
                                 <td class="p-4">
                                     <div class="flex items-center gap-2">
                                         <input type="number" name="min_members" value="{{ $event->min_members }}"
                                             readonly
-                                            class="bg-slate-800 border border-white/10 rounded px-1 py-1 w-10 text-center text-xs">
+                                            class="border border-white/10 rounded px-1 py-1 w-10 text-center text-xs">
                                         <span class="text-slate-600">-</span>
                                         <input type="number" name="max_members" value="{{ $event->max_members }}"
                                             readonly
-                                            class="bg-slate-800 border border-white/10 rounded px-1 py-1 w-10 text-center text-xs">
+                                            class="border border-white/10 rounded px-1 py-1 w-10 text-center text-xs">
                                     </div>
                                 </td>
                                 <td>
@@ -192,7 +192,7 @@
                                         @method('DELETE')
 
                                         <button type="submit"
-                                            class="bg-red-500/10 hover:bg-red-500 border border-red-500/50 text-red-500 hover:text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition shadow-sm">
+                                            class="bg-red-500/10 hover:bg-red-500 border border-red-500/50 text-red-500 hover: px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition shadow-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

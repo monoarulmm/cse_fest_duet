@@ -2,15 +2,7 @@
 
 @section('custom_css')
     <style>
-        :root {
-            --card-bg: rgba(15, 23, 42, 0.8);
-            --border-color: rgba(34, 211, 238, 0.2);
-        }
-
-        .admin-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-        }
+        
 
         .active-tab {
             border-bottom: 2px solid #22d3ee;
@@ -35,7 +27,7 @@
 
             {{-- ১. বড় প্রফেশনাল টাইটেল --}}
             <div>
-                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
+                <h2 class="text-4xl md:text-5xl font-black  uppercase tracking-tighter">
                     Admin Dashboard <span class="text-cyan-400">Details</span>
                 </h2>
                 <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
@@ -43,9 +35,9 @@
 
             {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
             <button onclick="window.history.back()"
-                class="flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
+                class="flex items-center gap-3 px-6 py-3  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
                 <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                <span class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.2em]">
+                <span class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.2em]">
                     Back to previous
                 </span>
             </button>
@@ -53,13 +45,13 @@
         </div>
         {{-- Top Action Bar --}}
         <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
-            <h1 class="text-xl font-black text-white uppercase italic">
+            <h1 class="text-xl font-black  uppercase italic">
                 Admin <span class="text-cyan-500">Panel</span> <span
                     class="text-[10px] text-slate-500 ml-2">[{{ $selectedEvent->name }}]</span>
             </h1>
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('admin.export.result.template', $selectedEvent->id) }}"
-                    class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
+                    class=" hover:bg-slate-700 text-cyan-400 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
                     Result & Seat Plan Template
                 </a>
 
@@ -70,7 +62,7 @@
                 </a>
 
                 <a href="{{ route('admin.iupc.export') }}"
-                    class="bg-slate-800 hover:bg-slate-700 text-cyan-400 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
+                    class=" hover:bg-slate-700 text-cyan-400 px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition">
                     iupc coach export
                 </a>
             </div>
@@ -80,7 +72,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {{-- Result Upload --}}
             <div class="admin-card p-6 rounded-3xl">
-                <h3 class="text-white text-xs font-bold uppercase mb-4 flex items-center gap-2">
+                <h3 class=" text-xs font-bold uppercase mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-upload text-cyan-500"></i> Results Upload
                 </h3>
                 <form action="{{ route('admin.upload.result') }}" method="POST" enctype="multipart/form-data">
@@ -89,7 +81,7 @@
                         class="block w-full text-[10px] text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-cyan-500/10 file:text-cyan-400 mb-4"
                         required>
                     <button type="submit"
-                        class="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 rounded-xl font-bold text-[10px] uppercase transition">Process
+                        class="w-full bg-cyan-600 hover:bg-cyan-500  py-2 rounded-xl font-bold text-[10px] uppercase transition">Process
                         Results</button>
                 </form>
             </div>
@@ -97,23 +89,23 @@
             {{-- Event Specific Tools (Slots/Coupons) --}}
             @if ($selectedEvent->slug == 'iupc')
                 <div class="admin-card p-6 rounded-3xl">
-                    <h3 class="text-white text-xs font-bold uppercase mb-4">University Slots</h3>
+                    <h3 class=" text-xs font-bold uppercase mb-4">University Slots</h3>
                     <form action="{{ route('admin.slots.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="file" class="block w-full text-[10px] mb-4" required>
                         <button type="submit"
-                            class="w-full bg-slate-700 text-white py-2 rounded-xl text-[10px] font-bold uppercase">Update
+                            class="w-full bg-slate-700  py-2 rounded-xl text-[10px] font-bold uppercase">Update
                             Slots</button>
                     </form>
                 </div>
                 <div class="admin-card p-6 rounded-3xl">
-                    <h3 class="text-white text-xs font-bold uppercase mb-4">Coach Coupons</h3>
+                    <h3 class=" text-xs font-bold uppercase mb-4">Coach Coupons</h3>
                     <form action="{{ route('admin.coupons.import', $selectedEvent->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="excel_file" class="block w-full text-[10px] mb-4" required>
                         <button type="submit"
-                            class="w-full bg-green-600 text-white py-2 rounded-xl text-[10px] font-bold uppercase">Generate
+                            class="w-full bg-green-600  py-2 rounded-xl text-[10px] font-bold uppercase">Generate
                             & Mail</button>
                     </form>
 
@@ -124,7 +116,7 @@
                 </div>
 
                 {{-- ৩. কুপন স্ট্যাটাস টেবিল (শুধুমাত্র IUPC এর জন্য) --}}
-                <div class="p-8 bg-slate-900/50 border border-slate-800 rounded-[2rem] mb-8">
+                <div class="p-8  border border-slate-800 rounded-[2rem] mb-8">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h2 class="text-xl font-black text-cyan-400 uppercase flex items-center gap-2">
                             <span class="w-2 h-6 bg-cyan-500 rounded-full"></span>
@@ -133,7 +125,7 @@
 
                         {{-- মাল্টিপল ডিলিট বাটন --}}
                         <button type="button" id="delete-selected-btn" disabled
-                            class="px-4 py-2 bg-red-600/20 border border-red-500/40 text-red-400 hover:bg-red-600 hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 opacity-50 cursor-not-allowed flex items-center gap-2">
+                            class="px-4 py-2 bg-red-600/20 border border-red-500/40 text-red-400 hover:bg-red-600 hover: rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 opacity-50 cursor-not-allowed flex items-center gap-2">
                             <i class="fa-solid fa-trash-can"></i> Delete Selected (<span id="selected-count">0</span>)
                         </button>
                     </div>
@@ -147,7 +139,7 @@
                                     <tr class="text-slate-500 border-b border-slate-800 uppercase">
                                         <th class="py-3 px-2 w-10">
                                             <input type="checkbox" id="select-all-coupons"
-                                                class="rounded border-slate-700 bg-slate-800 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-900 w-4 h-4 cursor-pointer">
+                                                class="rounded border-slate-700  text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-900 w-4 h-4 cursor-pointer">
                                         </th>
                                         <th class="py-3 px-2">University</th>
                                         <th class="py-3 px-2">Coach</th>
@@ -160,7 +152,7 @@
                                         <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
                                             <td class="py-3 px-2">
                                                 <input type="checkbox" name="coupon_ids[]" value="{{ $coupon->id }}"
-                                                    class="coupon-checkbox rounded border-slate-700 bg-slate-800 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-900 w-4 h-4 cursor-pointer">
+                                                    class="coupon-checkbox rounded border-slate-700  text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-900 w-4 h-4 cursor-pointer">
                                             </td>
                                             <td class="py-3 px-2">{{ $coupon->university }}</td>
                                             <td class="py-3 px-2">{{ $coupon->coach_name }}</td>
@@ -209,7 +201,7 @@
             {{-- Stats Sidebar --}}
             <div class="w-full lg:w-1/4 space-y-6">
                 <div class="admin-card p-6 rounded-3xl">
-                    <h4 class="text-white text-[10px] font-black uppercase mb-4 border-b border-white/5 pb-2">Uni Stats
+                    <h4 class=" text-[10px] font-black uppercase mb-4 border-b border-white/5 pb-2">Uni Stats
                     </h4>
                     <div class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
                         @foreach ($stats as $stat)
@@ -230,9 +222,9 @@
                     <form id="bulkDeleteForm" action="{{ route('admin.registrations.bulkDelete') }}" method="POST">
                         @csrf @method('DELETE')
                         <div class="p-4 bg-white/5 flex justify-between items-center">
-                            <span class="text-white text-[10px] font-bold uppercase">Registration Records</span>
+                            <span class=" text-[10px] font-bold uppercase">Registration Records</span>
                             <button type="submit" onclick="return confirm('Delete selected?')"
-                                class="hidden bulk-btn bg-red-600 text-white px-3 py-1 rounded text-[9px] font-bold uppercase">Delete
+                                class="hidden bulk-btn bg-red-600  px-3 py-1 rounded text-[9px] font-bold uppercase">Delete
                                 Selected</button>
                         </div>
                         <div class="overflow-x-auto">
@@ -251,7 +243,7 @@
                                             <td class="p-4"><input type="checkbox" name="ids[]"
                                                     value="{{ $team->id }}" class="row-checkbox"></td>
                                             <td class="p-4">
-                                                <div class="text-white font-bold">
+                                                <div class=" font-bold">
                                                     {{ $selectedEvent->slug == 'ict-olympiad' ? $team->m1_name : $team->team_name }}
                                                 </div>
                                                 <div class="text-[10px] text-cyan-600">{{ $team->university_name }}</div>
@@ -289,7 +281,7 @@
                             <tbody class="divide-y divide-white/5">
                                 @forelse($results as $res)
                                     <tr class="hover:bg-white/5">
-                                        <td class="p-4 text-white font-mono">{{ $res->participant_id }}</td>
+                                        <td class="p-4  font-mono">{{ $res->participant_id }}</td>
                                         <td class="p-4 text-slate-500">{{ $res->university_name }}</td>
                                         <td class="p-4"><span class="text-cyan-500">{{ $res->result_status }}</span>
                                         </td>

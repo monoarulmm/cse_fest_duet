@@ -7,14 +7,14 @@
             {{-- Header --}}
             <div class="mb-8">
                 <button onclick="window.history.back()"
-                    class="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all mb-4">
+                    class="flex items-center gap-2 px-4 py-2  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all mb-4">
                     <i
                         class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform text-xs"></i>
                     <span
                         class="text-xs font-bold text-slate-400 group-hover:text-white uppercase tracking-[0.15em]">Back</span>
                 </button>
                 <div class="text-center">
-                    <h1 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-wider">{{ $event->name }}</h1>
+                    <h1 class="text-2xl sm:text-4xl font-black  uppercase tracking-wider">{{ $event->name }}</h1>
                     <p class="text-cyan-400 tracking-widest mt-1 text-xs sm:text-sm italic">Registration Status & List</p>
                 </div>
             </div>
@@ -24,9 +24,9 @@
                 <div class="relative w-full max-w-xl group">
                     <input type="text" name="search" value="{{ request('search') }}" required
                         placeholder="Team, University or Student ID..."
-                        class="w-full bg-slate-900/80 border border-cyan-500/30 rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm text-white focus:outline-none focus:border-cyan-500 transition-all pr-28 sm:pr-36">
+                        class="w-full  border border-cyan-500/30 rounded-full px-5 sm:px-8 py-3 sm:py-4 text-sm  focus:outline-none focus:border-cyan-500 transition-all pr-28 sm:pr-36">
                     <button type="submit"
-                        class="absolute right-2 top-1.5 bottom-1.5 sm:top-2 sm:bottom-2 bg-cyan-500 px-4 sm:px-6 rounded-full text-slate-900 font-black hover:scale-105 transition-transform flex items-center gap-1.5 text-sm">
+                        class="absolute right-2 top-1.5 bottom-1.5 sm:top-2 sm:bottom-2 bg-cyan-500 px-4 sm:px-6 rounded-full  font-black hover:scale-105 transition-transform flex items-center gap-1.5 text-sm">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         <span class="hidden sm:inline text-xs font-black uppercase tracking-wider">Search</span>
                     </button>
@@ -47,7 +47,7 @@
 
                 {{-- টেবিল কন্টেইনার --}}
                 <div
-                    class="rounded-2xl sm:rounded-3xl border border-cyan-500/20 bg-slate-900/40 backdrop-blur-md shadow-2xl">
+                    class="rounded-2xl sm:rounded-3xl border border-cyan-500/20  backdrop-blur-md shadow-2xl">
                     <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                         <table class="text-left border-collapse" style="width: 100%; min-width: 560px;">
                             <thead class="bg-cyan-500/10 text-cyan-400 text-[10px] sm:text-xs uppercase tracking-widest">
@@ -62,7 +62,7 @@
                                 @forelse ($teams as $team)
                                     <tr class="hover:bg-cyan-500/5 transition duration-200">
                                         <td class="px-4 sm:px-6 py-4">
-                                            <div class="font-bold text-white text-sm leading-tight whitespace-nowrap">
+                                            <div class="font-bold  text-sm leading-tight whitespace-nowrap">
                                                 {{ $team->team_name ?? $team->m1_name }}
                                             </div>
                                             @if ($team->team_id)

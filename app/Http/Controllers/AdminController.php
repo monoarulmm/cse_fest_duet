@@ -156,10 +156,21 @@ class AdminController extends Controller
         $registration = Registration::with('event')->findOrFail($id);
         return view('admin.pre_reg_show', compact('registration'));
     }
+
+
+
+/**
+     * 1. Common Status Update (যেমন: ICT Olympiad ইত্যাদি)
+     */
     public function common_updateStatus(Request $request, $id)
     {
         $registration = Registration::with('event')->findOrFail($id);
         $newStatus = $request->status;
+
+        // 🛑 রেস্ট্রিকশন লক: ইতিমধ্যে selected/verified থাকলে pending এ ব্যাক করা যাবে না
+        if (in_array($registration->status, ['selected', 'verified']) && $newStatus === 'pending') {
+            return back()->with('error', 'Action denied! Once selected or verified, status cannot be reverted to pending.');
+        }
 
         // ১. ডাটা আপডেট অ্যারে
         $updateData = ['status' => $newStatus];
@@ -168,7 +179,7 @@ class AdminController extends Controller
         if ($newStatus === 'verified') {
             $updateData['payment_status'] = 'paid';
             if (!$registration->participant_id) {
-                // ইভেন্ট অনুযায়ী প্রিফিক্স সেট করা (যেমন: ICT-XXXX)
+                // ইভেন্ট অনুযায়ী প্রিফিক্স সেট করা (যেমন: ICT-XXXX)
                 $prefix = strtoupper(substr($registration->event->slug, 0, 3));
                 $updateData['participant_id'] = $prefix . '-' . rand(1000, 9999);
             }
@@ -192,17 +203,24 @@ class AdminController extends Controller
         }
     }
 
-    // project and iupc
+    /**
+     * 2. Project Showcase and IUPC Status Update
+     */
     public function updateStatus(Request $request, $id)
     {
         $registration = Registration::with('event')->findOrFail($id);
         $eventSlug = $registration->event->slug;
         $newStatus = $request->status;
 
+        // 🛑 রেস্ট্রিকশন লক: ইতিমধ্যে selected/verified থাকলে pending এ ব্যাক করা যাবে না
+        if (in_array($registration->status, ['selected', 'verified']) && $newStatus === 'pending') {
+            return back()->with('error', 'Action denied! Once selected or verified, status cannot be reverted to pending.');
+        }
+
         // আপডেট ডাটা অ্যারে
         $updateData = ['status' => $newStatus];
 
-        // যদি ভেরিফাইড (পেইড) করা হয়
+        // যদি ভেরিফাইড (পেইড) করা হয়
         if ($newStatus === 'verified') {
             $updateData['payment_status'] = 'paid';
 
@@ -236,7 +254,7 @@ class AdminController extends Controller
     }
 
     /**
-     * AI Hackathon Update
+     * 3. AI Hackathon Status Update
      */
     public function ai_updateStatus(Request $request, $id)
     {
@@ -246,6 +264,11 @@ class AdminController extends Controller
 
         $registration = Registration::findOrFail($id);
         $newStatus = $request->status;
+
+        // 🛑 রেস্ট্রিকশন লক: ইতিমধ্যে selected/verified থাকলে pending এ ব্যাক করা যাবে না
+        if (in_array($registration->status, ['selected', 'verified']) && $newStatus === 'pending') {
+            return back()->with('error', 'Action denied! Once selected or verified, status cannot be reverted to pending.');
+        }
 
         $updateData = ['status' => $newStatus];
 
@@ -279,6 +302,8 @@ class AdminController extends Controller
         return back()->with('success', 'Status updated to ' . $newStatus . ' and Participant ID assigned.');
     }
 
+
+    
     // ai hackton
 
 
@@ -317,14 +342,6 @@ class AdminController extends Controller
             return back()->with('error', 'Failed to send some emails. Please check configuration.');
         }
     }
-
-    // ২. স্ট্যাটাস আপডেট করার মেথড (এখন আর মেইল যাবে না, শুধু স্ট্যাটাস চেঞ্জ হবে)
-
-
-
-
-
-
 
 
 

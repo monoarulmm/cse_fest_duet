@@ -7,6 +7,12 @@ use App\Http\Controllers\HomeController;
 
 // ১. হোম পেজ রাউট
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/test-link', function () {
+
+    Artisan::call('storage:link');
+
+    return Artisan::output();
+});
 
 // ২. ড্যাশবোর্ড (শুধুমাত্র লগইন করা ইউজারদের জন্য মিডলওয়্যারসহ)
 Route::get('/dashboard', [HomeController::class, 'dashboard'])

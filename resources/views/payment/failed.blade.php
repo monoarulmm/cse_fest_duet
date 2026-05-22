@@ -1,123 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Unsuccessful - DUET CSE CARNIVAL 2026</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@section('title', 'Payment Failed — DUET CSE CARNIVAL 2026')
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-    </style>
+@section('custom_css')
+<style>
+    .pay-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-mid);
+        box-shadow: var(--shadow-card);
+    }
+    .pay-accent-bar {
+        background: linear-gradient(90deg, #f43f5e, #e11d48);
+    }
+    .pay-icon-wrap {
+        background: rgba(244, 63, 94, 0.10);
+        border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+    .pay-info-box {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-soft);
+    }
+    .pay-info-divider { border-color: var(--border-mid); }
 
-    @php
-        $setting = \App\Models\Setting::first();
-        $activeEvents = \App\Models\Event::where('is_active', true)->get();
-    @endphp
+    .pay-btn-primary {
+        background: var(--accent);
+        color: #020617;
+        transition: opacity 0.2s, transform 0.15s;
+    }
+    .pay-btn-primary:hover  { opacity: 0.88; }
+    .pay-btn-primary:active { transform: scale(0.97); }
 
-    @if ($setting && $setting->favicon)
-        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
-        <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
-    @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('cse.jpg') }}">
-    @endif
-</head>
+    .pay-btn-secondary {
+        background: transparent;
+        border: 1px solid var(--border-accent);
+        color: var(--text-secondary);
+        transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .pay-btn-secondary:hover  { background: var(--accent-dim); color: var(--text-primary); }
+    .pay-btn-secondary:active { transform: scale(0.97); }
 
-<body class="antialiased text-slate-800 min-h-screen flex items-center justify-center p-4">
+    .pay-contact-link { color: var(--accent); }
+    .pay-contact-link:hover { opacity: 0.8; }
 
-    <div
-        class="max-w-md w-full bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
+    /* pulse ring around icon */
+    @keyframes ring-pulse {
+        0%   { transform: scale(1);   opacity: 0.5; }
+        100% { transform: scale(1.6); opacity: 0; }
+    }
+    .ring-pulse {
+        animation: ring-pulse 1.8s ease-out infinite;
+        border: 2px solid rgba(244, 63, 94, 0.4);
+        border-radius: 9999px;
+        position: absolute;
+        inset: 0;
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-16">
+    <div class="pay-card w-full max-w-md rounded-[2.25rem] overflow-hidden relative">
 
         {{-- Top accent bar --}}
-        <div class="absolute top-0 left-0 right-0 h-2 bg-rose-500"></div>
+        <div class="pay-accent-bar h-1.5 w-full"></div>
 
-        {{-- Icon --}}
-        <div
-            class="inline-flex items-center justify-center w-20 h-20 bg-rose-50 text-rose-500 rounded-full mb-6 border border-rose-100">
-            @if ($payment_status === 'error')
-                {{-- Warning icon for system error --}}
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                        d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-                </svg>
-            @else
-                {{-- X icon for payment failed --}}
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            @endif
-        </div>
+        <div class="p-8 md:p-10 text-center">
 
-        {{-- Title --}}
-        <h1 class="text-2xl font-black text-slate-900 uppercase tracking-tight">
-            {{ $payment_status === 'error' ? 'System Error' : 'Payment Failed' }}
-        </h1>
-
-        {{-- Message --}}
-        <p class="text-sm font-medium text-slate-600 mt-3 px-2 leading-relaxed">
-            {{ $message ?? 'পেমেন্ট সফল হয়নি। আপনার অ্যাকাউন্ট থেকে টাকা কেটে থাকলে ২৪ ঘণ্টার মধ্যে তা স্বয়ংক্রিয়ভাবে ফেরত চলে আসবে।' }}
-        </p>
-
-        {{-- Info box — শুধু failed হলে দেখাও, system error-এ gateway status দেখানো misleading --}}
-        @if ($payment_status === 'failed' || $registration)
-            <div class="mt-6 p-4 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-2">
-                @if ($payment_status === 'failed' && !empty($sp_code))
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Gateway
-                            Status:</span>
-                        <span
-                            class="font-mono font-bold px-2 py-0.5 bg-rose-50 text-rose-600 rounded-md border border-rose-100">
-                            {{ $sp_code }}
-                        </span>
+            {{-- Animated icon --}}
+            <div class="flex justify-center mb-7">
+                <div class="relative w-20 h-20 flex items-center justify-center">
+                    <div class="ring-pulse"></div>
+                    <div class="pay-icon-wrap w-20 h-20 rounded-full flex items-center justify-center relative z-10">
+                        <svg class="w-9 h-9" fill="none" stroke="#f43f5e" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </div>
-                @endif
-
-                @if ($registration)
-                    <div
-                        class="flex justify-between items-center text-xs {{ $payment_status === 'failed' && !empty($sp_code) ? 'pt-1 border-t border-slate-200/60' : '' }}">
-                        <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Participant
-                            Ref:</span>
-                        <span class="font-mono font-bold text-slate-700">#{{ $registration->id }}</span>
-                    </div>
-                @endif
+                </div>
             </div>
-        @endif
 
-        {{-- Action buttons --}}
-        <div class="mt-8 space-y-3">
-            {{--
-                "Try Again" শুধু failed হলে দেখাও।
-                Route: event.payment.retry — registration id পাঠাও, controller নতুন order_id বানাবে।
-                payment/initiate/{order_id} ভুল ছিল — পুরানো failed order_id দিয়ে pay হয় না।
-            --}}
-            @if ($payment_status === 'failed' && $registration)
-                <a href="{{ route('payment.make', $registration->id) }}"
-                    class="block w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-xs py-3.5 rounded-xl uppercase tracking-widest transition-all shadow-md shadow-slate-900/10">
-                    Try Payment Again
-                </a>
+            {{-- Title --}}
+            <h1 class="heading-font font-black text-2xl uppercase tracking-tight" style="color:var(--text-primary)">
+                Payment Failed
+            </h1>
+
+            {{-- Subtitle badge --}}
+            <div class="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
+                style="background:rgba(244,63,94,0.10); color:#f43f5e; border:1px solid rgba(244,63,94,0.2)">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                Transaction Unsuccessful
+            </div>
+
+            {{-- Message --}}
+            <p class="text-sm mt-5 leading-relaxed px-2"
+                style="color:var(--text-secondary); font-family:'JetBrains Mono',monospace">
+                {{ $message ?? 'পেমেন্ট সফল হয়নি। আপনার অ্যাকাউন্ট থেকে টাকা কেটে থাকলে ২৪ ঘণ্টার মধ্যে তা স্বয়ংক্রিয়ভাবে ফেরত চলে আসবে।' }}
+            </p>
+
+            {{-- Info box --}}
+            @if (!empty($sp_code) || $registration)
+                <div class="pay-info-box mt-6 rounded-2xl p-4 text-left space-y-2.5">
+
+                    @if (!empty($sp_code))
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] font-black uppercase tracking-[0.2em]"
+                                style="color:var(--text-muted)">Gateway Status</span>
+                            <span class="font-mono font-bold text-[11px] px-2.5 py-0.5 rounded-lg"
+                                style="background:rgba(244,63,94,0.10); color:#f43f5e; border:1px solid rgba(244,63,94,0.18)">
+                                {{ $sp_code }}
+                            </span>
+                        </div>
+                    @endif
+
+                    @if ($registration)
+                        @if (!empty($sp_code))
+                            <div class="pay-info-divider border-t pt-2"></div>
+                        @endif
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] font-black uppercase tracking-[0.2em]"
+                                style="color:var(--text-muted)">Participant Ref</span>
+                            <span class="font-mono font-bold text-[11px]"
+                                style="color:var(--text-primary)">#{{ $registration->id }}</span>
+                        </div>
+                    @endif
+
+                </div>
             @endif
 
-            <a href="{{ url('/event/' . ($slug ?? 'event')) }}"
-                class="block w-full bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs py-3 rounded-xl uppercase tracking-widest transition-all">
-                Go Back to Event Page
-            </a>
-        </div>
+            {{-- Buttons --}}
+            <div class="mt-8 space-y-3">
+                @if ($registration)
+                    <a href="{{ route('payment.make', $registration->id) }}"
+                        class="pay-btn-primary flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-lg"
+                        style="box-shadow: 0 8px 20px rgba(34,211,238,0.25)">
+                        <i class="fa-solid fa-rotate-right text-sm"></i>
+                        Try Payment Again
+                    </a>
+                @endif
 
-        {{-- Contact --}}
-        <div class="mt-8 pt-6 border-t border-slate-100">
-            <p class="text-[11px] text-slate-400 font-medium">
-                কোনো সমস্যা হলে যোগাযোগ করুন:
-                <span class="text-cyan-600 font-bold font-mono">csefest2026@duet.ac.bd</span>
-            </p>
-        </div>
+                <a href="{{ url('/event/' . ($slug ?? 'event')) }}"
+                    class="pay-btn-secondary flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-[11px] font-bold uppercase tracking-widest">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    Go Back to Event Page
+                </a>
+            </div>
 
+            {{-- Divider --}}
+            <div class="mt-8 pt-6" style="border-top:1px solid var(--border-soft)">
+                <p class="text-[11px]" style="color:var(--text-muted); font-family:'JetBrains Mono',monospace">
+                    কোনো সমস্যা হলে যোগাযোগ করুন —
+                </p>
+                <a href="mailto:csefest2026@duet.ac.bd"
+                    class="pay-contact-link text-[11px] font-bold font-mono mt-1 inline-block">
+                    csefest2026@duet.ac.bd
+                </a>
+            </div>
+
+        </div>
     </div>
-
-</body>
-
-</html>
+</div>
+@endsection

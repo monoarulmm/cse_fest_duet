@@ -105,7 +105,7 @@
         <div
             class="id-card-body relative bg-white border-2 border-cyan-500/40 rounded-[2.5rem] overflow-hidden shadow-2xl w-full max-w-[460px] h-[660px] flex flex-col justify-between">
 
-            <div class="bg-slate-950 p-6 flex justify-between items-center border-b-4 border-cyan-500 relative">
+            <div class="bg-green-700 p-6 flex justify-between items-center border-b-4 border-cyan-500 relative">
                 <div class="flex items-center gap-3">
                     @if ($setting && $setting->logo)
                         <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
@@ -116,7 +116,7 @@
                     @endif
                     <div>
                         <h1 class="text-lg font-black text-white leading-none tracking-tight uppercase">
-                            DUET CSE <span class="text-cyan-400">{{ $setting->site_name ?? 'CARNIVAL' }}</span>
+                            DUET CSE CARNIVAL <span class="text-cyan-400">{{ $setting->site_name ?? 'CARNIVAL' }}</span>
                         </h1>
                         <p class="text-cyan-400/80 font-bold tracking-[0.2em] text-[8px] mt-1 uppercase">DUET, Gazipur
                         </p>
@@ -192,7 +192,7 @@
                     <div class="space-y-1">
                         <p class="text-[7.5px] text-slate-400 font-bold uppercase leading-tight">
                             * Bring institute ID card for verification<br>
-                            * Reporting: 08:30 AM @ DUET Campus
+                            
                         </p>
                     </div>
                     <div class="text-right">

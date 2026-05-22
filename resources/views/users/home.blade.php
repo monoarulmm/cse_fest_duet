@@ -66,12 +66,15 @@
                 <p class="powered-label text-[10px] text-slate-500 font-bold tracking-[0.4em] uppercase mb-6">Powered By</p>
                 <div
                     class="flex flex-wrap justify-center gap-10 grayscale opacity-40 hover:opacity-90 hover:grayscale-0 transition duration-500">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" class="h-6"
-                        alt="Google">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" class="h-6"
-                        alt="Microsoft">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" class="h-6"
-                        alt="Amazon">
+                    
+                      <img src="{{ asset('duet-logo.png') }}" class="h-6"
+                        alt="DUET">
+                    
+                    <img src="{{ asset('cs.png') }}" class="h-6"
+                        alt="DUET CS">
+                    <img src="{{ asset('wi.png') }}" class="h-6"
+                        alt="WI">
+                  
                 </div>
             </div>
         </div>
@@ -83,7 +86,7 @@
     <section class="py-24  relative overflow-hidden border-t border-slate-900">
         <div class="container mx-auto px-6 relative">
             <div class="mb-16 text-center">
-                <h2 class="heading-font text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+                <h2 class="heading-font text-4xl md:text-6xl font-black uppercase tracking-tighter ">
                     Our Proud <span class="text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">Sponsors</span>
                 </h2>
                 <div class="flex justify-center items-center gap-3 mt-4">
@@ -134,7 +137,7 @@
     <section class="py-24  border-t border-slate-900">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="heading-font text-4xl md:text-6xl font-black uppercase text-white">
+                <h2 class="heading-font text-4xl md:text-6xl font-black uppercase ">
                     Event <span class="text-cyan-500">Gallery</span>
                 </h2>
                 <p class="text-slate-500 font-mono text-xs mt-4 tracking-[0.2em]">>> VISUAL_ARCHIVE_ACCESS_GRANTED</p>

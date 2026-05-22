@@ -167,8 +167,7 @@
                             <td class="p-4 pl-6">
                                 <span
                                     class="text-slate-900 font-bold uppercase block">{{ $registration->event->name ?? 'Event Registration' }}</span>
-                                <span class="text-xs text-slate-400 font-medium mt-0.5 block">Access Pass for All
-                                    Keynote Events & Sub-Segments</span>
+                                <span class="text-xs text-slate-400 font-medium mt-0.5 block"></span>
                             </td>
                             <td class="p-4 text-right pr-6 font-bold text-slate-900 font-mono">
                                 {{ number_format($transaction->amount ?? 0, 2) }}
@@ -202,9 +201,7 @@
             <div
                 class="mt-12 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
                 <p class="text-[10px] text-slate-400 font-semibold leading-relaxed max-w-sm">
-                    * This is an automated electronic money receipt; no manual signature is required. Please secure your
-                    official <span class="text-slate-600 font-bold">Admit Card / Entry Pass</span> using the dynamic
-                    action panel above prior to venue check-in.
+                    * This is an automated electronic money receipt; no manual signature is required.
                 </p>
                 <div class="text-slate-300 font-serif italic text-sm select-none">
                     Thank You!

@@ -21,14 +21,14 @@
                         <div class="h-[1px] flex-grow bg-slate-800"></div>
                     </div>
 
-                    <h2 class="heading-font text-4xl md:text-5xl font-black uppercase text-white">
+                    <h2 class="heading-font text-4xl md:text-5xl font-black uppercase ">
                         About the <span
                             class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Carnival</span>
                     </h2>
 
-                    <div class="content-glass p-8 space-y-6 bg-slate-900/40 border border-slate-800 rounded-xl">
-                        <p class="text-slate-300 leading-relaxed italic border-l-2 border-cyan-500 pl-4 bg-cyan-500/5 py-2">
-                            "A national-level technologyCARNIVAlival bringing together students, educators, and innovators
+                    <div class="content-glass p-8 space-y-6 border border-slate-800 rounded-xl">
+                        <p class=" leading-relaxed italic border-l-2 border-cyan-500 pl-4 bg-cyan-500/5 py-2">
+                            "A national-level  technology  CARNIVAl bringing together students, educators, and innovators
                             on a
                             dynamic platform of creativity and collaboration."
                         </p>
@@ -43,7 +43,7 @@
                         <p>Competition Segments</p>
 
                         <!-- Segments Quick List -->
-                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[12px] font-mono text-slate-300">
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[12px] font-mono ">
                             <li class="flex items-center gap-2 group">
                                 <span class="text-cyan-500 group-hover:translate-x-1 transition-transform">▶</span> IUPC
                             </li>
@@ -71,7 +71,7 @@
                     <div
                         class="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur opacity-10 group-hover:opacity-25 transition duration-1000">
                     </div>
-                    <div class="relative bg-slate-900 border border-slate-800 p-2 rounded-lg overflow-hidden">
+                    <div class="relative  border border-slate-800 p-2 rounded-lg overflow-hidden">
                         <img src="{{ asset('storage/' . $setting->main_banner3) }}" alt="DUET CSE Carnival 2026"
                             class="w-full rounded-md grayscale group-hover:grayscale-0 transition duration-700 transform group-hover:scale-105 shadow-2xl"
                             onerror="this.src='https://via.placeholder.com/800x1000/0f172a/22d3ee?text=CSE+CARNIVAL+2026'">
@@ -104,7 +104,7 @@
                     <button @click="activeSegment = 'iupc'"
                         :class="activeSegment === 'iupc' ?
                             'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-600'"
+                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
                         class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
                         IUPC
                     </button>
@@ -112,7 +112,7 @@
                     <button @click="activeSegment = 'hackathon'"
                         :class="activeSegment === 'hackathon' ?
                             'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-600'"
+                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
                         class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
                         AI Hackathon
                     </button>
@@ -120,7 +120,7 @@
                     <button @click="activeSegment = 'olympiad'"
                         :class="activeSegment === 'olympiad' ?
                             'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-600'"
+                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
                         class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
                         ICT Olympiad
                     </button>
@@ -128,7 +128,7 @@
                     <button @click="activeSegment = 'showcase'"
                         :class="activeSegment === 'showcase' ?
                             'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-600'"
+                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
                         class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
                         Project Showcasing
                     </button>
@@ -139,11 +139,11 @@
                     <!-- IUPC -->
                     <div x-show="activeSegment === 'iupc'" x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class="bg-gradient-to-br from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
+                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
                         <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
-                            <span class="w-8 h-px bg-cyan-500"></span> IUPC
+                            <span class="w-8 h-px "></span> IUPC
                         </h4>
-                        <p class="text-slate-300 leading-relaxed text-sm md:text-base italic">
+                        <p class=" leading-relaxed text-sm md:text-base italic">
                             "IUPC (Inter University Programming Contest) will bring together teams from universities
                             nationwide to compete in challenging algorithmic and problem-solving contests through
                             competitive programming."
@@ -153,11 +153,11 @@
                     <!-- AI Hackathon -->
                     <div x-show="activeSegment === 'hackathon'" x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class="bg-gradient-to-br from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
+                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
                         <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
                             <span class="w-8 h-px bg-cyan-500"></span> AI Hackathon
                         </h4>
-                        <p class="text-slate-300 leading-relaxed text-sm md:text-base italic">
+                        <p class=" leading-relaxed text-sm md:text-base italic">
                             "AI Hackathon will provide participants with an opportunity to develop innovative AI-driven
                             solutions addressing real-world challenges using modern technologies and creative approaches."
                         </p>
@@ -166,11 +166,11 @@
                     <!-- ICT Olympiad -->
                     <div x-show="activeSegment === 'olympiad'" x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class="bg-gradient-to-br from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
+                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
                         <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
                             <span class="w-8 h-px bg-cyan-500"></span> ICT Olympiad
                         </h4>
-                        <p class="text-slate-300 leading-relaxed text-sm md:text-base italic">
+                        <p class=" leading-relaxed text-sm md:text-base italic">
                             "ICT Olympiad will engage students in analytical and technology-based problem-solving activities
                             designed to test their knowledge and understanding of ICT and emerging technologies."
                         </p>
@@ -179,11 +179,11 @@
                     <!-- Project Showcasing -->
                     <div x-show="activeSegment === 'showcase'" x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class="bg-gradient-to-br from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
+                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
                         <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
                             <span class="w-8 h-px bg-cyan-500"></span> Project Showcasing
                         </h4>
-                        <p class="text-slate-300 leading-relaxed text-sm md:text-base italic">
+                        <p class=" leading-relaxed text-sm md:text-base italic">
                             "Project Showcasing will offer a platform for participants to present innovative projects,
                             research ideas, and technological solutions, encouraging creativity, collaboration, and
                             practical implementation of engineering concepts."

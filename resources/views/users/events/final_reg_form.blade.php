@@ -101,7 +101,7 @@
                         <input type="text" name="coupon_code" id="coupon_code" required value="{{ old('coupon_code') }}"
                             class="input-field w-full rounded-xl px-4 py-3 text-white focus:border-cyan-400 @error('coupon_code') border-red-500 @enderror"
                             placeholder="Ex: XXXXXX">
-                        <p class="text-[10px] text-slate-500 mt-2 italic">* কুপন ভুল হলে পেমেন্ট প্রসেস শুরু হবে না।</p>
+                        <p class="text-[10px] text-slate-500 mt-2 italic">*Valid Coupon Required</p>
                     </div>
                 </div>
 
@@ -251,8 +251,7 @@
                             <p class="text-3xl font-black text-cyan-400 mt-2">
                                 {{ number_format($team->event->reg_fee) }} BDT
                             </p>
-                            <p class="text-[9px] text-slate-500 uppercase mt-1 italic">* পেমেন্ট গেটওয়ে চার্জ প্রযোজ্য হতে
-                                পারে</p>
+                            <p class="text-[9px] text-slate-500 uppercase mt-1 italic">*without payment getway charge</p>
                         </div>
                         <button type="submit"
                             class="pay-btn-gradient w-full md:w-80 text-white font-black py-5 rounded-2xl transition-all hover:scale-105 tracking-widest uppercase text-sm">

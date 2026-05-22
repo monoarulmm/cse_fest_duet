@@ -10,6 +10,17 @@
         href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap"
         rel="stylesheet">
 
+    @php
+        $setting = \App\Models\Setting::first();
+        $activeEvents = \App\Models\Event::where('is_active', true)->get();
+    @endphp
+
+    @if ($setting && $setting->favicon)
+        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
+        <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
+    @endif
     <style>
         *,
         *::before,

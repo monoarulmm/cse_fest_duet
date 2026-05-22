@@ -2,12 +2,12 @@
 
 @section('content')
     {{-- Main Background wrapper --}}
-    <div class="min-h-screen py-12 px-4 md:px-8 font-sans selection:bg-indigo-500/30 selection:text-white">
+    <div class="min-h-screen py-12 px-4 md:px-8 font-sans selection:bg-indigo-500/30 selection:">
         <div class="max-w-7xl mx-auto space-y-10">
 
             {{-- 1. Control Center (Cyber-UI Header) --}}
             <div
-                class="relative overflow-hidden bg-slate-900/40 backdrop-blur-3xl border border-slate-800/60 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+                class="relative overflow-hidden  backdrop-blur-3xl border border-slate-800/60 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
                 <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px]"></div>
 
                 <div class="relative flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-8">
@@ -18,7 +18,7 @@
                                 <i class="fas fa-university text-indigo-400 text-xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter italic">
+                                <h2 class="text-3xl md:text-4xl font-black  uppercase tracking-tighter italic">
                                     Institution <span class="text-indigo-500">Quotas</span>
                                 </h2>
                                 <p
@@ -32,10 +32,10 @@
                     </div>
 
                     <div class="flex items-center gap-5">
-                        <div class="px-7 py-3 bg-slate-950/60 border border-slate-800 rounded-2xl shadow-inner">
+                        <div class="px-7 py-3  border border-slate-800 rounded-2xl shadow-inner">
                             <p class="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Capacity
                             </p>
-                            <p class="text-white font-mono text-2xl leading-none font-bold">
+                            <p class=" font-mono text-2xl leading-none font-bold">
                                 <span id="totalCount"
                                     class="text-indigo-400">{{ $universitySlots->flatten()->count() }}</span>
                                 <span class="text-[10px] text-slate-600 uppercase ml-1">Units</span>
@@ -43,11 +43,11 @@
                         </div>
 
                         <button onclick="window.history.back()"
-                            class="h-14 px-8 bg-slate-950/80 border border-slate-800 rounded-2xl hover:border-indigo-500/50 transition-all group flex items-center gap-4">
+                            class="h-14 px-8  border border-slate-800 rounded-2xl hover:border-indigo-500/50 transition-all group flex items-center gap-4">
                             <i
                                 class="fa-solid fa-arrow-left text-indigo-500 group-hover:-translate-x-1 transition-transform text-sm"></i>
                             <span
-                                class="text-[10px] font-black text-slate-400 group-hover:text-white uppercase tracking-widest">Return</span>
+                                class="text-[10px] font-black text-slate-400 group-hover: uppercase tracking-widest">Return</span>
                         </button>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <label
                             class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Order/Priority</label>
                         <select id="sortOrder"
-                            class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-300 focus:border-indigo-500/50 outline-none transition-all cursor-pointer appearance-none shadow-lg">
+                            class="w-full  border border-slate-800 rounded-xl p-4 text-sm  focus:border-indigo-500/50 outline-none transition-all cursor-pointer appearance-none shadow-lg">
                             <option value="asc">Alphabetical (A-Z)</option>
                             <option value="desc">Alphabetical (Z-A)</option>
                             <option value="quota-high">Capacity Priority</option>
@@ -70,7 +70,7 @@
                             Query</label>
                         <div class="relative group">
                             <input type="text" id="searchInput" placeholder="Search ID or Name..."
-                                class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 pl-12 text-sm text-slate-200 focus:border-indigo-500/50 outline-none placeholder:text-slate-700 transition-all shadow-lg">
+                                class="w-full  border border-slate-800 rounded-xl p-4 pl-12 text-sm text-slate-200 focus:border-indigo-500/50 outline-none placeholder:text-slate-700 transition-all shadow-lg">
                             <i
                                 class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-500 transition-colors"></i>
                         </div>
@@ -78,7 +78,7 @@
 
                     <div class="flex items-end">
                         <button onclick="window.location.reload()"
-                            class="w-full h-[54px] bg-slate-800/80 hover:bg-indigo-600 border border-slate-700/50 hover:border-indigo-400 text-white font-black text-[10px] rounded-xl transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl">
+                            class="w-full h-[54px]  hover:bg-indigo-600 border border-slate-700/50 hover:border-indigo-400  font-black text-[10px] rounded-xl transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl">
                             <i class="fas fa-sync-alt animate-spin-slow"></i> Refresh System
                         </button>
                     </div>
@@ -87,13 +87,13 @@
 
             {{-- 2. Data Registry Table --}}
             <div
-                class="rounded-[2.5rem] overflow-hidden border border-slate-800/60 shadow-2xl bg-slate-900/20 backdrop-blur-sm">
+                class="rounded-[2.5rem] overflow-hidden border border-slate-800/60 shadow-2xl  backdrop-blur-sm">
                 {{-- Table Header --}}
                 <div class="flex items-center bg-indigo-600 px-10 py-6">
-                    <div class="flex-1 text-white font-black text-[11px] uppercase tracking-[0.4em] italic">
+                    <div class="flex-1  font-black text-[11px] uppercase tracking-[0.4em] italic">
                         Registry_Identification</div>
                     <div
-                        class="w-40 text-white font-black text-[11px] uppercase tracking-[0.4em] text-center border-l border-white/20 italic">
+                        class="w-40  font-black text-[11px] uppercase tracking-[0.4em] text-center border-l border-white/20 italic">
                         Allocation</div>
                 </div>
 
@@ -113,7 +113,7 @@
 
                             <div class="w-40 p-8 flex justify-center border-l border-slate-800/30">
                                 <div
-                                    class="h-16 w-20 bg-slate-950/60 rounded-2xl flex items-center justify-center border border-slate-800 group-hover:border-indigo-500/40 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all">
+                                    class="h-16 w-20  rounded-2xl flex items-center justify-center border border-slate-800 group-hover:border-indigo-500/40 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all">
                                     <span
                                         class="text-indigo-400 group-hover:text-indigo-300 font-mono font-black text-2xl tracking-tighter">
                                         {{ sprintf('%02d', $slot->max_slots) }}
@@ -127,7 +127,7 @@
 
             {{-- 3. Empty State --}}
             <div id="noResult"
-                class="hidden text-center py-40 bg-slate-900/20 rounded-[3rem] border border-slate-800 border-dashed">
+                class="hidden text-center py-40  rounded-[3rem] border border-slate-800 border-dashed">
                 <i class="fas fa-database text-slate-800 text-6xl mb-6"></i>
                 <h3 class="text-slate-400 font-black uppercase tracking-[0.6em] text-sm mb-2">Zero Matches Found_</h3>
                 <p class="text-slate-600 text-xs font-mono">System query returned null response.</p>

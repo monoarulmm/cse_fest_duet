@@ -54,9 +54,12 @@ class PaymentController extends Controller
     // =========================================================================
     private function friendlyError(Throwable $e): string // ✅ FIX: Exception → Throwable
     {
-        $msg = strtolower($e->getMessage() ?? '');
+      $msg = strtolower($e->getMessage() ?? '');
 
-        if (str_contains($msg, 'phone') || str_contains($msg, 'mobile')) {
+    // ✅ নতুন: SSL error detect করা
+    if (str_contains($msg, 'ssl') || str_contains($msg, 'certificate') || str_contains($msg, 'verify')) {
+        return 'SSL সংযোগ সমস্যা। Admin কে জানান। [SSL_ERROR]';
+    }        if (str_contains($msg, 'phone') || str_contains($msg, 'mobile')) {
             return 'ফোন নম্বর সঠিক নয়। সঠিক ১১ ডিজিটের বাংলাদেশী নম্বর দিন।';
         }
         if (str_contains($msg, 'amount')) {

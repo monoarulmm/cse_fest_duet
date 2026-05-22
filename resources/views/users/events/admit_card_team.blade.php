@@ -93,7 +93,7 @@
                         class="w-8 h-8 md:w-10 md:h-10 object-contain transition-transform duration-500 group-hover:scale-110">
                     <div>
                         <h1 class="text-lg font-black text-white leading-none tracking-tight uppercase">
-                            DUET CSE <span class="text-cyan-400">{{ $setting->site_name }}</span>
+                            DUET CSE CARNIVAL <span class="text-cyan-400">{{ $setting->site_name }}</span>
                         </h1>
                         <p class="text-cyan-400/80 font-bold tracking-[0.2em] text-[8px] mt-1 uppercase">DUET, Gazipur
                         </p>
@@ -182,7 +182,6 @@
                     <div class="space-y-1">
                         <p class="text-[7.5px] text-slate-400 font-bold uppercase leading-tight">
                             * Admit card is mandatory for entry<br>
-                            * Reporting: 08:30 AM @ DUET Campus
                         </p>
                     </div>
                     <div class="text-right">
