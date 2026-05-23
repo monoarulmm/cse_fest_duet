@@ -104,8 +104,8 @@
                                     class="text-[11px] text-slate-500 group-hover:text-slate-300 transition-colors">Remember
                                     Me</span>
                             </label>
-                            <a href="{{ route('password.request') }}"
-                                class="text-[11px] text-cyan-400/70 hover:text-cyan-400 transition-colors">Recover Key?</a>
+                            <!-- <a href="{{ route('password.request') }}"
+                                class="text-[11px] text-cyan-400/70 hover:text-cyan-400 transition-colors">Recover Key?</a> -->
                         </div>
 
                         <!-- Submit Button -->
@@ -124,8 +124,8 @@
                     <div class="mt-8 pt-6 border-t border-white/5 text-center">
                         <p class="text-slate-500 text-xs">
                             Don't have access?
-                            <a href="{{ url('register') }}" class="text-cyan-400 font-bold hover:underline ml-1">Initialize
-                                Account</a>
+                            <!-- <a href="{{ url('register') }}" class="text-cyan-400 font-bold hover:underline ml-1">Initialize
+                                Account</a> -->
                         </p>
                     </div>
                 </div>

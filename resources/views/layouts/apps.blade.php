@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'CSE CARNIVAL 2026 | DUET')</title>
+    <title>@yield('title', 'DUET CSE CARNIVAL 2026 ')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -287,11 +287,11 @@
         /* ═══════════════════════════════════════════════════
            FOOTER
         ═══════════════════════════════════════════════════ */
-        footer {
+        /* footer {
             background: var(--bg-surface);
             border-top: 1px solid var(--border-accent);
         }
-        [data-theme="light"] footer { background: #f8faff; }
+        [data-theme="light"] footer { background: #f8faff; } */
 
         /* ═══════════════════════════════════════════════════
            MOBILE MENU CARD
@@ -388,38 +388,37 @@
             </div>
         </div>
     </div>
-
-    {{-- ═══════════ NAVBAR ═══════════ --}}
+{{-- ═══════════ NAVBAR ═══════════ --}}
     <nav class="fixed top-4 md:top-5 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl">
 
         {{-- Main Bar --}}
-        <div class="glass-nav rounded-full px-4 md:px-6 py-2.5 flex justify-between items-center">
+        <div class="glass-nav rounded-full px-3 sm:px-4 md:px-6 py-2.5 flex justify-between items-center gap-2">
 
             {{-- Logo --}}
-            <a href="{{ url('/') }}" class="group flex items-center gap-3 transition-all duration-300 shrink-0">
+            <a href="{{ url('/') }}" class="group flex items-center gap-2 sm:gap-3 transition-all duration-300 shrink-0">
                 <div class="relative">
                     <div class="absolute inset-0 rounded-xl blur-md transition-all duration-500"
                         style="background: var(--accent-dim); group-hover: background: rgba(34,211,238,0.3)"></div>
-                    <div class="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-xl overflow-hidden transition-all shadow-lg"
+                    <div class="relative w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-xl overflow-hidden transition-all shadow-lg"
                         style="background: var(--bg-base); border: 1px solid var(--border-mid)">
                         @if ($setting && $setting->logo)
                             <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
-                                class="w-8 h-8 object-contain transition-transform duration-500 group-hover:scale-110">
+                                class="w-7 h-7 md:w-8 md:h-8 object-contain transition-transform duration-500 group-hover:scale-110">
                         @else
-                            <span class="font-black text-xl heading-font" style="color:var(--accent)">
+                            <span class="font-black text-lg md:text-xl heading-font" style="color:var(--accent)">
                                 {{ substr($setting->site_name ?? 'D', 0, 1) }}
                             </span>
                         @endif
                     </div>
                 </div>
-                <div class="flex flex-col justify-center pl-3 border-l transition-colors duration-300"
+                <div class="flex flex-col justify-center pl-2 sm:pl-3 border-l transition-colors duration-300"
                     style="border-color: var(--border-mid)">
-                    <span class="heading-font font-black text-lg md:text-xl tracking-tighter uppercase leading-none"
+                    <span class="heading-font font-black text-base sm:text-lg md:text-xl tracking-tighter uppercase leading-none"
                         style="color: var(--text-primary)">
                         DUET <span style="color:var(--accent)">CSE</span>
                     </span>
-                    <div class="flex items-center gap-2 mt-0.5">
-                        <span class="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase leading-none"
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <span class="text-[6px] sm:text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase leading-none"
                             style="color: var(--accent); opacity: 0.6">CARNIVAL</span>
                         <span class="w-1 h-1 rounded-full animate-pulse" style="background:var(--accent)"></span>
                     </div>
@@ -477,7 +476,7 @@
             </div>
 
             {{-- Right Actions --}}
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
 
                 {{-- Desktop Search --}}
                 <div class="hidden lg:block relative w-52 xl:w-60">
@@ -498,28 +497,28 @@
 
                 {{-- Mobile Search Trigger --}}
                 <button id="mobile-search-btn"
-                    class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
+                    class="lg:hidden w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
                     style="border:1px solid var(--border-accent); color:var(--accent); background:var(--accent-dim)"
                     aria-label="Search">
-                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm"></i>
                 </button>
 
                 {{-- Theme Toggle --}}
                 <button id="theme-toggle"
-                    class="w-9 h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
+                    class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
                     style="border:1px solid var(--border-accent); color:var(--accent); background:var(--accent-dim)"
                     aria-label="Toggle theme">
-                    <i class="fa-solid fa-moon text-sm theme-icon-dark"></i>
-                    <i class="fa-solid fa-sun text-sm theme-icon-light"></i>
+                    <i class="fa-solid fa-moon text-xs sm:text-sm theme-icon-dark"></i>
+                    <i class="fa-solid fa-sun text-xs sm:text-sm theme-icon-light"></i>
                 </button>
 
                 {{-- Auth --}}
                 @auth
                     <div class="relative">
                         <button id="profile-dropdown-btn" class="flex items-center gap-2 outline-none group">
-                            <div class="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all"
                                 style="border:1px solid var(--border-accent); color:var(--accent); background:var(--accent-dim)">
-                                <i class="fa-solid fa-user-gear text-sm"></i>
+                                <i class="fa-solid fa-user-gear text-xs sm:text-sm"></i>
                             </div>
                             <div class="hidden lg:block text-left">
                                 <p class="text-[9px] leading-none" style="color:var(--text-muted)">Welcome,</p>
@@ -569,25 +568,22 @@
                             </form>
                         </div>
                     </div>
-                @else
+                 @else
                     <a href="{{ route('login') }}"
-                        class="flex items-center gap-2 px-3 md:px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
-                        style="background:var(--accent-dim); border:1px solid var(--accent-border); color:var(--accent)"
-                        onmouseover="this.style.background='var(--accent)'; this.style.color='#020617'"
-                        onmouseout="this.style.background='var(--accent-dim)'; this.style.color='var(--accent)'">
-                        <i class="fa-solid fa-fingerprint text-sm"></i>
-                        <span class="hidden sm:inline">Login</span>
+                        class="flex items-center gap-2 bg-cyan-500/10 px-4 py-2 rounded-xl border border-cyan-500/20 text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg active:scale-95">
+                        <!-- <i class="fa-solid fa-fingerprint text-sm"></i> -->
+                        <span class="text-[10px] font-black uppercase tracking-widest">login</span>
                     </a>
                 @endauth
 
-                {{-- Hamburger --}}
+                {{-- Hamburger Menu Button --}}
                 <button id="mobile-btn"
-                    class="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-xl transition-all focus:outline-none"
+                    class="lg:hidden w-8 h-8 sm:w-10 sm:h-10 flex flex-col items-center justify-center gap-[4px] sm:gap-[5px] rounded-xl transition-all focus:outline-none shrink-0"
                     style="background:var(--accent-dim); border:1px solid var(--border-accent)"
                     aria-label="Menu">
-                    <span class="ham-line"></span>
-                    <span class="ham-line" style="width:12px; margin-right:-4px; align-self:flex-end"></span>
-                    <span class="ham-line"></span>
+                    <span class="w-4 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"></span>
+                    <span class="w-3 h-[2px] bg-cyan-400 rounded-full transition-all duration-300 align-self-end" style="margin-right: -2px;"></span>
+                    <span class="w-4 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"></span>
                 </button>
             </div>
         </div>
@@ -687,7 +683,6 @@
     <main class="pt-24 md:pt-32">
         @yield('content')
     </main>
-
 {{-- ═══════════ FOOTER ═══════════ --}}
 <footer class="relative pt-14 pb-28 md:pb-14 overflow-hidden">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
@@ -695,18 +690,10 @@
 
     <div class="max-w-7xl mx-auto px-6 lg:px-16">
         
-        {{-- BRAND HEADER: ফুটারের প্রধান ব্র্যান্ডিং টাইটেল --}}
-        <div class="mb-10 pb-6 border-b border-slate-800/30">
-            <h3 class="heading-font text-base md:text-lg font-black tracking-[0.4em] uppercase" 
-                style="color:var(--text-primary)">
-                DUET CSE CARNIVAL
-            </h3>
-        </div>
-
         {{-- ROW 1: 3 Column Dashboard Layout for Core Content --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
 
-            {{-- 1. Segments Column --}}
+            {{-- Segments Column --}}
             <div>
                 <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
                     style="color:var(--accent)">Segments</h4>
@@ -721,7 +708,9 @@
                                onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
                                onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
                                
+                               {{-- একটি ছোট গ্লোয়িং ডট আইকন --}}
                                <span class="w-1 h-1 rounded-full bg-current transition-all group-hover:scale-125"></span>
+                               
                                {{ $event->name }}
                             </a>
                         </li>
@@ -735,19 +724,19 @@
                 </ul>
             </div>
 
-            {{-- 2. Connectivity / Contact Column --}}
+            {{-- Connectivity / Contact Column --}}
             <div>
                 <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
                     style="color:var(--accent)">Connectivity</h4>
                 <ul class="space-y-3 text-[11px]" style="color:var(--text-muted)">
                     
-                    {{-- Address --}}
+                    {{-- 1. Address --}}
                     <li class="flex items-start">
                         <i class="fa-solid fa-location-dot mr-2 mt-0.5 shrink-0" style="color:var(--accent)"></i>
                         <span>{{ $setting->address ?? 'DUET, Gazipur-1707, Bangladesh' }}</span>
                     </li>
 
-                    {{-- Email --}}
+                    {{-- 2. Email --}}
                     <li>
                         <a href="mailto:{{ $setting->email ?? 'carnival.cse@duet.ac.bd' }}" 
                            class="hover:underline transition-all flex items-center" 
@@ -759,7 +748,7 @@
                         </a>
                     </li>
 
-                    {{-- Facebook --}}
+                    {{-- 3. Facebook --}}
                     <li>
                         <a href="{{ $setting->fb_link ?? 'https://facebook.com/csecarnivalduet' }}" 
                            target="_blank" rel="noopener noreferrer" 
@@ -771,87 +760,77 @@
                             DUET CSE CARNIVAL 
                         </a>
                     </li>
+
+                    {{-- 4. YouTube --}}
+                    <!-- <li>
+                        <a href="{{ $setting->youtube_link ?? 'https://youtube.com/@duetcsecarnival' }}" 
+                           target="_blank" rel="noopener noreferrer" 
+                           class="hover:underline transition-all flex items-center" 
+                           style="color:var(--text-muted)" 
+                           onmouseover="this.style.color='var(--text-primary)'" 
+                           onmouseout="this.style.color='var(--text-muted)'">
+                            <i class="fa-brands fa-youtube mr-2 shrink-0" style="color:var(--accent)"></i>
+                            YouTube Channel
+                        </a>
+                    </li> -->
                 </ul>
             </div>
 
-            {{-- 3. Navigation Links Column (Instant Channels এর পরিবর্তে) --}}
+            {{-- Social Shortcuts & Messaging Support --}}
             <div>
                 <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Navigation</h4>
-                <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
+                    style="color:var(--accent)">Instant Channels</h4>
+                <div class="space-y-4">
+                    <div class="flex gap-2.5">
+                        @if ($setting && $setting->fb_link)
+                            <a href="{{ $setting->fb_link }}"
+                                class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                                style="border:1px solid var(--border-accent); color:var(--accent)"
+                                onmouseover="this.style.background='#1877f2'; this.style.color='white'; this.style.borderColor='#1877f2'"
+                                onmouseout="this.style.background=''; this.style.color='var(--accent)'; this.style.borderColor='var(--border-accent)'">
+                                <i class="fa-brands fa-facebook-f text-xs"></i>
+                            </a>
+                        @endif
+                        @if ($setting && $setting->youtube_link)
+                            <a href="{{ $setting->youtube_link }}"
+                                class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                                style="border:1px solid var(--border-accent); color:var(--accent)"
+                                onmouseover="this.style.background='#ff0000'; this.style.color='white'; this.style.borderColor='#ff0000'"
+                                onmouseout="this.style.background=''; this.style.color='var(--accent)'; this.style.borderColor='var(--border-accent)'">
+                                <i class="fa-brands fa-youtube text-xs"></i>
+                            </a>
+                        @endif
+                    </div>
                     
-                    {{-- Home --}}
-                    <li>
-                        <a href="{{ url('/') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-house text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Home
-                        </a>
-                    </li>
-
-                    {{-- About --}}
-                    <li>
-                        <a href="{{ url('/about') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-circle-info text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           About
-                        </a>
-                    </li>
-
-                    {{-- Schedule --}}
-                    <li>
-                        <a href="{{ url('/schedule') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-calendar-days text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Schedule
-                        </a>
-                    </li>
-
-                    {{-- Gallery --}}
-                    <li>
-                        <a href="{{ url('/cse-gallery') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-images text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Gallery
-                        </a>
-                    </li>
-
-                    {{-- Contact --}}
-                    <li>
-                        <a href="{{ url('/contact') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-phone text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Contact
-                        </a>
-                    </li>
-                </ul>
+                 
+                    
+                </div>
             </div>
 
         </div>
 
+     
+
         {{-- Bottom Copyright Section --}}
         <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em]"
             style="border-top:1px solid var(--border-soft); color:var(--text-muted)">
-            <p>&copy; 2026 DUET CARNIVAL. All Rights Reserved.</p>
+            <p>&copy; DUET CSE CARNIVAL. All Rights Reserved.</p>
             <p>Developed by <span style="color:var(--accent)">Monoarul Islam</span></p>
         </div>
     </div>
 </footer>
 
-    {{-- ═══════════ MOBILE BOTTOM TAB BAR ═══════════ --}}
+{{-- ═══════════ MOBILE BOTTOM TAB BAR ═══════════ --}}
     <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3">
-        <nav class="tab-bar rounded-[1.75rem] flex items-center px-2 py-2">
+        <nav class="tab-bar rounded-[1.75rem] flex items-center px-2 py-2 bg-slate-950/90 backdrop-blur-md border border-slate-800 shadow-2xl">
 
-            <a href="/" class="tab-link tab-active flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all">
+            {{-- Home --}}
+            <a href="{{ url('/') }}" 
+               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('/') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-house-chimney text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Home</span>
             </a>
-                                                         {{-- Schedule --}}
+{{-- Schedule --}}
 <a href="/schedule" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
     <i class="fa-solid fa-calendar-days text-xl"></i>
     <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Schedule</span>
@@ -879,9 +858,7 @@
                 <i class="fa-solid fa-address-book text-[18px]"></i> {{-- কন্টাক্ট/যোগাযোগ আইকন --}}
                 <span class="text-[8px] font-black uppercase tracking-wider">Contact</span>
             </a>
-                                     
 
-           
         </nav>
     </div>
 
@@ -889,70 +866,28 @@
 
     {{-- SweetAlert --}}
     <script>
-    (function () {
-        /* ── Read computed CSS vars so light/dark mode colours are correct ── */
-        function cssVar(name) {
-            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        }
-
-        function makeSwal() {
-            const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const isLight = theme === 'light';
-            return Swal.mixin({
-                background:          isLight ? '#ffffff' : '#0f172a',
-                color:               isLight ? '#0f172a' : '#f8fafc',
-                confirmButtonColor:  isLight ? '#0891b2' : '#06b6d4',
-                iconColor:           undefined, /* overridden per call */
-                customClass: {
-                    popup:         'swal-popup-themed rounded-3xl shadow-2xl font-mono',
-                    title:         'heading-font uppercase tracking-widest text-lg',
-                    confirmButton: 'uppercase tracking-widest font-black text-xs px-10 py-3 rounded-xl',
-                }
-            });
-        }
-
+        const customSwal = Swal.mixin({
+            background: 'var(--swal-bg)',
+            color: 'var(--swal-text)',
+            confirmButtonColor: '#06b6d4',
+            customClass: {
+                popup: 'rounded-3xl border border-cyan-500/20 shadow-2xl backdrop-blur-xl font-mono',
+                title: 'heading-font uppercase tracking-widest text-lg',
+                confirmButton: 'uppercase tracking-widest font-black text-xs px-10 py-3 rounded-xl',
+            }
+        });
         @if (session('success'))
-            makeSwal().fire({
-                icon: 'success', iconColor: '#06b6d4',
-                title: 'SUCCESSFUL!',
-                text: "{{ session('success') }}",
-                confirmButtonText: 'OK'
-            });
+            customSwal.fire({ icon:'success', iconColor:'#06b6d4', title:'SUCCESSFUL!', text:"{{ session('success') }}", confirmButtonText:'OK' });
         @endif
         @if (session('error'))
-            makeSwal().fire({
-                icon: 'error', iconColor: '#ef4444',
-                title: 'ERROR!',
-                text: "{{ session('error') }}",
-                confirmButtonText: 'TRY AGAIN'
-            });
+            customSwal.fire({ icon:'error', iconColor:'#ef4444', title:'ERROR!', text:"{{ session('error') }}", confirmButtonText:'TRY AGAIN' });
         @endif
         @if ($errors->any())
-            makeSwal().fire({
-                icon: 'warning', iconColor: '#eab308',
-                title: 'VALIDATION FAILED!',
-                html: `<div style="text-align:left;font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.05em">• {!! implode('<br>• ', $errors->all()) !!}</div>`,
-                confirmButtonText: 'GOT IT'
-            });
+            customSwal.fire({ icon:'warning', iconColor:'#eab308', title:'VALIDATION FAILED!',
+                html:`<div style="text-align:left;font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.05em">• {!! implode('<br>• ', $errors->all()) !!}</div>`,
+                confirmButtonText:'GOT IT' });
         @endif
-
-        /* expose globally so child pages can also call makeSwal() */
-        window.makeSwal = makeSwal;
-    })();
     </script>
-
-    <style>
-        /* SweetAlert themed border — works in both modes */
-        .swal-popup-themed {
-            border: 1px solid var(--border-accent) !important;
-        }
-        [data-theme="light"] .swal-popup-themed {
-            border: 1px solid rgba(8,145,178,0.2) !important;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.12) !important;
-        }
-        /* SweetAlert icon circle fix for light mode */
-        [data-theme="light"] .swal2-icon { border-color: var(--accent-border) !important; }
-    </style>
 
     {{-- Core JS --}}
     <script>

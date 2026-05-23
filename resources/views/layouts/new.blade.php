@@ -688,160 +688,111 @@
         @yield('content')
     </main>
 
-{{-- ═══════════ FOOTER ═══════════ --}}
-<footer class="relative pt-14 pb-28 md:pb-14 overflow-hidden">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
-        style="background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity:0.5"></div>
+    {{-- ═══════════ FOOTER ═══════════ --}}
+    <footer class="relative pt-14 pb-28 md:pb-14 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
+            style="background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity:0.5"></div>
 
-    <div class="max-w-7xl mx-auto px-6 lg:px-16">
-        
-        {{-- BRAND HEADER: ফুটারের প্রধান ব্র্যান্ডিং টাইটেল --}}
-        <div class="mb-10 pb-6 border-b border-slate-800/30">
-            <h3 class="heading-font text-base md:text-lg font-black tracking-[0.4em] uppercase" 
-                style="color:var(--text-primary)">
-                DUET CSE CARNIVAL
-            </h3>
-        </div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
-        {{-- ROW 1: 3 Column Dashboard Layout for Core Content --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
-
-            {{-- 1. Segments Column --}}
-            <div>
-                <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Segments</h4>
-                <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider"
-                    style="color:var(--text-secondary)">
-
-                    @forelse ($activeEvents as $event)
-                        <li>
-                            <a href="{{ route('event.dashboard', $event->slug) }}" 
-                               class="transition-all duration-200 hover:opacity-100 flex items-center gap-2 group"
-                               style="color:var(--text-secondary)"
-                               onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                               onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                               
-                               <span class="w-1 h-1 rounded-full bg-current transition-all group-hover:scale-125"></span>
-                               {{ $event->name }}
+                {{-- Brand --}}
+                <div class="space-y-4">
+                    <span class="heading-font font-black text-xl tracking-tighter uppercase"
+                        style="color:var(--text-primary)">
+                        CSE <span style="color:var(--accent)">FEST</span>
+                    </span>
+                    <p class="text-xs leading-relaxed font-mono" style="color:var(--text-muted)">
+                        &gt; Mission: Future Tech<br>
+                        &gt; Status: <span style="color:var(--accent)">ACTIVE</span><br>
+                        &gt; Location: DUET, Gazipur
+                    </p>
+                    <div class="flex gap-2.5 pt-1">
+                        @if ($setting && $setting->fb_link)
+                            <a href="{{ $setting->fb_link }}"
+                                class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                                style="border:1px solid var(--border-accent); color:var(--accent)"
+                                onmouseover="this.style.background='#1877f2'; this.style.color='white'; this.style.borderColor='#1877f2'"
+                                onmouseout="this.style.background=''; this.style.color='var(--accent)'; this.style.borderColor='var(--border-accent)'">
+                                <i class="fa-brands fa-facebook-f text-xs"></i>
                             </a>
-                        </li>
-                    @empty
+                        @endif
+                        @if ($setting && $setting->youtube_link)
+                            <a href="{{ $setting->youtube_link }}"
+                                class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                                style="border:1px solid var(--border-accent); color:var(--accent)"
+                                onmouseover="this.style.background='#ff0000'; this.style.color='white'; this.style.borderColor='#ff0000'"
+                                onmouseout="this.style.background=''; this.style.color='var(--accent)'; this.style.borderColor='var(--border-accent)'">
+                                <i class="fa-brands fa-youtube text-xs"></i>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Directory --}}
+                <div>
+                    <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
+                        style="color:var(--accent)">Directory</h4>
+                    <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider"
+                        style="color:var(--text-secondary)">
+                        <li><a href="#" class="transition-colors hover:opacity-80"
+                            onmouseover="this.style.color='var(--accent)'"
+                            onmouseout="this.style.color='var(--text-secondary)'">Events Schedule</a></li>
+                        <li><a href="#" class="transition-colors hover:opacity-80"
+                            onmouseover="this.style.color='var(--accent)'"
+                            onmouseout="this.style.color='var(--text-secondary)'">Leaderboard</a></li>
+                        <li><a href="#" class="transition-colors hover:opacity-80"
+                            onmouseover="this.style.color='var(--accent)'"
+                            onmouseout="this.style.color='var(--text-secondary)'">Rules & Policy</a></li>
+                    </ul>
+                </div>
+
+                {{-- Contact --}}
+                <div>
+                    <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
+                        style="color:var(--accent)">Connectivity</h4>
+                    <ul class="space-y-3 text-[11px]" style="color:var(--text-muted)">
                         <li>
-                            <span class="block py-1 text-[10px] italic font-normal normal-case" style="color:var(--text-muted)">
-                                No Active Events
-                            </span>
+                            <i class="fa-solid fa-location-dot mr-2" style="color:var(--accent)"></i>
+                            {{ $setting->address ?? 'Gazipur, BD' }}
                         </li>
-                    @endforelse
-                </ul>
+                        <li>
+                            <i class="fa-solid fa-envelope mr-2" style="color:var(--accent)"></i>
+                            {{ $setting->email ?? 'csefest@duet.ac.bd' }}
+                        </li>
+                    </ul>
+                </div>
+
+                {{-- System Core --}}
+                <div class="p-5 rounded-2xl" style="background:var(--bg-elevated); border:1px solid var(--border-accent)">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[9px] font-black uppercase tracking-widest"
+                            style="color:var(--text-muted)">System Core</span>
+                        <span class="flex h-2 w-2 rounded-full animate-ping" style="background:var(--accent)"></span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span style="color:var(--text-secondary)">Runtime</span>
+                            <span style="color:var(--accent)">{{ app()->version() }}</span>
+                        </div>
+                        <div class="w-full h-1 rounded-full overflow-hidden" style="background:var(--border-soft)">
+                            <div class="w-[70%] h-full rounded-full" style="background:var(--accent)"></div>
+                        </div>
+                        <p class="text-[9px] mt-4 font-mono" style="color:var(--text-muted)">
+                            Console: login_success...<br>
+                            Ready for DUET_CSE_FEST_2026
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            {{-- 2. Connectivity / Contact Column --}}
-            <div>
-                <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Connectivity</h4>
-                <ul class="space-y-3 text-[11px]" style="color:var(--text-muted)">
-                    
-                    {{-- Address --}}
-                    <li class="flex items-start">
-                        <i class="fa-solid fa-location-dot mr-2 mt-0.5 shrink-0" style="color:var(--accent)"></i>
-                        <span>{{ $setting->address ?? 'DUET, Gazipur-1707, Bangladesh' }}</span>
-                    </li>
-
-                    {{-- Email --}}
-                    <li>
-                        <a href="mailto:{{ $setting->email ?? 'carnival.cse@duet.ac.bd' }}" 
-                           class="hover:underline transition-all flex items-center" 
-                           style="color:var(--text-muted)" 
-                           onmouseover="this.style.color='var(--text-primary)'" 
-                           onmouseout="this.style.color='var(--text-muted)'">
-                            <i class="fa-solid fa-envelope mr-2 shrink-0" style="color:var(--accent)"></i>
-                            {{ $setting->email ?? 'info@carnival.cse.duet.ac.bd' }}
-                        </a>
-                    </li>
-
-                    {{-- Facebook --}}
-                    <li>
-                        <a href="{{ $setting->fb_link ?? 'https://facebook.com/csecarnivalduet' }}" 
-                           target="_blank" rel="noopener noreferrer" 
-                           class="hover:underline transition-all flex items-center" 
-                           style="color:var(--text-muted)" 
-                           onmouseover="this.style.color='var(--text-primary)'" 
-                           onmouseout="this.style.color='var(--text-muted)'">
-                            <i class="fa-brands fa-facebook mr-2 shrink-0" style="color:var(--accent)"></i>
-                            DUET CSE CARNIVAL 
-                        </a>
-                    </li>
-                </ul>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em]"
+                style="border-top:1px solid var(--border-soft); color:var(--text-muted)">
+                <p>&copy; 2026 DUET CARNIVAL. All Rights Reserved.</p>
+                <p>Developed by <span style="color:var(--accent)">Monoar Islam</span></p>
             </div>
-
-            {{-- 3. Navigation Links Column (Instant Channels এর পরিবর্তে) --}}
-            <div>
-                <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Navigation</h4>
-                <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
-                    
-                    {{-- Home --}}
-                    <li>
-                        <a href="{{ url('/') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-house text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Home
-                        </a>
-                    </li>
-
-                    {{-- About --}}
-                    <li>
-                        <a href="{{ url('/about') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-circle-info text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           About
-                        </a>
-                    </li>
-
-                    {{-- Schedule --}}
-                    <li>
-                        <a href="{{ url('/schedule') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-calendar-days text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Schedule
-                        </a>
-                    </li>
-
-                    {{-- Gallery --}}
-                    <li>
-                        <a href="{{ url('/cse-gallery') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-images text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Gallery
-                        </a>
-                    </li>
-
-                    {{-- Contact --}}
-                    <li>
-                        <a href="{{ url('/contact') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-phone text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Contact
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
-
-        {{-- Bottom Copyright Section --}}
-        <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em]"
-            style="border-top:1px solid var(--border-soft); color:var(--text-muted)">
-            <p>&copy; 2026 DUET CARNIVAL. All Rights Reserved.</p>
-            <p>Developed by <span style="color:var(--accent)">Monoarul Islam</span></p>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     {{-- ═══════════ MOBILE BOTTOM TAB BAR ═══════════ --}}
     <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3">
@@ -851,37 +802,31 @@
                 <i class="fa-solid fa-house-chimney text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Home</span>
             </a>
-                                                         {{-- Schedule --}}
-<a href="/schedule" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
-    <i class="fa-solid fa-calendar-days text-xl"></i>
-    <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Schedule</span>
-</a>
 
-{{-- Gallery --}}
-<a href="/cse-gallery" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
-    <i class="fa-solid fa-images text-xl"></i>
-    <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Gallery</span>
-</a>
-
-            {{-- Center FAB (Quick Join / Dashboard / Plus) --}}
-            
-
-            {{-- About --}}
-            <a href="{{ url('/about') }}" 
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('about*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
-                <i class="fa-solid fa-circle-info text-[18px]"></i> {{-- ইনফো/অ্যাবাউট আইকন --}}
-                <span class="text-[8px] font-black uppercase tracking-wider">About</span>
+            <a href="/schedule" class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all">
+                <i class="fa-solid fa-calendar-days text-[18px]"></i>
+                <span class="text-[8px] font-black uppercase tracking-wider">Events</span>
             </a>
 
-            {{-- Contact --}}
-            <a href="{{ url('/contact') }}" 
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('contact*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
-                <i class="fa-solid fa-address-book text-[18px]"></i> {{-- কন্টাক্ট/যোগাযোগ আইকন --}}
-                <span class="text-[8px] font-black uppercase tracking-wider">Contact</span>
-            </a>
-                                     
+            {{-- Center FAB --}}
+            <div class="flex-1 flex justify-center relative -mt-5">
+                <a href="/"
+                    class="w-13 h-13 w-[52px] h-[52px] rounded-2xl rotate-45 flex items-center justify-center transition-all active:scale-95"
+                    style="background:var(--accent); border:3px solid var(--bg-base); box-shadow:0 0 20px rgba(34,211,238,0.5)">
+                    <i class="fa-solid fa-plus text-xl -rotate-45" style="color:#020617"></i>
+                </a>
+            </div>
 
-           
+            <a href="/about" class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all">
+                <i class="fa-solid fa-ranking-star text-[18px]"></i>
+                <span class="text-[8px] font-black uppercase tracking-wider">Rank</span>
+            </a>
+
+            <a href="/contact" class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all">
+                <i class="fa-solid fa-user-gear text-[18px]"></i>
+                <span class="text-[8px] font-black uppercase tracking-wider">Setup</span>
+            </a>
+
         </nav>
     </div>
 

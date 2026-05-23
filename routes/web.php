@@ -32,20 +32,15 @@ Route::post('/check-result', [HomeController::class, 'checkResult'])->name('chec
 
 
 
-Route::get('/login', function () {
-    return view('auth.login');
-});
-Route::get('/register', function () {
-    return view('auth.register');
-});
+
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PaymentTestController;
 
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+// Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+// Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 Route::get('/verify', function () {
     return view('auth.verify.page');
 })->name('verify.page');

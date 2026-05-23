@@ -33,7 +33,7 @@
     ═══════════════════════════════════════════ */
     .reg-input,
     .reg-select {
-        background: var(--accent-dim);
+        background-color: var(--accent-dim);   /* background-color আলাদা — .reg-select এর background-image এ override না হওয়ার জন্য */
         border: 1px solid var(--accent-border);
         color: var(--text-primary);
         width: 100%;
@@ -42,28 +42,36 @@
         font-size: 13px;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 600;
-        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
         appearance: none;
         -webkit-appearance: none;
     }
     .reg-input::placeholder { color: var(--text-muted); }
 
-    .reg-input:focus,
-    .reg-select:focus {
+    .reg-input:focus {
         border-color: var(--accent);
         box-shadow: 0 0 0 3px var(--accent-dim);
         outline: none;
-        background: var(--bg-elevated);
+        background-color: var(--bg-elevated);
     }
 
-    /* Light mode select arrow tint */
+    /* Select custom arrow — background-size stops the tile/repeat bug */
     .reg-select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2322d3ee' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
+        background-color:    var(--accent-dim);
+        background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpolyline fill='none' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' points='1,1 6,7 11,1'/%3E%3C/svg%3E");
+        background-repeat:   no-repeat;
         background-position: right 14px center;
-        padding-right: 38px;
+        background-size:     12px 8px;
+        padding-right:       42px;
     }
-   
+    [data-theme="light"] .reg-select {
+        background-color: var(--accent-dim);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpolyline fill='none' stroke='%230891b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' points='1,1 6,7 11,1'/%3E%3C/svg%3E");
+        background-size:  12px 8px;
+    }
+    .reg-select:focus {
+        background-color: var(--bg-elevated);
+    }
 
     /* Native select option colours */
     .reg-select option {
@@ -351,12 +359,7 @@
                         <label class="reg-label">Domain*</label>
                         <select name="domain" required class="reg-select">
                             <option value="">Select Domain</option>
-                            @foreach (['AI & Data Science' => 'AI & Data Science', 
-                            'IoT' => 'IoT & Embedded Intelligence',
-                             'web' => 'Web & Mobile Applications',
-                             'robotics' => 'Robotics & Automation',
-                             'Cybersecurity' => 'Cybersecurity & Networking',
-                              'green tech' => 'Green Technology & Sustainability'] as $val => $label)
+                            @foreach (['AI & Data Science' => 'AI & Data Science', 'IoT' => 'IoT & Embedded Intelligence', 'Software' => 'Software & Digital Platforms', 'Smart' => 'Smart Solutions'] as $val => $label)
                                 <option value="{{ $val }}" {{ old('domain') == $val ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>

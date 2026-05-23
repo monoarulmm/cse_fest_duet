@@ -9,22 +9,11 @@
                 class="relative overflow-hidden  backdrop-blur-2xl border border-slate-800/50 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl">
 
                 {{-- Decorative Glow --}}
-                <div class="absolute -top-24 -left-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px]"></div>
-                <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-purple-500/5 rounded-full blur-[100px]"></div>
+                <div class="absolute -top-24 -left-24 w-64 h-64  rounded-full blur-[100px]"></div>
+                <div class="absolute -bottom-24 -right-24 w-64 h-64  rounded-full blur-[100px]"></div>
 
                 <div class="relative p-6 md:p-12">
 
-                    {{-- Header Section --}}
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-                        <div class="space-y-2">
-                           
-                            <h1 class="text-3xl md:text-6xl font-black  uppercase tracking-tighter leading-tight">
-                                {{ $event->name }}
-                            </h1>
-                        </div>
-
-
-                    </div>
 
                     {{-- Dynamic Content Section --}}
                     <div
@@ -38,7 +27,7 @@
                     </div>
 
                     {{-- Back Button --}}
-                    <div class="mt-16 pt-8 border-t border-slate-800/50 flex justify-center">
+                    <div class="mt-16 pt-8 border-t  flex justify-center">
                         <a href="{{ url()->previous() }}"
                             class="inline-flex items-center gap-4 px-8 py-3 bg-slate-950/30 border border-slate-800 rounded-xl hover:border-cyan-500/50 group transition-all duration-300">
                             <i

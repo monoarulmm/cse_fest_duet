@@ -20,7 +20,7 @@
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <p class="text-white font-semibold text-sm">Boktiar Mahamud</p>
+                            <p class=" font-semibold text-sm">Boktiar Mahamud</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">Multimedia & Gaming
                                 Secretary, DUETCS</p>
                             <a href="tel:+8801744555821"
@@ -29,7 +29,7 @@
                             </a>
                         </div>
                         <div>
-                            <p class="text-white font-semibold text-sm">Raju Mia</p>
+                            <p class=" font-semibold text-sm">Raju Mia</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">CSE 3/2, DUET</p>
                             <a href="tel:+8801835397371"
                                 class="text-cyan-400 text-xs hover:underline font-mono tracking-tighter">
@@ -45,7 +45,7 @@
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <p class="text-white font-semibold text-sm">Abdul Owadud Islam Raton</p>
+                            <p class=" font-semibold text-sm">Abdul Owadud Islam Raton</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">Research & Innovation
                                 Secretary, DUETCS</p>
                             <a href="tel:+8801318175391"
@@ -54,7 +54,7 @@
                             </a>
                         </div>
                         <div>
-                            <p class="text-white font-semibold text-sm">Md. Abdullah Al Masum</p>
+                            <p class=" font-semibold text-sm">Md. Abdullah Al Masum</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">Additional R&I Secretary,
                                 DUETCS</p>
                             <a href="tel:+8801738276219"
@@ -71,7 +71,7 @@
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <p class="text-white font-semibold text-sm">Mahamudul Hasan</p>
+                            <p class=" font-semibold text-sm">Mahamudul Hasan</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">Programming & Algorithms
                                 Secretary, DUETCS</p>
                             <a href="tel:+8801705870272"
@@ -80,7 +80,7 @@
                             </a>
                         </div>
                         <div>
-                            <p class="text-white font-semibold text-sm">Touhid Ahmed</p>
+                            <p class=" font-semibold text-sm">Touhid Ahmed</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">Additional P&A Secretary,
                                 DUETCS</p>
                             <a href="tel:+8801982652458"
@@ -97,7 +97,7 @@
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <p class="text-white font-semibold text-sm">Prosanto Kumar Barman</p>
+                            <p class=" font-semibold text-sm">Prosanto Kumar Barman</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">CSE 3/2, DUET</p>
                             <a href="tel:+8801332704025"
                                 class="text-cyan-400 text-xs hover:underline font-mono tracking-tighter">
@@ -105,7 +105,7 @@
                             </a>
                         </div>
                         <div>
-                            <p class="text-white font-semibold text-sm">Avijit Mondal</p>
+                            <p class=" font-semibold text-sm">Avijit Mondal</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">CSE 3/2, DUET</p>
                             <a href="tel:+8801855512502"
                                 class="text-cyan-400 text-xs hover:underline font-mono tracking-tighter">
@@ -121,7 +121,7 @@
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <p class="text-white font-semibold text-sm">Imran Mansur</p>
+                            <p class=" font-semibold text-sm">Imran Mansur</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">President, DUET Computer
                                 Society</p>
                             <a href="tel:+8801738587110"
@@ -130,7 +130,7 @@
                             </a>
                         </div>
                         <div>
-                            <p class="text-white font-semibold text-sm">M. Aiman Aousaf Hossain</p>
+                            <p class=" font-semibold text-sm">M. Aiman Aousaf Hossain</p>
                             <p class="text-slate-500 text-[10px] leading-tight uppercase mb-1">CEO, WhiteBoard Initiatives
                             </p>
                             <a href="tel:+8801810115665"

@@ -92,40 +92,74 @@
                     <div class="h-px w-20 bg-cyan-500/30 mx-auto"></div>
                 </div>
 
-                <!-- Tab Buttons -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <button @click="activeSegment = 'iupc'"
-                        :class="activeSegment === 'iupc' ?
-                            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
-                        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
-                        IUPC
-                    </button>
+                                      <div class="flex items-center gap-2 mb-4 px-1 text-slate-500 dark:text-slate-400">
+    <i class="fa-solid fa-mouse-pointer text-[10px] animate-pulse text-cyan-500"></i>
+    <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Select a segment to view details</span>
+</div>
 
-                    <button @click="activeSegment = 'hackathon'"
-                        :class="activeSegment === 'hackathon' ?
-                            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
-                        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
-                        AI Hackathon
-                    </button>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    
+    {{-- 1. IUPC Button --}}
+    <button @click="activeSegment = 'iupc'"
+        :class="activeSegment === 'iupc' ?
+            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
+            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
+        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
+        <span class="flex flex-col items-center gap-2">
+            <img src="{{ asset('iupc.png') }}" 
+                 alt="IUPC" 
+                 :class="activeSegment === 'iupc' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
+                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
+            <span>IUPC</span>
+        </span>
+    </button>
 
-                    <button @click="activeSegment = 'olympiad'"
-                        :class="activeSegment === 'olympiad' ?
-                            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
-                        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
-                        ICT Olympiad
-                    </button>
+    {{-- 2. AI Hackathon Button --}}
+    <button @click="activeSegment = 'hackathon'"
+        :class="activeSegment === 'hackathon' ?
+            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
+            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
+        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
+        <span class="flex flex-col items-center gap-2">
+            <img src="{{ asset('ai.png') }}" 
+                 alt="AI Hackathon" 
+                 :class="activeSegment === 'hackathon' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
+                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
+            <span>AI Hackathon</span>
+        </span>
+    </button>
 
-                    <button @click="activeSegment = 'showcase'"
-                        :class="activeSegment === 'showcase' ?
-                            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] scale-105' :
-                            ' border-slate-800 text-slate-400 hover:border-slate-600'"
-                        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform">
-                        Project Showcasing
-                    </button>
-                </div>
+    {{-- 3. ICT Olympiad Button --}}
+    <button @click="activeSegment = 'olympiad'"
+        :class="activeSegment === 'olympiad' ?
+            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
+            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
+        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
+        <span class="flex flex-col items-center gap-2">
+            <img src="{{ asset('ict.png') }}" 
+                 alt="ICT Olympiad" 
+                 :class="activeSegment === 'olympiad' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
+                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
+            <span>ICT Olympiad</span>
+        </span>
+    </button>
+
+    {{-- 4. Project Showcasing Button --}}
+    <button @click="activeSegment = 'showcase'"
+        :class="activeSegment === 'showcase' ?
+            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
+            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
+        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
+        <span class="flex flex-col items-center gap-2">
+            <img src="{{ asset('ps.png') }}" 
+                 alt="Project Showcase" 
+                 :class="activeSegment === 'showcase' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
+                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
+            <span>Project Showcase</span>
+        </span>
+    </button>
+
+</div>
 
                 <!-- Content Display Area -->
                 <div class="relative min-h-[220px]">

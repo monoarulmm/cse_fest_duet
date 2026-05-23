@@ -45,7 +45,7 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">2026</span>
             </h1>
 
-            <p class="hero-tagline max-w-2xl mx-auto text-sm md:text-lg mb-10 border-l-2 px-6 py-2">
+            <p class="hero-tagline max-w-2xl mx-auto text-sm md:text-lg mb-10  px-6 py-2">
                 A two-day-long celebration of thrilling competitions and attractive science-based activities, everything in a festive atmosphere. </p>
 
             {{-- Countdown --}}
