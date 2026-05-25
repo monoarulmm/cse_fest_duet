@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'CSE CARNIVAL 2026 | DUET')</title>
+    <title>@yield('title', 'DUET CSE CARNIVAL 2026 ')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +68,8 @@
 
             --swal-bg:       #0f172a;
             --swal-text:     #f8fafc;
+
+            --scroll-btn-bg: rgba(15, 23, 42, 0.95);
         }
 
         /* ═══════════════════════════════════════════════════
@@ -106,6 +108,8 @@
 
             --swal-bg:       #ffffff;
             --swal-text:     #0f172a;
+
+            --scroll-btn-bg: rgba(255, 255, 255, 0.95);
         }
 
         /* ═══════════════════════════════════════════════════
@@ -127,8 +131,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body.loading { overflow: hidden; }
-
         .heading-font { font-family: 'Orbitron', sans-serif; }
 
         /* ═══════════════════════════════════════════════════
@@ -144,30 +146,28 @@
         }
         [data-theme="light"] #matrix-bg { opacity: 0.05; }
 
-        /* ═══════════════════════════════════════════════════
-           PRELOADER
-        ═══════════════════════════════════════════════════ */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-base);
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        #preloader.loader-hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        @keyframes loading-slide {
-            0%   { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
 
+        @keyframes loading-slide {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-base);
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#preloader.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
         /* ═══════════════════════════════════════════════════
            GLASS NAV
         ═══════════════════════════════════════════════════ */
@@ -234,7 +234,7 @@
         }
 
         /* ═══════════════════════════════════════════════════
-           NAV INPUT — Light/Dark aware
+           NAV INPUT
         ═══════════════════════════════════════════════════ */
         .nav-input {
             background: var(--accent-dim);
@@ -283,15 +283,6 @@
             border-radius: 50%;
             box-shadow: 0 0 6px var(--accent);
         }
-
-        /* ═══════════════════════════════════════════════════
-           FOOTER
-        ═══════════════════════════════════════════════════ */
-        footer {
-            background: var(--bg-surface);
-            border-top: 1px solid var(--border-accent);
-        }
-        [data-theme="light"] footer { background: #f8faff; }
 
         /* ═══════════════════════════════════════════════════
            MOBILE MENU CARD
@@ -355,6 +346,48 @@
         }
 
         /* ═══════════════════════════════════════════════════
+           SCROLL NAVIGATOR
+        ═══════════════════════════════════════════════════ */
+        #scroll-navigator {
+            position: fixed;
+            right: 1rem;
+            bottom: 7rem;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+        #scroll-navigator.nav-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .scroll-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border-accent);
+            background: var(--scroll-btn-bg);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-card);
+            transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, opacity 0.25s ease;
+            font-size: 11px;
+        }
+        .scroll-btn:hover {
+            background: var(--accent);
+            color: #020617;
+            transform: scale(1.08);
+        }
+        .scroll-btn:active { transform: scale(0.93); }
+        .scroll-btn.btn-dim { opacity: 0.3; pointer-events: none; }
+
+        /* ═══════════════════════════════════════════════════
            SCROLLBAR
         ═══════════════════════════════════════════════════ */
         ::-webkit-scrollbar { width: 4px; }
@@ -365,61 +398,62 @@
     @yield('custom_css')
 </head>
 
-<body class="loading">
+<body>
     <canvas id="matrix-bg"></canvas>
 
-    {{-- ═══════════ PRELOADER ═══════════ --}}
+
     <div id="preloader">
-        <div class="relative">
-            <div class="w-24 h-24 border-4 border-cyan-500/10 border-t-cyan-500 rounded-full animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-                <div class="w-12 h-12 rounded-xl border border-cyan-500/30 bg-cyan-500/5 animate-pulse flex items-center justify-center">
-                    <span class="text-cyan-500 text-[10px] font-black tracking-tighter heading-font">CSE</span>
-                </div>
-            </div>
-        </div>
-        <div class="mt-10 text-center">
-            <div class="text-[10px] uppercase tracking-[0.5em] animate-pulse" style="color:var(--accent)">
-                System_Initializing...
-            </div>
-            <div class="mt-4 w-56 h-px rounded-full overflow-hidden relative" style="background:var(--border-soft)">
-                <div class="absolute inset-0 w-full animate-[loading-slide_1.5s_ease-in-out_infinite]"
-                    style="background: linear-gradient(90deg, transparent, var(--accent), transparent)"></div>
+    <div class="relative">
+        <div class="w-24 h-24 border-4 rounded-full animate-spin"
+            style="border-color: var(--accent-border); border-top-color: var(--accent)"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-12 h-12 rounded-xl border animate-pulse flex items-center justify-center"
+                style="border-color: var(--border-accent); background: var(--accent-dim)">
+                <span class="font-black text-[10px] heading-font" style="color:var(--accent)">CSE</span>
             </div>
         </div>
     </div>
-
+    <div class="mt-10 text-center">
+        <div class="text-[10px] uppercase tracking-[0.5em] animate-pulse" style="color:var(--accent)">
+            System_Initializing...
+        </div>
+        <div class="mt-4 w-56 h-px rounded-full overflow-hidden relative" style="background:var(--border-soft)">
+            <div class="absolute inset-0 animate-[loading-slide_1.5s_ease-in-out_infinite]"
+                style="background: linear-gradient(90deg, transparent, var(--accent), transparent)"></div>
+        </div>
+    </div>
+</div>
     {{-- ═══════════ NAVBAR ═══════════ --}}
     <nav class="fixed top-4 md:top-5 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl">
 
         {{-- Main Bar --}}
-        <div class="glass-nav rounded-full px-4 md:px-6 py-2.5 flex justify-between items-center">
+        <div class="glass-nav rounded-full px-3 sm:px-4 md:px-6 py-2.5 flex justify-between items-center gap-2">
 
             {{-- Logo --}}
-            <a href="{{ url('/') }}" class="group flex items-center gap-3 transition-all duration-300 shrink-0">
+            <a href="{{ url('/') }}" class="group flex items-center gap-2 sm:gap-3 transition-all duration-300 shrink-0">
                 <div class="relative">
                     <div class="absolute inset-0 rounded-xl blur-md transition-all duration-500"
-                        style="background: var(--accent-dim); group-hover: background: rgba(34,211,238,0.3)"></div>
-                    <div class="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-xl overflow-hidden transition-all shadow-lg"
+                        style="background: var(--accent-dim)"></div>
+                    <div class="relative w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-xl overflow-hidden transition-all shadow-lg"
                         style="background: var(--bg-base); border: 1px solid var(--border-mid)">
                         @if ($setting && $setting->logo)
                             <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
-                                class="w-8 h-8 object-contain transition-transform duration-500 group-hover:scale-110">
+                                class="w-7 h-7 md:w-8 md:h-8 object-contain transition-transform duration-500 group-hover:scale-110">
                         @else
-                            <span class="font-black text-xl heading-font" style="color:var(--accent)">
+                            <span class="font-black text-lg md:text-xl heading-font" style="color:var(--accent)">
                                 {{ substr($setting->site_name ?? 'D', 0, 1) }}
                             </span>
                         @endif
                     </div>
                 </div>
-                <div class="flex flex-col justify-center pl-3 border-l transition-colors duration-300"
+                <div class="flex flex-col justify-center pl-2 sm:pl-3 border-l transition-colors duration-300"
                     style="border-color: var(--border-mid)">
-                    <span class="heading-font font-black text-lg md:text-xl tracking-tighter uppercase leading-none"
+                    <span class="heading-font font-black text-base sm:text-lg md:text-xl tracking-tighter uppercase leading-none"
                         style="color: var(--text-primary)">
                         DUET <span style="color:var(--accent)">CSE</span>
                     </span>
-                    <div class="flex items-center gap-2 mt-0.5">
-                        <span class="text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase leading-none"
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <span class="text-[6px] sm:text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase leading-none"
                             style="color: var(--accent); opacity: 0.6">CARNIVAL</span>
                         <span class="w-1 h-1 rounded-full animate-pulse" style="background:var(--accent)"></span>
                     </div>
@@ -429,8 +463,9 @@
             {{-- Desktop Nav Links --}}
             <div class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.18em] uppercase"
                 style="color: var(--text-primary)">
-                <a href="/" class="transition-colors duration-200 hover:opacity-100"
-                    style="color:var(--text-secondary)" onmouseover="this.style.color='var(--accent)'"
+                <a href="/" class="transition-colors duration-200"
+                    style="color:var(--text-secondary)"
+                    onmouseover="this.style.color='var(--accent)'"
                     onmouseout="this.style.color='var(--text-secondary)'">Home</a>
 
                 <a href="/about" style="color:var(--text-secondary)"
@@ -477,7 +512,7 @@
             </div>
 
             {{-- Right Actions --}}
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
 
                 {{-- Desktop Search --}}
                 <div class="hidden lg:block relative w-52 xl:w-60">
@@ -498,28 +533,28 @@
 
                 {{-- Mobile Search Trigger --}}
                 <button id="mobile-search-btn"
-                    class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
+                    class="lg:hidden w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
                     style="border:1px solid var(--border-accent); color:var(--accent); background:var(--accent-dim)"
                     aria-label="Search">
-                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm"></i>
                 </button>
 
                 {{-- Theme Toggle --}}
                 <button id="theme-toggle"
-                    class="w-9 h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
+                    class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl transition-all active:scale-90"
                     style="border:1px solid var(--border-accent); color:var(--accent); background:var(--accent-dim)"
                     aria-label="Toggle theme">
-                    <i class="fa-solid fa-moon text-sm theme-icon-dark"></i>
-                    <i class="fa-solid fa-sun text-sm theme-icon-light"></i>
+                    <i class="fa-solid fa-moon text-xs sm:text-sm theme-icon-dark"></i>
+                    <i class="fa-solid fa-sun text-xs sm:text-sm theme-icon-light"></i>
                 </button>
 
                 {{-- Auth --}}
                 @auth
                     <div class="relative">
                         <button id="profile-dropdown-btn" class="flex items-center gap-2 outline-none group">
-                            <div class="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all"
                                 style="border:1px solid var(--border-accent); color:var(--accent); background:var(--accent-dim)">
-                                <i class="fa-solid fa-user-gear text-sm"></i>
+                                <i class="fa-solid fa-user-gear text-xs sm:text-sm"></i>
                             </div>
                             <div class="hidden lg:block text-left">
                                 <p class="text-[9px] leading-none" style="color:var(--text-muted)">Welcome,</p>
@@ -534,7 +569,7 @@
                             </div>
 
                             @php $menuItems = [
-                                ['route' => route('dashboard'),        'icon' => 'fa-gauge-high',   'label' => 'Dashboard'],
+                                ['route' => route('dashboard'), 'icon' => 'fa-gauge-high', 'label' => 'Dashboard'],
                             ]; @endphp
 
                             @if (Auth::user()->role === 'admin')
@@ -571,23 +606,19 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}"
-                        class="flex items-center gap-2 px-3 md:px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
-                        style="background:var(--accent-dim); border:1px solid var(--accent-border); color:var(--accent)"
-                        onmouseover="this.style.background='var(--accent)'; this.style.color='#020617'"
-                        onmouseout="this.style.background='var(--accent-dim)'; this.style.color='var(--accent)'">
-                        <i class="fa-solid fa-fingerprint text-sm"></i>
-                        <span class="hidden sm:inline">Login</span>
+                        class="flex items-center gap-2 bg-cyan-500/10 px-4 py-2 rounded-xl border border-cyan-500/20 text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg active:scale-95">
+                        <span class="text-[10px] font-black uppercase tracking-widest">login</span>
                     </a>
                 @endauth
 
-                {{-- Hamburger --}}
+                {{-- Hamburger Menu Button --}}
                 <button id="mobile-btn"
-                    class="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-xl transition-all focus:outline-none"
+                    class="lg:hidden w-8 h-8 sm:w-10 sm:h-10 flex flex-col items-center justify-center gap-[4px] sm:gap-[5px] rounded-xl transition-all focus:outline-none shrink-0"
                     style="background:var(--accent-dim); border:1px solid var(--border-accent)"
                     aria-label="Menu">
-                    <span class="ham-line"></span>
-                    <span class="ham-line" style="width:12px; margin-right:-4px; align-self:flex-end"></span>
-                    <span class="ham-line"></span>
+                    <span class="w-4 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"></span>
+                    <span class="w-3 h-[2px] bg-cyan-400 rounded-full transition-all duration-300" style="margin-right: -2px;"></span>
+                    <span class="w-4 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"></span>
                 </button>
             </div>
         </div>
@@ -688,271 +719,197 @@
         @yield('content')
     </main>
 
-{{-- ═══════════ FOOTER ═══════════ --}}
-<footer class="relative pt-14 pb-28 md:pb-14 overflow-hidden">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
-        style="background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity:0.5"></div>
+    {{-- ═══════════ FOOTER ═══════════ --}}
+    <footer class="relative pt-14 pb-28 md:pb-14 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
+            style="background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity:0.5"></div>
 
-    <div class="max-w-7xl mx-auto px-6 lg:px-16">
-        
-        {{-- BRAND HEADER: ফুটারের প্রধান ব্র্যান্ডিং টাইটেল --}}
-        <div class="mb-10 pb-6 border-b border-slate-800/30">
-            <h3 class="heading-font text-base md:text-lg font-black tracking-[0.4em] uppercase" 
-                style="color:var(--text-primary)">
-                DUET CSE CARNIVAL
-            </h3>
-        </div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-16">
 
-        {{-- ROW 1: 3 Column Dashboard Layout for Core Content --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
+            <div class="mb-10 pb-6 border-b border-slate-800/30">
+                <h3 class="heading-font text-base md:text-lg font-black tracking-[0.4em] uppercase"
+                    style="color:var(--text-primary)">
+                    DUET CSE CARNIVAL
+                </h3>
+            </div>
 
-            {{-- 1. Segments Column --}}
-            <div>
-                <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Segments</h4>
-                <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider"
-                    style="color:var(--text-secondary)">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
 
-                    @forelse ($activeEvents as $event)
+                {{-- Segments --}}
+                <div>
+                    <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
+                        style="color:var(--accent)">Segments</h4>
+                    <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider"
+                        style="color:var(--text-secondary)">
+                        @forelse ($activeEvents as $event)
+                            <li>
+                                <a href="{{ route('event.dashboard', $event->slug) }}"
+                                   class="transition-all duration-200 flex items-center gap-2 group"
+                                   style="color:var(--text-secondary)"
+                                   onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
+                                   onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
+                                   <span class="w-1 h-1 rounded-full bg-current transition-all group-hover:scale-125"></span>
+                                   {{ $event->name }}
+                                </a>
+                            </li>
+                        @empty
+                            <li>
+                                <span class="block py-1 text-[10px] italic font-normal normal-case" style="color:var(--text-muted)">
+                                    No Active Events
+                                </span>
+                            </li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                {{-- Connectivity --}}
+                <div>
+                    <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
+                        style="color:var(--accent)">Connectivity</h4>
+                    <ul class="space-y-3 text-[11px]" style="color:var(--text-muted)">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-location-dot mr-2 mt-0.5 shrink-0" style="color:var(--accent)"></i>
+                            <span>{{ $setting->address ?? 'DUET, Gazipur-1707, Bangladesh' }}</span>
+                        </li>
                         <li>
-                            <a href="{{ route('event.dashboard', $event->slug) }}" 
-                               class="transition-all duration-200 hover:opacity-100 flex items-center gap-2 group"
+                            <a href="mailto:{{ $setting->email ?? 'carnival.cse@duet.ac.bd' }}"
+                               class="hover:underline transition-all flex items-center"
+                               style="color:var(--text-muted)"
+                               onmouseover="this.style.color='var(--text-primary)'"
+                               onmouseout="this.style.color='var(--text-muted)'">
+                                <i class="fa-solid fa-envelope mr-2 shrink-0" style="color:var(--accent)"></i>
+                                {{ $setting->email ?? 'info@carnival.cse.duet.ac.bd' }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ $setting->fb_link ?? 'https://facebook.com/csecarnivalduet' }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="hover:underline transition-all flex items-center"
+                               style="color:var(--text-muted)"
+                               onmouseover="this.style.color='var(--text-primary)'"
+                               onmouseout="this.style.color='var(--text-muted)'">
+                                <i class="fa-brands fa-facebook mr-2 shrink-0" style="color:var(--accent)"></i>
+                                DUET CSE CARNIVAL
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {{-- Navigation --}}
+                <div>
+                    <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
+                        style="color:var(--accent)">Navigation</h4>
+                    <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
+                        @foreach ([
+                            ['url' => '/',            'icon' => 'fa-house',        'label' => 'Home'],
+                            ['url' => '/about',       'icon' => 'fa-circle-info',  'label' => 'About'],
+                            ['url' => '/schedule',    'icon' => 'fa-calendar-days','label' => 'Schedule'],
+                            ['url' => '/cse-gallery', 'icon' => 'fa-images',       'label' => 'Gallery'],
+                            ['url' => '/contact',     'icon' => 'fa-phone',        'label' => 'Contact'],
+                        ] as $nav)
+                        <li>
+                            <a href="{{ url($nav['url']) }}"
+                               class="transition-all duration-200 flex items-center gap-2 group"
                                style="color:var(--text-secondary)"
                                onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
                                onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                               
-                               <span class="w-1 h-1 rounded-full bg-current transition-all group-hover:scale-125"></span>
-                               {{ $event->name }}
+                               <i class="fa-solid {{ $nav['icon'] }} text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
+                               {{ $nav['label'] }}
                             </a>
                         </li>
-                    @empty
-                        <li>
-                            <span class="block py-1 text-[10px] italic font-normal normal-case" style="color:var(--text-muted)">
-                                No Active Events
-                            </span>
-                        </li>
-                    @endforelse
-                </ul>
+                        @endforeach
+                    </ul>
+                </div>
+
             </div>
 
-            {{-- 2. Connectivity / Contact Column --}}
-            <div>
-                <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Connectivity</h4>
-                <ul class="space-y-3 text-[11px]" style="color:var(--text-muted)">
-                    
-                    {{-- Address --}}
-                    <li class="flex items-start">
-                        <i class="fa-solid fa-location-dot mr-2 mt-0.5 shrink-0" style="color:var(--accent)"></i>
-                        <span>{{ $setting->address ?? 'DUET, Gazipur-1707, Bangladesh' }}</span>
-                    </li>
-
-                    {{-- Email --}}
-                    <li>
-                        <a href="mailto:{{ $setting->email ?? 'carnival.cse@duet.ac.bd' }}" 
-                           class="hover:underline transition-all flex items-center" 
-                           style="color:var(--text-muted)" 
-                           onmouseover="this.style.color='var(--text-primary)'" 
-                           onmouseout="this.style.color='var(--text-muted)'">
-                            <i class="fa-solid fa-envelope mr-2 shrink-0" style="color:var(--accent)"></i>
-                            {{ $setting->email ?? 'info@carnival.cse.duet.ac.bd' }}
-                        </a>
-                    </li>
-
-                    {{-- Facebook --}}
-                    <li>
-                        <a href="{{ $setting->fb_link ?? 'https://facebook.com/csecarnivalduet' }}" 
-                           target="_blank" rel="noopener noreferrer" 
-                           class="hover:underline transition-all flex items-center" 
-                           style="color:var(--text-muted)" 
-                           onmouseover="this.style.color='var(--text-primary)'" 
-                           onmouseout="this.style.color='var(--text-muted)'">
-                            <i class="fa-brands fa-facebook mr-2 shrink-0" style="color:var(--accent)"></i>
-                            DUET CSE CARNIVAL 
-                        </a>
-                    </li>
-                </ul>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em]"
+                style="border-top:1px solid var(--border-soft); color:var(--text-muted)">
+                <p>&copy; DUET CSE CARNIVAL. All Rights Reserved.</p>
+                <p>Developed by <span style="color:var(--accent)">Monoarul Islam</span></p>
             </div>
-
-            {{-- 3. Navigation Links Column (Instant Channels এর পরিবর্তে) --}}
-            <div>
-                <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
-                    style="color:var(--accent)">Navigation</h4>
-                <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
-                    
-                    {{-- Home --}}
-                    <li>
-                        <a href="{{ url('/') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-house text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Home
-                        </a>
-                    </li>
-
-                    {{-- About --}}
-                    <li>
-                        <a href="{{ url('/about') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-circle-info text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           About
-                        </a>
-                    </li>
-
-                    {{-- Schedule --}}
-                    <li>
-                        <a href="{{ url('/schedule') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-calendar-days text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Schedule
-                        </a>
-                    </li>
-
-                    {{-- Gallery --}}
-                    <li>
-                        <a href="{{ url('/cse-gallery') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-images text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Gallery
-                        </a>
-                    </li>
-
-                    {{-- Contact --}}
-                    <li>
-                        <a href="{{ url('/contact') }}" class="transition-all duration-200 flex items-center gap-2 group" style="color:var(--text-secondary)"
-                           onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                           onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                           <i class="fa-solid fa-phone text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                           Contact
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
-
-        {{-- Bottom Copyright Section --}}
-        <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] font-bold uppercase tracking-[0.2em]"
-            style="border-top:1px solid var(--border-soft); color:var(--text-muted)">
-            <p>&copy; 2026 DUET CARNIVAL. All Rights Reserved.</p>
-            <p>Developed by <span style="color:var(--accent)">Monoarul Islam</span></p>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     {{-- ═══════════ MOBILE BOTTOM TAB BAR ═══════════ --}}
     <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3">
-        <nav class="tab-bar rounded-[1.75rem] flex items-center px-2 py-2">
+        <nav class="tab-bar rounded-[1.75rem] flex items-center px-2 py-2 bg-slate-950/90 backdrop-blur-md border border-slate-800 shadow-2xl">
 
-            <a href="/" class="tab-link tab-active flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all">
+            <a href="{{ url('/') }}"
+               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('/') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-house-chimney text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Home</span>
             </a>
-                                                         {{-- Schedule --}}
-<a href="/schedule" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
-    <i class="fa-solid fa-calendar-days text-xl"></i>
-    <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Schedule</span>
-</a>
 
-{{-- Gallery --}}
-<a href="/cse-gallery" class="mobile-link flex flex-col items-center flex-1 text-gray-600 hover:text-blue-600 transition-colors">
-    <i class="fa-solid fa-images text-xl"></i>
-    <span class="text-[9px] mt-1 font-bold uppercase tracking-wider">Gallery</span>
-</a>
+            <a href="/schedule"
+               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('schedule*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                <i class="fa-solid fa-calendar-days text-[18px]"></i>
+                <span class="text-[8px] font-black uppercase tracking-wider">Schedule</span>
+            </a>
 
-            {{-- Center FAB (Quick Join / Dashboard / Plus) --}}
-            
+            <a href="/cse-gallery"
+               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('cse-gallery*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                <i class="fa-solid fa-images text-[18px]"></i>
+                <span class="text-[8px] font-black uppercase tracking-wider">Gallery</span>
+            </a>
 
-            {{-- About --}}
-            <a href="{{ url('/about') }}" 
+            <a href="{{ url('/about') }}"
                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('about*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
-                <i class="fa-solid fa-circle-info text-[18px]"></i> {{-- ইনফো/অ্যাবাউট আইকন --}}
+                <i class="fa-solid fa-circle-info text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">About</span>
             </a>
 
-            {{-- Contact --}}
-            <a href="{{ url('/contact') }}" 
+            <a href="{{ url('/contact') }}"
                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('contact*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
-                <i class="fa-solid fa-address-book text-[18px]"></i> {{-- কন্টাক্ট/যোগাযোগ আইকন --}}
+                <i class="fa-solid fa-address-book text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Contact</span>
             </a>
-                                     
 
-           
         </nav>
+    </div>
+
+    {{-- ═══════════ SCROLL NAVIGATOR ═══════════ --}}
+    <div id="scroll-navigator" aria-label="Page navigation">
+        <button id="scroll-up-btn"
+            class="scroll-btn"
+            aria-label="Scroll to top"
+            onclick="window.scrollTo({top:0,behavior:'smooth'})">
+            <i class="fa-solid fa-chevron-up"></i>
+        </button>
+        <button id="scroll-down-btn"
+            class="scroll-btn"
+            aria-label="Scroll to bottom"
+            onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">
+            <i class="fa-solid fa-chevron-down"></i>
+        </button>
     </div>
 
     {{-- ═══════════ SCRIPTS ═══════════ --}}
 
     {{-- SweetAlert --}}
     <script>
-    (function () {
-        /* ── Read computed CSS vars so light/dark mode colours are correct ── */
-        function cssVar(name) {
-            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        }
-
-        function makeSwal() {
-            const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const isLight = theme === 'light';
-            return Swal.mixin({
-                background:          isLight ? '#ffffff' : '#0f172a',
-                color:               isLight ? '#0f172a' : '#f8fafc',
-                confirmButtonColor:  isLight ? '#0891b2' : '#06b6d4',
-                iconColor:           undefined, /* overridden per call */
-                customClass: {
-                    popup:         'swal-popup-themed rounded-3xl shadow-2xl font-mono',
-                    title:         'heading-font uppercase tracking-widest text-lg',
-                    confirmButton: 'uppercase tracking-widest font-black text-xs px-10 py-3 rounded-xl',
-                }
-            });
-        }
-
+        const customSwal = Swal.mixin({
+            background: 'var(--swal-bg)',
+            color: 'var(--swal-text)',
+            confirmButtonColor: '#06b6d4',
+            customClass: {
+                popup: 'rounded-3xl border border-cyan-500/20 shadow-2xl backdrop-blur-xl font-mono',
+                title: 'heading-font uppercase tracking-widest text-lg',
+                confirmButton: 'uppercase tracking-widest font-black text-xs px-10 py-3 rounded-xl',
+            }
+        });
         @if (session('success'))
-            makeSwal().fire({
-                icon: 'success', iconColor: '#06b6d4',
-                title: 'SUCCESSFUL!',
-                text: "{{ session('success') }}",
-                confirmButtonText: 'OK'
-            });
+            customSwal.fire({ icon:'success', iconColor:'#06b6d4', title:'SUCCESSFUL!', text:"{{ session('success') }}", confirmButtonText:'OK' });
         @endif
         @if (session('error'))
-            makeSwal().fire({
-                icon: 'error', iconColor: '#ef4444',
-                title: 'ERROR!',
-                text: "{{ session('error') }}",
-                confirmButtonText: 'TRY AGAIN'
-            });
+            customSwal.fire({ icon:'error', iconColor:'#ef4444', title:'ERROR!', text:"{{ session('error') }}", confirmButtonText:'TRY AGAIN' });
         @endif
         @if ($errors->any())
-            makeSwal().fire({
-                icon: 'warning', iconColor: '#eab308',
-                title: 'VALIDATION FAILED!',
-                html: `<div style="text-align:left;font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.05em">• {!! implode('<br>• ', $errors->all()) !!}</div>`,
-                confirmButtonText: 'GOT IT'
-            });
+            customSwal.fire({ icon:'warning', iconColor:'#eab308', title:'VALIDATION FAILED!',
+                html:`<div style="text-align:left;font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.05em">• {!! implode('<br>• ', $errors->all()) !!}</div>`,
+                confirmButtonText:'GOT IT' });
         @endif
-
-        /* expose globally so child pages can also call makeSwal() */
-        window.makeSwal = makeSwal;
-    })();
     </script>
-
-    <style>
-        /* SweetAlert themed border — works in both modes */
-        .swal-popup-themed {
-            border: 1px solid var(--border-accent) !important;
-        }
-        [data-theme="light"] .swal-popup-themed {
-            border: 1px solid rgba(8,145,178,0.2) !important;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.12) !important;
-        }
-        /* SweetAlert icon circle fix for light mode */
-        [data-theme="light"] .swal2-icon { border-color: var(--accent-border) !important; }
-    </style>
 
     {{-- Core JS --}}
     <script>
@@ -972,8 +929,8 @@
         });
 
         /* ── Mobile hamburger ──────────────────────────────── */
-        const mobileBtn   = document.getElementById('mobile-btn');
-        const mobileMenu  = document.getElementById('mobile-menu');
+        const mobileBtn  = document.getElementById('mobile-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
         let menuOpen = false;
 
         function setMenu(open) {
@@ -986,16 +943,16 @@
         mobileBtn?.addEventListener('click', e => { e.stopPropagation(); setMenu(!menuOpen); });
 
         /* ── Mobile search ─────────────────────────────────── */
-        const searchBtn    = document.getElementById('mobile-search-btn');
-        const searchPanel  = document.getElementById('mobile-search-panel');
-        const searchInput  = document.getElementById('mobile-search-input');
+        const searchBtn   = document.getElementById('mobile-search-btn');
+        const searchPanel = document.getElementById('mobile-search-panel');
+        const searchInput = document.getElementById('mobile-search-input');
         let searchOpen = false;
 
         function setSearch(open) {
             searchOpen = open;
             searchPanel?.classList.toggle('search-open', open);
             if (open) {
-                setMenu(false); // close hamburger if open
+                setMenu(false);
                 setTimeout(() => searchInput?.focus(), 200);
             }
         }
@@ -1022,7 +979,6 @@
             setSearch(false);
         });
 
-        /* Stop propagation inside menus so they don't self-close */
         [mobileMenu, profileMenu, searchPanel].forEach(el =>
             el?.addEventListener('click', e => e.stopPropagation())
         );
@@ -1032,8 +988,8 @@
         const path = window.location.pathname;
         tabLinks.forEach(link => {
             link.classList.remove('tab-active');
-            if (link.getAttribute('href') === path ||
-                (path !== '/' && link.getAttribute('href') !== '/' && path.startsWith(link.getAttribute('href')))) {
+            const href = link.getAttribute('href');
+            if (href === path || (path !== '/' && href !== '/' && path.startsWith(href))) {
                 link.classList.add('tab-active');
             }
         });
@@ -1042,6 +998,29 @@
         document.addEventListener('touchstart', e => {
             if (e.touches.length > 1) e.preventDefault();
         }, { passive: false });
+
+        /* ── Scroll Navigator ──────────────────────────────── */
+        const scrollNav   = document.getElementById('scroll-navigator');
+        const scrollUpBtn = document.getElementById('scroll-up-btn');
+        const scrollDnBtn = document.getElementById('scroll-down-btn');
+
+        function updateScrollNav() {
+            const y   = window.scrollY;
+            const max = document.body.scrollHeight - window.innerHeight;
+
+            if (y > 120) {
+                scrollNav.classList.add('nav-visible');
+            } else {
+                scrollNav.classList.remove('nav-visible');
+            }
+
+            scrollUpBtn?.classList.toggle('btn-dim', y < 50);
+            scrollDnBtn?.classList.toggle('btn-dim', max > 0 && y >= max - 10);
+        }
+
+        window.addEventListener('scroll', updateScrollNav, { passive: true });
+        updateScrollNav();
+
     })();
     </script>
 
@@ -1083,22 +1062,23 @@
         requestAnimationFrame(draw);
     })();
     </script>
-
-    {{-- Preloader --}}
-    <script>
-    (function () {
-        function hide() {
-            const el = document.getElementById('preloader');
-            if (!el || el.classList.contains('loader-hidden')) return;
-            el.classList.add('loader-hidden');
-            document.body.classList.remove('loading');
-            setTimeout(() => el.remove(), 600);
-        }
-        window.addEventListener('load', hide);
-        setTimeout(hide, 4000);
-    })();
-    </script>
-
+<script>
+(function () {
+    function hide() {
+        const el = document.getElementById('preloader');
+        if (!el || el.classList.contains('loader-hidden')) return;
+        el.classList.add('loader-hidden');
+        document.body.classList.remove('loading');
+        setTimeout(() => el.remove(), 600);
+    }
+    if (document.readyState === 'complete') {
+        setTimeout(hide, 300);
+    } else {
+        window.addEventListener('load', () => setTimeout(hide, 300));
+    }
+    setTimeout(hide, 3500); // max fallback
+})();
+</script>
     @yield('custom_js')
 </body>
 </html>

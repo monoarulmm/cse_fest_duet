@@ -80,58 +80,68 @@ class EventController extends Controller
     /**
      * Update the specified event.
      */
-    public function update(Request $request, $id)
-    {
-        $event = Event::findOrFail($id);
+ public function update(Request $request, $id)
+{
+    $event = Event::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:events,slug,' . $id,
-            'reg_fee' => 'required|numeric',
-            'min_members' => 'required|integer',
-            'max_members' => 'required|integer',
-            'end_date' => 'required|date',
-            'description' => 'nullable|string',
-            'rules' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+    // ১. ভ্যালিডেশন
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|unique:events,slug,' . $id,
+        'reg_fee' => 'required|numeric|min:0',
+        'min_members' => 'required|integer|min:1',
+        'max_members' => 'required|integer|min:1',
+        'end_date' => 'required|date',
+        'description' => 'nullable|string',
+        'rules' => 'nullable|string',
+        'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+    ]);
 
-        // ইমেজ হ্যান্ডেলিং
-        $imagePaths = $event->images; // আগের ইমেজগুলো ডিফল্ট রাখা হলো
+    // ২. বর্তমান ইমেজগুলো অ্যারে আকারে নিয়ে আসা
+    $currentImages = is_array($event->images) ? $event->images : json_decode($event->images, true) ?? [];
 
-        if ($request->hasFile('images')) {
-            // ১. আগের ইমেজগুলো স্টোরেজ থেকে ডিলিট করা
-            if (!empty($event->images)) {
-                foreach ($event->images as $oldPath) {
-                    Storage::disk('public')->delete($oldPath);
+    // ৩. নির্দিষ্ট ইমেজ ডিলিট করার লজিক (ব্লেড ফাইল থেকে ডিলিট করার জন্য সিলেক্ট করলে)
+    if ($request->has('delete_images')) {
+        foreach ($request->delete_images as $imageToDelete) {
+            if (($key = array_search($imageToDelete, $currentImages)) !== false) {
+                // লোকাল বা ক্লাউড স্টোরেজ থেকে ডিলিট
+                if (Storage::disk('public')->exists($imageToDelete)) {
+                    Storage::disk('public')->delete($imageToDelete);
                 }
-            }
-
-            // ২. নতুন ইমেজগুলো সেভ করা
-            $imagePaths = [];
-            foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('event_images', 'public');
+                // মেইন অ্যারে থেকে রিমুভ
+                unset($currentImages[$key]);
             }
         }
-
-        $event->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->slug),
-            'reg_fee' => $request->reg_fee,
-            'min_members' => $request->min_members,
-            'max_members' => $request->max_members,
-            'description' => $request->description,
-            'rules' => $request->rules,
-            'result' => $request->result,
-            'seatplan' => $request->seatplan,
-            'images' => $imagePaths,
-            'needs_coach' => $request->has('needs_coach'),
-            'end_date' => $request->end_date,
-            'is_active' => $request->has('is_active'),
-        ]);
-
-        return redirect()->route('admin.events.index')->with('success', 'Event updated successfully!');
+        // অ্যারের ইনডেক্স রিসেট করা
+        $currentImages = array_values($currentImages);
     }
+
+    // ৪. নতুন কোনো ইমেজ আপলোড করা হলে তা আগের ইমেজের সাথে যুক্ত (Append) হবে
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $currentImages[] = $image->store('event_images', 'public');
+        }
+    }
+
+    // ৫. ডাটাবেস আপডেট
+    $event->update([
+        'name' => $request->name,
+        'slug' => Str::slug($request->slug),
+        'reg_fee' => floatval($request->reg_fee), // দশমিক বা ফ্লোট ভ্যালু নিশ্চিত করা হলো
+        'min_members' => $request->min_members,
+        'max_members' => $request->max_members,
+        'description' => $request->description,
+        'rules' => $request->rules,
+        'result' => $request->result,
+        'seatplan' => $request->seatplan,
+        'images' => $currentImages, // ফাইনাল ইমেজ অ্যারে
+        'needs_coach' => $request->has('needs_coach'), // টিক দিলে true, না দিলে false
+        'end_date' => $request->end_date,
+        'is_active' => $request->has('is_active'), // টিক দিলে true, না দিলে false
+    ]);
+
+    return redirect()->route('admin.events.index')->with('success', 'Event updated successfully!');
+}
 
     /**
      * Remove the specified event.

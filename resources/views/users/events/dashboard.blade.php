@@ -42,6 +42,7 @@
 }
 .ev-card:hover .stat-icon-wrap { transform: scale(1.12); }
 
+/* Theme Color Utilities */
 .si-cyan   { background: rgba(34,211,238,.12); color: #22d3ee; }
 .si-green  { background: rgba(34,197,94,.12);  color: #22c55e; }
 .si-amber  { background: rgba(245,158,11,.12); color: #f59e0b; }
@@ -54,7 +55,6 @@
 .sv-blue   { color: #3b82f6; }
 .sv-purple { color: #a855f7; }
 
-/* stat card top glow line */
 .stat-line-cyan   { background: linear-gradient(90deg,#22d3ee,transparent); }
 .stat-line-green  { background: linear-gradient(90deg,#22c55e,transparent); }
 .stat-line-amber  { background: linear-gradient(90deg,#f59e0b,transparent); }
@@ -116,12 +116,7 @@
 }
 .back-btn:hover { border-color: var(--accent); color: var(--text-primary); background: var(--accent-dim); }
 
-/* ═══════════════════════════════════════════════════════
-   HEADER DIVIDER
-═══════════════════════════════════════════════════════ */
-.header-divider {
-    border-bottom: 1px solid var(--border-soft);
-}
+.header-divider { border-bottom: 1px solid var(--border-soft); }
 
 /* ═══════════════════════════════════════════════════════
    JUDGES / SWIPER
@@ -170,7 +165,6 @@
 }
 [data-theme="light"] .stats-section { background: #f8faff; }
 
-/* Countdown box */
 .cd-unit {
     background: var(--bg-elevated);
     border: 1px solid var(--accent-border);
@@ -185,7 +179,6 @@
 }
 .cd-unit.tick { box-shadow: 0 0 12px rgba(34,211,238,.25); }
 
-/* Circle stat */
 .circle-ring {
     background: conic-gradient(var(--accent) 0% 68%, var(--border-soft) 68% 100%);
     border-radius: 50%;
@@ -197,7 +190,6 @@
 }
 [data-theme="light"] .circle-inner { background: #f0f6ff; }
 
-/* Deadline card */
 .deadline-pill {
     display: inline-flex; align-items: center; gap: 10px;
     padding: 16px 28px; border-radius: 1.5rem;
@@ -205,7 +197,6 @@
     border: 1px solid rgba(239,68,68,.2);
 }
 
-/* Expert badge */
 .expert-badge {
     background: var(--accent-dim);
     border: 1px solid var(--accent-border);
@@ -220,13 +211,10 @@
 @section('content')
 <div id="page-root">
 
-    {{-- ══════════════════════════════════════════
-         MAIN CONTAINER
-    ══════════════════════════════════════════ --}}
     <div class="container mx-auto px-4 py-10">
 
-        {{-- ── Page Header ──────────────────────────────────── --}}
-        <div class="header-divider flex flex-col md:flex-row justify-between items-start md:items-center gap-5 pb-8 mb-12">
+        {{-- ── ১. Page Header ──────────────────────────────────── --}}
+        <div class="header-divider flex flex-col md:flex-row justify-between items-start md:items-center gap-5 pb-8 mb-6">
             <div>
                 <p class="text-[9px] font-black uppercase tracking-[.35em] mb-2"
                    style="color:var(--accent); opacity:.7">Event Overview</p>
@@ -241,17 +229,100 @@
             </button>
         </div>
 
+        {{-- ── লজিক প্রসেসিং পার্ট (Ict-র জন্য ৩০০ কন্ডিশন ট্র্যাক) ── --}}
+        @php
+            $verifiedCount = $counts['verified'] ?? 0;
+            $slug = $event->slug;
+            
+            // কন্ডিশন: শুধুমাত্র Ict olympiad-এর জন্য ৩০০ বা তার বেশি ভেরিফাইড হলে স্লট ফুল ধরবে
+            $isRegistrationFilled = ($slug === 'ict' && $verifiedCount >= 300);
+            
+            // মেইন টাইমলাইন ওভার হওয়া অথবা স্লট ফুল হওয়া—উভয় ক্ষেত্রেই ডেডলাইন ট্রিপড হবে
+            $isDeadlineOver = ($event->end_date && now()->gt($event->end_date)) || $isRegistrationFilled;
+        @endphp
+
+        {{-- ── ২. STATS BAR (সবার উপরে স্থানান্তরিত উইজেট) ────────────────── --}}
+        <div class="stats-section py-12 relative overflow-hidden rounded-[2.5rem] mb-12">
+            <div class="absolute top-0 left-1/4 w-96 h-96 rounded-full pointer-events-none"
+                 style="background:var(--accent-dim); filter:blur(100px)" aria-hidden="true"></div>
+            <div class="absolute bottom-0 right-1/4 w-72 h-72 rounded-full pointer-events-none"
+                 style="background:rgba(168,85,247,.08); filter:blur(80px)" aria-hidden="true"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
+
+                    {{-- Countdown (টাইমার অংশ) --}}
+                    <div class="text-center md:text-left">
+                        <p class="text-[9px] font-black tracking-[.3em] uppercase mb-5"
+                           style="color:var(--text-muted)">Time Remaining to Register</p>
+                        <div id="countdown-wrapper" class="flex gap-3 justify-center md:justify-start">
+                            @if (!$isRegistrationFilled)
+                                @foreach (['days','hours','minutes','seconds'] as $unit)
+                                    <div class="flex flex-col items-center">
+                                        <div id="{{ $unit }}" class="cd-unit">00</div>
+                                        <span class="text-[8px] uppercase mt-2 font-black tracking-widest"
+                                              style="color:var(--text-muted)">{{ $unit }}</span>
+                                    </div>
+                                @endforeach
+                            @else
+                                {{-- ডেডলাইন শেষ না হয়ে শুধু iupc ৩০০ স্লট ফুল হলে হলুদ কন্টেন্ট --}}
+                                @if (!($event->end_date && now()->gt($event->end_date)))
+                                    <p class="text-sm font-black uppercase tracking-widest" style="color:#f59e0b">
+                                        <i class="fa-solid fa-hourglass-half mr-2"></i>Slots Full • Coming Soon
+                                    </p>
+                                @else
+                                    <p class="text-sm font-black uppercase tracking-widest" style="color:#f87171">
+                                        <i class="fa-solid fa-lock mr-2"></i>Registration Closed
+                                    </p>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Circle Stat (মোট সংখ্যা) --}}
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-44 h-44 flex items-center justify-center">
+                            <div class="circle-ring absolute inset-0 rounded-full" aria-hidden="true"></div>
+                            <div class="circle-inner absolute inset-[4px] rounded-full flex flex-col items-center justify-center">
+                                <span class="text-4xl font-black italic tabular-nums"
+                                      style="color:var(--text-primary)">
+                                    {{ number_format($totalRegistered) }}
+                                </span>
+                                <span class="text-[9px] uppercase font-black tracking-widest mt-1"
+                                      style="color:var(--text-muted)">Total Registered</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Deadline (শেষ সময়) --}}
+                    <div class="text-center md:text-right">
+                        <p class="text-[9px] tracking-[.3em] uppercase mb-5 font-black"
+                           style="color:var(--text-muted)">Registration Deadline</p>
+                        <div class="deadline-pill inline-flex justify-center md:justify-end">
+                            <i class="fa-solid fa-calendar-check" style="color:#f87171"></i>
+                            <span class="text-xl md:text-2xl font-black italic uppercase tracking-tighter"
+                                  style="color:var(--text-primary)">
+                                {{ \Carbon\Carbon::parse($event->end_date)->format('M d, Y') }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div> {{-- /stats-section --}}
+
+
         <div class="max-w-7xl mx-auto">
 
-            {{-- ── Stat Cards ───────────────────────────────── --}}
+            {{-- ── ৩. Stat Cards Grid ───────────────────────────────── --}}
             @php
                 $stats = [
-                    ['label'=>'Total Registered','value'=>$counts['pre-registered']??0,'color'=>'cyan',  'icon'=>'fa-users',        'route'=>route('event.pre_registered',[$event->slug,'status'=>'pre-registered'])],
-                    ['label'=>'Verified / Paid', 'value'=>$counts['verified']??0,      'color'=>'green', 'icon'=>'fa-circle-check', 'route'=>route('event.final_registered',[$event->slug,'status'=>'verified'])],
+                    ['label'=>'Total Pre Registered','value'=>$counts['pre-registered']??0,'color'=>'cyan',   'icon'=>'fa-users',        'route'=>route('event.pre_registered',[$event->slug,'status'=>'pre-registered'])],
+                    ['label'=>'Verified / Paid', 'value'=>$verifiedCount,      'color'=>'green', 'icon'=>'fa-circle-check', 'route'=>route('event.final_registered',[$event->slug,'status'=>'verified'])],
                     ['label'=>'Institutions',    'value'=>$counts['institutes']??0,     'color'=>'amber', 'icon'=>'fa-university',   'route'=>route('event.institutes',$event->slug)],
                 ];
-                if ($event->slug==='iupc' || in_array($event->slug,['ai-hackathon','project-showcase'])) {
-                    $isIupc = $event->slug==='iupc';
+                if ($slug==='iupc' || in_array($slug,['ai-hackathon','project-showcase'])) {
+                    $isIupc = $slug==='iupc';
                     $stats[] = [
                         'label' => $isIupc?'Available Slots':'Final Selected',
                         'value' => $isIupc?($totalSlots??0):($counts['selected']??0),
@@ -260,8 +331,6 @@
                         'route' => $isIupc?route('event.slot_list',$event->slug):route('event.select_registered',$event->slug),
                     ];
                 }
-                $slug = $event->slug;
-                $isDeadlineOver = $event->end_date && now()->gt($event->end_date);
             @endphp
 
             <div class="flex flex-wrap justify-center gap-5 mb-16">
@@ -269,9 +338,7 @@
                     <a href="{{ $s['route'] }}"
                        class="ev-card rounded-[1.75rem] p-7 text-center relative overflow-hidden"
                        style="min-width:170px">
-                        {{-- Glow top line --}}
                         <div class="stat-line-{{ $s['color'] }} absolute top-0 left-0 right-0 h-[3px] rounded-t-[1.75rem]"></div>
-
                         <div class="stat-icon-wrap si-{{ $s['color'] }} mx-auto">
                             <i class="fa-solid {{ $s['icon'] }} text-xl"></i>
                         </div>
@@ -284,26 +351,33 @@
                 @endforeach
             </div>
 
-            {{-- ── Action Buttons ───────────────────────────── --}}
+            {{-- ── ৪. Action Buttons (রেজিস্ট্রেশন বাটনসহ) ────────────────── --}}
             @php
                 $actions = [
-                    ['label'=>'Rulebook', 'icon'=>'fa-book-open',           'url'=>$event->rules,                        'cls'=>'act-purple'],
-                    ['label'=>'Result',   'icon'=>'fa-square-poll-vertical', 'url'=>$event->result,                       'cls'=>'act-blue'],
-                    ['label'=>'Seat Plan','icon'=>'fa-map-location-dot',     'url'=>$event->seatplan,                     'cls'=>'act-emerald'],
+                    ['label'=>'Rulebook', 'icon'=>'fa-book-open',           'url'=>$event->rules,                               'cls'=>'act-purple'],
+                    ['label'=>'Result',   'icon'=>'fa-square-poll-vertical', 'url'=>$event->result,                              'cls'=>'act-blue'],
+                    ['label'=>'Seat Plan','icon'=>'fa-map-location-dot',     'url'=>$event->seatplan,                            'cls'=>'act-emerald'],
                     ['label'=>'Schedule', 'icon'=>'fa-calendar-days',        'url'=>route('event.schedule',$event->slug), 'cls'=>'act-orange'],
                 ];
             @endphp
 
             <div class="flex flex-wrap justify-center gap-3 mb-20">
-
                 @if (!$isDeadlineOver)
                     <a href="{{ route('event.register',$slug) }}" class="act-btn act-primary">
                         <i class="fa-solid fa-bolt"></i> Register Now
                     </a>
                 @else
-                    <button disabled class="act-btn act-disabled">
-                        <i class="fa-solid fa-lock"></i> Registration Closed
-                    </button>
+                    {{-- ডেডলাইন পার হয়নি কিন্তু শুধু IUPC-তে ৩০০ স্লট পূরণ হওয়ার কারণে হোল্ড --}}
+                    @if ($isRegistrationFilled && !($event->end_date && now()->gt($event->end_date)))
+                        <button disabled class="act-btn" style="background: rgba(245,158,11,.08); border-color: rgba(245,158,11,.3); color: #f59e0b; opacity: .85; cursor: not-allowed;">
+                            <i class="fa-solid fa-hourglass-half"></i> Registration Coming Soon
+                        </button>
+                    @else
+                        {{-- সাধারণ টাইম ডেডলাইন ওভার হলে পার্মানেন্ট ক্লোজড --}}
+                        <button disabled class="act-btn act-disabled">
+                            <i class="fa-solid fa-lock"></i> Registration Closed
+                        </button>
+                    @endif
                 @endif
 
                 @foreach ($actions as $a)
@@ -314,14 +388,14 @@
                     </a>
                 @endforeach
 
-                @if ($slug === 'iupc')
+                @if ($slug === 'iupc' && !$isRegistrationFilled)
                     <a href="{{ route('event.pre_registered',$slug) }}" class="act-btn act-cyan">
                         <i class="fa-solid fa-pen-to-square"></i> Final Register Now
                     </a>
                 @endif
             </div>
 
-            {{-- ── Judges Panel ─────────────────────────────── --}}
+            {{-- ── ৫. Judges Panel ─────────────────────────────── --}}
             @if (!empty($event->images) && is_array($event->images))
                 <section class="mt-24">
                     <div class="flex flex-col items-center mb-12">
@@ -344,7 +418,7 @@
                         @endfor
                     </div>
 
-                    {{-- Real swiper --}}
+                    {{-- Real Swiper --}}
                     <div id="judges-swiper-wrap" class="relative px-14 hidden">
                         <div class="swiper judgesSwiper">
                             <div class="swiper-wrapper">
@@ -393,86 +467,27 @@
 
         </div>{{-- /max-w-7xl --}}
     </div>{{-- /container --}}
-
-
-    {{-- ══════════════════════════════════════════
-         STATS BAR
-    ══════════════════════════════════════════ --}}
-    <section class="stats-section py-20 relative overflow-hidden">
-        {{-- ambient glow --}}
-        <div class="absolute top-0 left-1/4 w-96 h-96 rounded-full pointer-events-none"
-             style="background:var(--accent-dim); filter:blur(100px)" aria-hidden="true"></div>
-        <div class="absolute bottom-0 right-1/4 w-72 h-72 rounded-full pointer-events-none"
-             style="background:rgba(168,85,247,.08); filter:blur(80px)" aria-hidden="true"></div>
-
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
-
-                {{-- Countdown ──────────────────── --}}
-                <div class="text-center md:text-left">
-                    <p class="text-[9px] font-black tracking-[.3em] uppercase mb-5"
-                       style="color:var(--text-muted)">Time Remaining to Register</p>
-                    <div id="countdown-wrapper" class="flex gap-3 justify-center md:justify-start">
-                        @foreach (['days','hours','minutes','seconds'] as $unit)
-                            <div class="flex flex-col items-center">
-                                <div id="{{ $unit }}" class="cd-unit">00</div>
-                                <span class="text-[8px] uppercase mt-2 font-black tracking-widest"
-                                      style="color:var(--text-muted)">{{ $unit }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                {{-- Circle Stat ─────────────────── --}}
-                <div class="flex flex-col items-center">
-                    <div class="relative w-44 h-44 flex items-center justify-center">
-                        <div class="circle-ring absolute inset-0 rounded-full" aria-hidden="true"></div>
-                        <div class="circle-inner absolute inset-[4px] rounded-full flex flex-col items-center justify-center">
-                            <span class="text-4xl font-black italic tabular-nums"
-                                  style="color:var(--text-primary)">
-                                {{ number_format($totalRegistered) }}
-                            </span>
-                            <span class="text-[9px] uppercase font-black tracking-widest mt-1"
-                                  style="color:var(--text-muted)">Registered</span>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Deadline ────────────────────── --}}
-                <div class="text-center md:text-right">
-                    <p class="text-[9px] tracking-[.3em] uppercase mb-5 font-black"
-                       style="color:var(--text-muted)">Registration Deadline</p>
-                    <div class="deadline-pill justify-center md:justify-end">
-                        <i class="fa-solid fa-calendar-check" style="color:#f87171"></i>
-                        <span class="text-xl md:text-2xl font-black italic uppercase tracking-tighter"
-                              style="color:var(--text-primary)">
-                            {{ \Carbon\Carbon::parse($event->end_date)->format('M d, Y') }}
-                        </span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
 </div>{{-- /#page-root --}}
 
 
 {{-- ══════════════════════════════════════════
-     SCRIPTS
+    SCRIPTS PART
 ══════════════════════════════════════════ --}}
 <script>
     document.getElementById('page-root').classList.add('ready');
 
-    /* Countdown */
+    /* Countdown Counter Script */
     (function () {
+        const isFilled = {{ $isRegistrationFilled ? 'true' : 'false' }};
+        if (isFilled) return; // কন্ডিশনাল স্টপ (iupc ৩শ ফিলআপ হলে টাইমার স্টপ)
+
         const target = new Date("{{ $event->end_date }}").getTime();
         const pad = n => String(n).padStart(2, '0');
         const els = {
-            days:    document.getElementById('days'),
-            hours:   document.getElementById('hours'),
-            minutes: document.getElementById('minutes'),
-            seconds: document.getElementById('seconds'),
+            days:     document.getElementById('days'),
+            hours:    document.getElementById('hours'),
+            minutes:  document.getElementById('minutes'),
+            seconds:  document.getElementById('seconds'),
         };
 
         function tick() {
@@ -484,14 +499,14 @@
                      </p>`;
                 return;
             }
-            els.days.textContent    = pad(Math.floor(diff / 86400000));
-            els.hours.textContent   = pad(Math.floor((diff % 86400000) / 3600000));
-            els.minutes.textContent = pad(Math.floor((diff % 3600000)  / 60000));
-            els.seconds.textContent = pad(Math.floor((diff % 60000)    / 1000));
-
-            /* subtle pulse on seconds */
-            els.seconds.classList.add('tick');
-            setTimeout(() => els.seconds.classList.remove('tick'), 300);
+            if(els.days) els.days.textContent       = pad(Math.floor(diff / 86400000));
+            if(els.hours) els.hours.textContent     = pad(Math.floor((diff % 86400000) / 3600000));
+            if(els.minutes) els.minutes.textContent = pad(Math.floor((diff % 3600000)  / 60000));
+            if(els.seconds) {
+                els.seconds.textContent = pad(Math.floor((diff % 60000)    / 1000));
+                els.seconds.classList.add('tick');
+                setTimeout(() => els.seconds.classList.remove('tick'), 300);
+            }
         }
         tick();
         setInterval(tick, 1000);

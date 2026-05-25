@@ -65,7 +65,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
         <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
     @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('DUET CSE CARNIVAL') }}">
     @endif
 </head>
 

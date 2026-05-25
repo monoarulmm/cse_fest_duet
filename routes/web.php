@@ -33,14 +33,13 @@ Route::post('/check-result', [HomeController::class, 'checkResult'])->name('chec
 
 
 
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PaymentTestController;
 
-// Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-// Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 Route::get('/verify', function () {
     return view('auth.verify.page');
 })->name('verify.page');
@@ -84,8 +83,7 @@ use App\Http\Controllers\RegistrationController;
 // IUPC Public Routes
 // Route::get('/iupc/register', [IupcController::class, 'create'])->name('iupc.register');
 // Route::post('/iupc/register', [IupcController::class, 'store'])->name('iupc.store');
-Route::get('/register/{slug}', [RegistrationController::class, 'create'])->name('event.register');
-Route::post('/register/store', [RegistrationController::class, 'store'])->name('registration.store');
+
 // Route::any('/payment/invoice', [RegistrationController::class, 'callback'])->name('payment.callback');
 
 
@@ -98,9 +96,6 @@ Route::post('/register/store', [RegistrationController::class, 'store'])->name('
 
 
 
-// রেজিস্ট্রেশন ফর্ম দেখানো এবং সাবমিট করা
-Route::get('/event/{slug}/register', [RegistrationController::class, 'create'])->name('registration.create');
-Route::post('/registration/store', [RegistrationController::class, 'store'])->name('registration.store');
 
 
 
@@ -108,14 +103,9 @@ Route::post('/registration/store', [RegistrationController::class, 'store'])->na
 // ════════════════════════════════════════════════════════════════════════════
 //  REGISTRATION ROUTES
 // ════════════════════════════════════════════════════════════════════════════
+    Route::get('/register/{slug}', [RegistrationController::class, 'create'])->name('event.register');
+    Route::post('/register/store', [RegistrationController::class, 'store'])->name('registration.store');
 
-// Registration form দেখানো
-Route::get('/event/{slug}/register', [RegistrationController::class, 'create'])
-    ->name('registration.create');
-
-// Registration form submit
-Route::post('/registration/store', [RegistrationController::class, 'store'])
-    ->name('registration.store');
 
 // ════════════════════════════════════════════════════════════════════════════
 //  PAYMENT ROUTES
@@ -203,11 +193,7 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
 
     Route::delete('/admin/events/{id}/delete', [EventController::class, 'destroy'])->name('admin.events.destroy');
-    // Route::get('/event/{slug}', [EventController::class, 'showDashboard'])->name('event.dashboard');
-    // Route::get('/event/{slug}/pre-registered', [EventController::class, 'preRegistered'])->name('event.pre_registered');
-    // Route::get('/event/{slug}/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
-    // আরও রাউট যেমন: rulebook, seat-plan ইত্যাদি...
-
+   
 
 
 
@@ -218,28 +204,11 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
 
 
 
-// Route::prefix('event/{slug}')->group(function () {
-//     // মেইন পোর্টাল/ড্যাশবোর্ড
-//     Route::get('/', [EventController::class, 'showDashboard'])->name('event.dashboard');
-
-//     // মেম্বার লিস্ট
-//     Route::get('/pre-registered', [EventController::class, 'preRegistered'])->name('event.pre_registered');
-//     Route::get('/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
-//     Route::get('/selected-teams', [EventController::class, 'selectedTeams'])->name('event.select_registered');    // Route::get('/final-registered', [EventController::class, 'finalRegistered'])->name('event.final_registered');
-
-//     // সিলেকশন এবং অন্যান্য
-//     Route::get('/selected-teams', [EventController::class, 'selectedTeams'])->name('event.selected_teams');
-
-//     // অ্যাডমিট কার্ড (ICT Olympiad এর জন্য)
-//     Route::get('/admit-download/{id}', [EventController::class, 'downloadAdmit'])->name('event.admit_download');
-// });
 
 Route::get('/event/{slug}/admit-card/{id}', [EventController::class, 'downloadAdmitCard'])
     ->name('event.admit_card');
 Route::prefix('iupc')->name('iupc.')->group(function () {
     // কুপন ভেরিফিকেশন পেজ দেখার জন্য
-
-
     // কুপন ভেরিফাই করার প্রসেস (POST মেথড)
     Route::post('/verify-coupon', [PaymentController::class, 'iupc_updateAndPay'])->name('verify.process');
 });

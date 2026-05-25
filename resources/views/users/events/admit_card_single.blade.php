@@ -111,7 +111,7 @@
                         <img src="{{ asset('logo.png') }}" alt="{{ $setting->site_name ?? 'Logo' }}"
                             class="w-8 h-8 md:w-10 md:h-10 object-contain">
                     @else
-                        <img src="{{ asset('duet-logo.png') }}" alt="DUET Logo"
+                        <img src="{{ asset('images/duet-logo.png') }}" alt="DUET Logo"
                             class="w-8 h-8 md:w-10 md:h-10 object-contain">
                     @endif
                     <div>

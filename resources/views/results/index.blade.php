@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result & Seat Plan | DUET CSE CARNIVAL 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     @php
         $setting = \App\Models\Setting::first();
@@ -21,6 +19,7 @@
     @else
         <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
     @endif
+
     <style>
         *,
         *::before,
@@ -44,7 +43,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
+            justify-content: center;
             width: 100%;
         }
 
@@ -56,7 +55,7 @@
             border: 2px solid #0e1829;
             border-radius: 14px;
             overflow: hidden;
-            box-shadow: 7px 7px 0 #0e1829;
+            box-shadow: 6px 6px 0 #0e1829;
         }
 
         /* Header */
@@ -97,7 +96,7 @@
             color: #94a3b8;
             margin-top: 4px;
             line-height: 1.4;
-            max-width: 220px;
+            max-width: 240px;
         }
 
         .header-badge {
@@ -229,13 +228,12 @@
 
         .status-val {
             color: #d97706;
-            /* Golden/Amber color for ranks */
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        /* Seat section updated for single column data */
+        /* Seat section */
         .seat-section {
             border: 2px solid #0e1829;
             border-radius: 10px;
@@ -264,7 +262,7 @@
 
         .seat-no-badge {
             font-family: 'Space Mono', monospace;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #0e1829;
             background: #dbeafe;
@@ -306,7 +304,7 @@
         .card-footer {
             background: #f8fafc;
             border-top: 1.5px solid #e2e8f0;
-            padding: 13px 24px;
+            padding: 14px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -315,69 +313,21 @@
         .dev-tag {
             font-size: 8px;
             color: #94a3b8;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             font-weight: 500;
         }
 
-        .print-btn {
-            background: #0e1829;
-            color: #38bdf8;
-            border: none;
-            border-radius: 7px;
-            padding: 9px 18px;
+        .secure-badge {
+            font-size: 9px;
+            color: #10b981;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 7px;
-            transition: background 0.15s;
-        }
-
-        .print-btn:hover {
-            background: #1e3a5f;
-        }
-
-        /* ─── PRINT STYLES ─── */
-        @media print {
-            body {
-                background: #fff !important;
-                padding: 0;
-                display: block;
-            }
-
-            .page-wrap {
-                align-items: flex-start;
-            }
-
-            .pass-card {
-                max-width: 100%;
-                box-shadow: none !important;
-                border: 2px solid #000 !important;
-                border-radius: 10px;
-                page-break-inside: avoid;
-            }
-
-            .card-footer {
-                display: none !important;
-            }
-
-            .notice {
-                display: flex !important;
-            }
-
-            .stripe,
-            .card-header,
-            .seat-header,
-            .avatar,
-            .seat-no-badge {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
+            gap: 5px;
         }
     </style>
 </head>
@@ -389,7 +339,7 @@
             <div class="card-header">
                 <div>
                     <span class="fest-label">Official Digital Pass &middot; CARNIVAL Portal</span>
-                    <div class="fest-title">DUET <span>CSE</span> CARNIVAL</div>
+                    <div class="fest-title">DUET <span>CSE</span> CARNIVAL </div>
                     <div class="uni-name">Dhaka University of Engineering &amp; Technology</div>
                 </div>
                 <div class="header-badge">
@@ -403,7 +353,6 @@
             <div class="card-body">
 
                 <div class="participant-block">
-                    {{-- নামের প্রথম ২ টি অক্ষর ডাইনামিকালি জেনারেট করার জন্য লজিক --}}
                     @php
                         $name = $result->team_name ?? 'Team Alpha';
                         $initials = strtoupper(substr($name, 0, 2));
@@ -418,11 +367,11 @@
 
                 <div class="info-grid">
                     <div class="info-cell">
-                        <div class="cell-label">Target Event</div>
+                        <div class="cell-label">Event</div>
                         <div class="cell-value">{{ $result->event_name ?? 'Programming Contest' }}</div>
                     </div>
                     <div class="info-cell">
-                        <div class="cell-label">Standing / Ranking</div>
+                        <div class="cell-label">Result Status</div>
                         <div class="cell-value">
                             <span class="status-val">
                                 <i class="fa-solid fa-trophy"></i>
@@ -430,14 +379,14 @@
                             </span>
                         </div>
                     </div>
-                    <div class="info-cell">
+                    <!-- <div class="info-cell">
                         <div class="cell-label">Date</div>
                         <div class="cell-value">26 June 2026</div>
                     </div>
                     <div class="info-cell">
                         <div class="cell-label">Report Time</div>
                         <div class="cell-value">08:30 AM</div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="seat-section">
@@ -456,18 +405,19 @@
                 <div class="notice">
                     <i class="fa-solid fa-circle-exclamation notice-icon"></i>
                     <p class="notice-text">
-                        This document is required at the entry point. Participant must carry their University ID card
-                        along with this pass. Unauthorized entry is strictly prohibited.
+                        This is a verified live information node. Participants can monitor their results and allocated venue directly through this portal segment.
                     </p>
                 </div>
 
             </div>
+
             <div class="card-footer">
-                <span class="dev-tag">Developed by DUET CSE Community</span>
-                <button class="print-btn" onclick="window.print()">
-                    <i class="fa-solid fa-print"></i>
-                    Print / Save PDF
-                </button>
+                <span class="dev-tag">DUET CSE Community</span>
+                
+                <div class="secure-badge">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Verified Portal Data
+                </div>
             </div>
 
         </div>

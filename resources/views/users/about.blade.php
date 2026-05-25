@@ -1,289 +1,200 @@
 @extends('layouts.app')
 
+@section('custom_css')
+<style>
+    .about-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-accent);
+        border-radius: 1rem;
+    }
+    .segment-btn {
+        border: 1px solid var(--border-mid);
+        background: var(--bg-elevated);
+        color: var(--text-secondary);
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .segment-btn:hover {
+        border-color: var(--accent-border);
+        color: var(--accent);
+        background: var(--accent-dim);
+    }
+    .segment-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #020617;
+        box-shadow: 0 0 25px rgba(34,211,238,0.35);
+        transform: scale(1.05);
+        z-index: 10;
+    }
+    .segment-btn.active img { filter: brightness(0); }
+    .segment-content {
+        background: var(--bg-surface);
+        border: 1px solid var(--accent-border);
+        border-radius: 1rem;
+    }
+    .badge-tag {
+        background: var(--accent-dim);
+        border: 1px solid var(--accent-border);
+        color: var(--accent);
+    }
+    .quote-block {
+        border-left: 2px solid var(--accent);
+        background: var(--accent-dim);
+        color: var(--text-primary);
+    }
+    .divider-line { background: var(--border-mid); }
+    .hint-row { color: var(--text-muted); }
+    .segment-list-item { color: var(--text-primary); }
+    .segment-list-item span { color: var(--accent); }
+</style>
+@endsection
+
 @section('content')
     @php
         $setting = \App\Models\Setting::first();
     @endphp
     <div class="container mx-auto px-6 py-16 space-y-24">
 
-        <!-- DUET CSE CARNIVAL 2026 - ABOUT & SEGMENTS SECTION -->
         <div class="space-y-20">
 
-            <!-- SECTION: ABOUT THE EVENT -->
+            {{-- ABOUT SECTION --}}
             <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
                 <div class="order-2 lg:order-1 space-y-6">
                     <div class="flex items-center gap-4">
-                        <span
-                            class="tech-badge px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono uppercase tracking-widest">
+                        <span class="badge-tag px-3 py-1 text-xs font-mono uppercase tracking-widest rounded-full">
                             Initialization
                         </span>
-                        <div class="h-[1px] flex-grow bg-slate-800"></div>
+                        <div class="h-px flex-grow divider-line"></div>
                     </div>
 
-                    <h2 class="heading-font text-4xl md:text-5xl font-black uppercase ">
-                        About the <span
-                            class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Carnival</span>
+                    <h2 class="heading-font text-4xl md:text-5xl font-black uppercase" style="color:var(--text-primary)">
+                        About the <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Carnival</span>
                     </h2>
 
-                    <div class="content-glass p-8 space-y-6 border border-slate-800 rounded-xl">
-                        <p class=" leading-relaxed italic border-l-2 border-cyan-500 pl-4 bg-cyan-500/5 py-2">
-                            "A national-level  technology  CARNIVAl bringing together students, educators, and innovators
-                            on a
-                            dynamic platform of creativity and collaboration."
+                    <div class="about-card p-8 space-y-6">
+                        <p class="quote-block leading-relaxed italic pl-4 py-2 text-sm">
+                            "A national-level technology CARNIVAL bringing together students, educators, and innovators
+                            on a dynamic platform of creativity and collaboration."
                         </p>
 
-                        <p class="text-slate-400 leading-relaxed text-sm">
-                            DUET CSE Carnival 2026 is organized by the <span class="text-cyan-400 font-bold">Department of
-                                CSE, DUET</span>, in association with <span class="text-cyan-400 font-bold">DUET Computer
-                                Society</span> and in collaboration with <span class="text-cyan-400 font-bold">WhiteBoard
+                        <p class="text-sm leading-relaxed" style="color:var(--text-secondary)">
+                            DUET CSE Carnival 2026 is organized by the <span class="font-bold" style="color:var(--accent)">Department of
+                                CSE, DUET</span>, in association with <span class="font-bold" style="color:var(--accent)">DUET Computer
+                                Society</span> and in collaboration with <span class="font-bold" style="color:var(--accent)">WhiteBoard
                                 Initiatives</span>. The event is designed to promote technical excellence and innovation
                             through prestigious competitions.
                         </p>
-                        <p>Competition Segments</p>
 
-                        <!-- Segments Quick List -->
-                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[12px] font-mono ">
-                            <li class="flex items-center gap-2 group">
-                                <span class="text-cyan-500 group-hover:translate-x-1 transition-transform">▶</span> IUPC
+                        <p class="text-xs font-bold uppercase tracking-widest" style="color:var(--text-muted)">Competition Segments</p>
+
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[12px] font-mono">
+                            @foreach(['IUPC', 'AI Hackathon', 'ICT Olympiad', 'Project Showcasing'] as $seg)
+                            <li class="flex items-center gap-2 group segment-list-item">
+                                <span class="group-hover:translate-x-1 transition-transform" style="color:var(--accent)">▶</span>
+                                {{ $seg }}
                             </li>
-                            <li class="flex items-center gap-2 group">
-                                <span class="text-cyan-500 group-hover:translate-x-1 transition-transform">▶</span> AI
-                                Hackathon
-                            </li>
-                            <li class="flex items-center gap-2 group">
-                                <span class="text-cyan-500 group-hover:translate-x-1 transition-transform">▶</span> ICT
-                                Olympiad
-                            </li>
-                            <li class="flex items-center gap-2 group">
-                                <span class="text-cyan-500 group-hover:translate-x-1 transition-transform">▶</span> Project
-                                Showcasing
-                            </li>
+                            @endforeach
                         </ul>
                     </div>
-
-                    <!-- Key Info Grid -->
-
                 </div>
 
-                <!-- Visual Poster Block -->
+                {{-- Poster --}}
                 <div class="order-1 lg:order-2 relative group">
-                    <div
-                        class="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur opacity-10 group-hover:opacity-25 transition duration-1000">
-                    </div>
-                    <div class="relative  border border-slate-800 p-2 rounded-lg overflow-hidden">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur opacity-10 group-hover:opacity-25 transition duration-1000"></div>
+                    <div class="relative border rounded-lg overflow-hidden p-2" style="border-color:var(--border-accent); background:var(--bg-surface)">
                         <img src="{{ asset('storage/' . $setting->main_banner3) }}" alt="DUET CSE Carnival 2026"
                             class="w-full rounded-md grayscale group-hover:grayscale-0 transition duration-700 transform group-hover:scale-105 shadow-2xl"
                             onerror="this.src='https://via.placeholder.com/800x1000/0f172a/22d3ee?text=CSE+CARNIVAL+2026'">
-
-                        
-
-                        
                     </div>
                 </div>
             </section>
 
-            <!-- SECTION: CARNIVAL SEGMENTS (Interactive Tabs) -->
+            {{-- SEGMENTS SECTION --}}
             <section x-data="{ activeSegment: 'iupc' }" class="py-12 space-y-8">
 
                 <div class="text-center space-y-2">
-                    <h3 class="text-white font-mono text-xs uppercase tracking-[0.3em] text-cyan-500/70">Explore Segments
-                    </h3>
-                    <div class="h-px w-20 bg-cyan-500/30 mx-auto"></div>
+                    <h3 class="font-mono text-xs uppercase tracking-[0.3em]" style="color:var(--accent); opacity:0.7">Explore Segments</h3>
+                    <div class="h-px w-20 mx-auto" style="background:var(--accent-border)"></div>
                 </div>
 
-                                      <div class="flex items-center gap-2 mb-4 px-1 text-slate-500 dark:text-slate-400">
-    <i class="fa-solid fa-mouse-pointer text-[10px] animate-pulse text-cyan-500"></i>
-    <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Select a segment to view details</span>
-</div>
+                <div class="flex items-center gap-2 mb-4 px-1 hint-row">
+                    <i class="fa-solid fa-mouse-pointer text-[10px] animate-pulse" style="color:var(--accent)"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Select a segment to view details</span>
+                </div>
 
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    
-    {{-- 1. IUPC Button --}}
-    <button @click="activeSegment = 'iupc'"
-        :class="activeSegment === 'iupc' ?
-            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
-            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
-        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
-        <span class="flex flex-col items-center gap-2">
-            <img src="{{ asset('iupc.png') }}" 
-                 alt="IUPC" 
-                 :class="activeSegment === 'iupc' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
-                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
-            <span>IUPC</span>
-        </span>
-    </button>
+                {{-- Segment Buttons --}}
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-    {{-- 2. AI Hackathon Button --}}
-    <button @click="activeSegment = 'hackathon'"
-        :class="activeSegment === 'hackathon' ?
-            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
-            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
-        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
-        <span class="flex flex-col items-center gap-2">
-            <img src="{{ asset('ai.png') }}" 
-                 alt="AI Hackathon" 
-                 :class="activeSegment === 'hackathon' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
-                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
-            <span>AI Hackathon</span>
-        </span>
-    </button>
+                    @php
+                        $segments = [
+                            ['key' => 'iupc',      'img' => 'iupc.png',  'label' => 'IUPC'],
+                            ['key' => 'hackathon', 'img' => 'ai.png',    'label' => 'AI Hackathon'],
+                            ['key' => 'olympiad',  'img' => 'ict.png',   'label' => 'ICT Olympiad'],
+                            ['key' => 'showcase',  'img' => 'ps.png',    'label' => 'Project Showcase'],
+                        ];
+                    @endphp
 
-    {{-- 3. ICT Olympiad Button --}}
-    <button @click="activeSegment = 'olympiad'"
-        :class="activeSegment === 'olympiad' ?
-            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
-            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
-        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
-        <span class="flex flex-col items-center gap-2">
-            <img src="{{ asset('ict.png') }}" 
-                 alt="ICT Olympiad" 
-                 :class="activeSegment === 'olympiad' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
-                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
-            <span>ICT Olympiad</span>
-        </span>
-    </button>
+                    @foreach($segments as $seg)
+                    <button @click="activeSegment = '{{ $seg['key'] }}'"
+                        :class="activeSegment === '{{ $seg['key'] }}' ? 'active' : ''"
+                        class="segment-btn px-4 py-5 font-black uppercase tracking-widest text-[11px] active:scale-95 group">
+                        <span class="flex flex-col items-center gap-2">
+                            <img src="{{ asset('images/' . $seg['img']) }}"
+                                 alt="{{ $seg['label'] }}"
+                                 :class="activeSegment === '{{ $seg['key'] }}' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100'"
+                                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none"
+                                 style="filter: var(--img-filter, none)">
+                            <span>{{ $seg['label'] }}</span>
+                        </span>
+                    </button>
+                    @endforeach
+                </div>
 
-    {{-- 4. Project Showcasing Button --}}
-    <button @click="activeSegment = 'showcase'"
-        :class="activeSegment === 'showcase' ?
-            'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_25px_rgba(34,211,238,0.4)] scale-105 z-10' :
-            'bg-slate-100/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/5'"
-        class="px-4 py-5 border rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 transform cursor-pointer select-none active:scale-95 group">
-        <span class="flex flex-col items-center gap-2">
-            <img src="{{ asset('ps.png') }}" 
-                 alt="Project Showcase" 
-                 :class="activeSegment === 'showcase' ? 'brightness-0' : 'opacity-70 group-hover:opacity-100 dark:brightness-200'"
-                 class="w-8 h-8 object-contain transition-all duration-300 pointer-events-none">
-            <span>Project Showcase</span>
-        </span>
-    </button>
-
-</div>
-
-                <!-- Content Display Area -->
+                {{-- Content Panel --}}
                 <div class="relative min-h-[220px]">
-                    <!-- IUPC -->
-                    <div x-show="activeSegment === 'iupc'" x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
-                        <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
-                            <span class="w-8 h-px "></span> IUPC
-                        </h4>
-                        <p class=" leading-relaxed text-sm md:text-base italic">
-                            "IUPC (Inter University Programming Contest) will bring together teams from universities
-                            nationwide to compete in challenging algorithmic and problem-solving contests through
-                            competitive programming."
-                        </p>
-                    </div>
 
-                    <!-- AI Hackathon -->
-                    <div x-show="activeSegment === 'hackathon'" x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
-                        <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
-                            <span class="w-8 h-px bg-cyan-500"></span> AI Hackathon
-                        </h4>
-                        <p class=" leading-relaxed text-sm md:text-base italic">
-                            "AI Hackathon will provide participants with an opportunity to develop innovative AI-driven
-                            solutions addressing real-world challenges using modern technologies and creative approaches."
-                        </p>
-                    </div>
+                    @php
+                        $contents = [
+                            'iupc' => [
+                                'title' => 'IUPC',
+                                'text'  => 'The Inter University Programming Contest (IUPC) of DUET CSE Carnival 2026 is a national-level competitive programming segment organized by the Department of CSE, DUET, in association with DUET Computer Society and White Board Initiative. The event aims to foster problem-solving ability, algorithmic thinking, and programming excellence among university students from across Bangladesh. Participating teams will compete in intense programming challenges designed to test their knowledge of algorithms, data structures, mathematics, and computational thinking under strict time constraints. The competition will feature a Mock Contest on 26 June 2026, followed by the Main Contest on 27 June 2026 at the DUET Campus, Gazipur. Teams will compete for prestigious titles and prize money worth over 180,000 BDT.',
+                            ],
+                            'hackathon' => [
+                                'title' => 'AI Hackathon',
+                                'text'  => 'The AI Hackathon of DUET CSE Carnival 2026 is a national-level competition organized by the Department of CSE, DUET, in association with DUET Computer Society and White Board Initiative. The event aims to encourage university students across Bangladesh to solve real-world problems using Artificial Intelligence, Machine Learning, and Data Science. The competition will be conducted in two rounds. The first round will be held on Kaggle, where teams will develop and submit their AI-based solutions. Shortlisted teams will advance to the final onsite round, where they will present their solutions before a panel of expert judges. The final evaluation will consist of 70% marks from Kaggle performance and 30% marks from onsite judging. The offline judging session will be held on 26 June 2026 at the DUET Campus, Gazipur.',
+                            ],
+                            'olympiad' => [
+                                'title' => 'ICT Olympiad',
+                                'text'  => 'The ICT Olympiad is a nationwide academic competition organized to promote ICT knowledge, computational thinking, and problem-solving skills among students across Bangladesh. The event will be held on 26 June 2026 and conducted offline through an OMR-based MCQ examination covering topics such as programming fundamentals, algorithms, networking, cybersecurity, databases, and modern technologies. Open to students up to undergraduate level, the Olympiad aims to identify talented individuals and foster a competitive learning environment. All participants will receive certificates, while top performers will be awarded cash prizes totaling 39,000 BDT.',
+                            ],
+                            'showcase' => [
+                                'title' => 'Project Showcasing',
+                                'text'  => 'The Project Showcase is the flagship competitive segment of DUET CSE Carnival 2026, serving as a national-level platform where student teams from across Bangladesh present innovative and impactful technical projects. Organized by the Department of Computer Science and Engineering, Dhaka University of Engineering & Technology (DUET), in association with DUET Computer Society and White Board Initiative, the event aims to inspire innovation, technical excellence, and real-world problem-solving among aspiring engineers and developers.',
+                            ],
+                        ];
+                    @endphp
 
-                    <!-- ICT Olympiad -->
-                    <div x-show="activeSegment === 'olympiad'" x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
-                        <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
-                            <span class="w-8 h-px bg-cyan-500"></span> ICT Olympiad
+                    @foreach($contents as $key => $content)
+                    <div x-show="activeSegment === '{{ $key }}'"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         class="segment-content p-8 shadow-2xl">
+                        <h4 class="text-2xl font-black uppercase mb-4 flex items-center gap-3" style="color:var(--accent)">
+                            <span class="w-8 h-px" style="background:var(--accent)"></span>
+                            {{ $content['title'] }}
                         </h4>
-                        <p class=" leading-relaxed text-sm md:text-base italic">
-                            "ICT Olympiad will engage students in analytical and technology-based problem-solving activities
-                            designed to test their knowledge and understanding of ICT and emerging technologies."
+                        <p class="leading-relaxed text-sm md:text-base italic" style="color:var(--text-secondary)">
+                            {{ $content['text'] }}
                         </p>
                     </div>
+                    @endforeach
 
-                    <!-- Project Showcasing -->
-                    <div x-show="activeSegment === 'showcase'" x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class=" from-slate-900 to-slate-950 border border-cyan-500/20 p-8 rounded-2xl shadow-2xl">
-                        <h4 class="text-2xl font-black text-cyan-400 uppercase mb-4 flex items-center gap-3">
-                            <span class="w-8 h-px bg-cyan-500"></span> Project Showcasing
-                        </h4>
-                        <p class=" leading-relaxed text-sm md:text-base italic">
-                            "Project Showcasing will offer a platform for participants to present innovative projects,
-                            research ideas, and technological solutions, encouraging creativity, collaboration, and
-                            practical implementation of engineering concepts."
-                        </p>
-                    </div>
                 </div>
             </section>
         </div>
-
-
-
-
-        {{-- <section class="space-y-12">
-            <div class="text-center space-y-4">
-                <h2 class="heading-font text-4xl font-black uppercase">
-                    <span class="text-slate-500">Department of</span> <br>
-                    Computer Science & Engineering
-                </h2>
-                <div class="h-1 w-20 bg-cyan-500 mx-auto"></div>
-                <p class="text-slate-400 max-w-2xl mx-auto text-sm">
-                    Empowering the next generation of engineers through cutting-edge technology,
-                    rigorous academics, and a culture of innovation.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div
-                    class="content-glass p-8 group hover:bg-cyan-500/5 transition-all border border-white/5 hover:border-cyan-500/30">
-                    <div class="text-cyan-500 mb-6 text-3xl group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-microchip"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Academic Excellence</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        DUET CSE is a premier hub for technical education, offering a curriculum that
-                        perfectly balances core theoretical foundations with hands-on practical expertise.
-                    </p>
-                </div>
-
-                <div class="content-glass p-8 group border border-cyan-500/30 bg-cyan-500/5">
-                    <div class="text-cyan-500 mb-6 text-3xl group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-code-branch"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Innovation Hub</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        Home to numerous award-winning projects and applications. Our students consistently
-                        excel in national and international competitions, pushing the boundaries of technology.
-                    </p>
-                </div>
-
-                <div
-                    class="content-glass p-8 group hover:bg-cyan-500/5 transition-all border border-white/5 hover:border-cyan-500/30">
-                    <div class="text-cyan-500 mb-6 text-3xl group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-flask-vial"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">R&D Culture</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        Our faculty and students are actively involved in high-impact research,
-                        publishing in prestigious journals across AI, Data Science, and Cybersecurity domains.
-                    </p>
-                </div>
-
-                <div
-                    class="content-glass p-8 group hover:bg-cyan-500/5 transition-all border border-white/5 hover:border-cyan-500/30">
-                    <div class="text-cyan-500 mb-6 text-3xl group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-network-wired"></i>
-                    </div>
-                    <h3 class="text-white font-bold uppercase mb-4 tracking-wider">Global Alumni</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        Our graduates are leading the tech industry worldwide, holding key positions
-                        at global tech giants and contributing to the digital transformation of Bangladesh.
-                    </p>
-                </div>
-            </div>
-        </section> --}}
     </div>
 @endsection

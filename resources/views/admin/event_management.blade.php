@@ -1,274 +1,282 @@
 @extends('layouts.app')
 
+@section('custom_css')
+<style>
+    .admin-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-accent);
+        color: var(--text-primary);
+    }
+    .admin-input {
+        width: 100%;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-soft);
+        color: var(--text-primary);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .admin-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent-dim);
+    }
+    .admin-label {
+        font-size: 0.625rem;
+        color: var(--text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        display: block;
+        margin-bottom: 0.25rem;
+        margin-left: 0.25rem;
+    }
+    .admin-label.accent { color: var(--accent); }
+    .back-btn {
+        border: 1px solid var(--border-mid);
+        color: var(--text-secondary);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        transition: border-color 0.2s;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .back-btn:hover { border-color: var(--accent); }
+    .table-row-card {
+        background: var(--bg-elevated);
+        transition: background 0.15s;
+        border-radius: 0;
+    }
+    .table-row-card:hover { background: var(--accent-dim); }
+    .table-head { color: var(--text-muted); font-size: 0.625rem; text-transform: uppercase; }
+    .readonly-input {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-soft);
+        color: var(--text-primary);
+        border-radius: 0.25rem;
+        padding: 0.375rem 0.5rem;
+        outline: none;
+        transition: border-color 0.2s;
+        font-size: 0.75rem;
+    }
+    .readonly-input:focus { border-color: var(--accent); }
+    /* CKEditor dark/light */
+    .ck-editor__editable_inline {
+        background-color: var(--bg-elevated) !important;
+        color: var(--text-primary) !important;
+        border-bottom-left-radius: 12px !important;
+        border-bottom-right-radius: 12px !important;
+        border: 1px solid var(--border-soft) !important;
+        min-height: 150px;
+    }
+    .ck-toolbar {
+        background-color: var(--bg-elevated) !important;
+        border-top-left-radius: 12px !important;
+        border-top-right-radius: 12px !important;
+        border: 1px solid var(--border-soft) !important;
+        border-bottom: none !important;
+    }
+    .ck.ck-toolbar .ck-button { color: var(--text-primary) !important; }
+    .ck.ck-list__item { color: #1a202c !important; }
+    .ck.ck-editor__main>.ck-editor__editable:focus {
+        border-color: var(--accent) !important;
+        box-shadow: none !important;
+    }
+</style>
+@endsection
+
 @section('content')
-    <div class="container mx-auto px-4 py-10">
+<div class="container mx-auto px-4 py-10">
 
-        <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-800 pb-8 mb-10">
+    {{-- Page Header --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-8"
+        style="border-bottom:1px solid var(--border-accent)">
+        <div>
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter" style="color:var(--text-primary)">
+                Event Management <span style="color:var(--accent)">Details</span>
+            </h2>
+            <div class="h-1 w-20 mt-2 rounded-full" style="background:var(--accent); box-shadow:0 0 10px rgba(34,211,238,0.5)"></div>
+        </div>
+        <button onclick="window.history.back()" class="back-btn group">
+            <i class="fa-solid fa-chevron-left group-hover:-translate-x-1 transition-transform" style="color:var(--accent)"></i>
+            Back to previous
+        </button>
+    </div>
 
-            {{-- ১. বড় প্রফেশনাল টাইটেল --}}
-            <div>
-                <h2 class="text-4xl md:text-5xl font-black  uppercase tracking-tighter">
-                    Event Management <span class="text-cyan-400">Details</span>
-                </h2>
-                <div class="h-1 w-20 bg-cyan-500 mt-2 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
-            </div>
-
-            {{-- ২. জাভাস্ক্রিপ্ট ব্যাক বাটন (হিস্ট্রি অনুযায়ী কাজ করবে) --}}
-            <button onclick="window.history.back()"
-                class="flex items-center gap-3 px-6 py-3  border border-slate-700 rounded-xl hover:border-cyan-500 group transition-all">
-                <i class="fa-solid fa-chevron-left text-cyan-500 group-hover:-translate-x-1 transition-transform"></i>
-                <span class="text-xs font-bold text-slate-400 group-hover: uppercase tracking-[0.2em]">
-                    Back to previous
-                </span>
-            </button>
-
+    {{-- Create New Event --}}
+    <div class="admin-card p-8 rounded-3xl mb-10 shadow-2xl">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="h-8 w-1 rounded-full" style="background:var(--accent); box-shadow:0 0 15px rgba(34,211,238,0.8)"></div>
+            <h2 class="heading-font text-xl uppercase font-black tracking-tighter" style="color:var(--text-primary)">
+                Create New <span style="color:var(--accent)">Event Segment</span>
+            </h2>
         </div>
 
-        {{-- Create New Event Section --}}
-        <div class="admin-card p-8 rounded-3xl border border-cyan-500/20  mb-10 shadow-2xl">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="h-8 w-1 bg-cyan-500 shadow-[0_0_15px_rgba(34,211,238,0.8)]"></div>
-                <h2 class="heading-font text-xl  uppercase font-black tracking-tighter">Create New <span
-                        class="text-cyan-400">Event Segment</span></h2>
-            </div>
+        <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="space-y-1">
+                    <label class="admin-label">Event Name</label>
+                    <input type="text" name="name" required class="admin-input">
+                </div>
+                <div class="space-y-1">
+                    <label class="admin-label">Slug</label>
+                    <input type="text" name="slug" required class="admin-input">
+                </div>
+                <div class="space-y-1">
+                    <label class="admin-label">Reg Fee</label>
+                    <input type="number" name="reg_fee" required class="admin-input">
+                </div>
+                <div class="space-y-1">
+                    <label class="admin-label">Deadline</label>
+                    <input type="datetime-local" name="end_date" required class="admin-input">
+                </div>
+                <div class="space-y-1">
+                    <label class="admin-label">Min Members</label>
+                    <input type="number" name="min_members" value="1" class="admin-input">
+                </div>
+                <div class="space-y-1">
+                    <label class="admin-label">Max Members</label>
+                    <input type="number" name="max_members" value="3" class="admin-input">
+                </div>
 
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Event
-                            Name</label>
-                        <input type="text" name="name" required
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Slug</label>
-                        <input type="text" name="slug" required
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Reg Fee</label>
-                        <input type="number" name="reg_fee" required
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Deadline</label>
-                        <input type="datetime-local" name="end_date" required
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner invert-[0.1]">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Min
-                            Members</label>
-                        <input type="number" name="min_members" value="1"
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Max
-                            Members</label>
-                        <input type="number" name="max_members" value="3"
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition shadow-inner">
-                    </div>
-
-                    {{-- CKEditor for Description Only --}}
-                    <div class="md:col-span-2 space-y-1">
-                        <label
-                            class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Description</label>
-                        <div class="custom-editor-container">
-                            <textarea name="description" id="editor_description"></textarea>
-                        </div>
-                    </div>
-
-                    {{-- Regular Textarea for Rules (Based on image_d3cd6d.png style) --}}
-                    <div class="md:col-span-2 space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Rules &
-                            Regulations</label>
-                        <input type="text" name="rules"
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition">
-                    </div>
-
-                    <div class="md:col-span-2 space-y-1">
-                        <label class="text-[10px] text-cyan-400 uppercase font-bold tracking-widest ml-1">Event Images
-                            (Multiple)</label>
-                        <div class="relative group">
-                            <input type="file" name="images[]" multiple
-                                class="w-full  border border-cyan-500/10 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:bg-cyan-500 file:text-slate-900 file:border-0 file:px-4 file:py-1.5 file:rounded-lg file:mr-4 file:font-black file:uppercase file:cursor-pointer">
-                        </div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Result
-                            URL</label>
-                        <input type="text" name="result"
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="text-[10px] text-slate-400 uppercase font-bold tracking-widest ml-1">Seat Plan
-                            URL</label>
-                        <input type="text" name="seatplan"
-                            class="w-full  border border-white/5 rounded-xl px-4 py-3 text-sm  focus:border-cyan-500 outline-none transition">
-                    </div>
-
-                    <div class="flex items-center space-x-3 lg:col-span-3">
-                        <input type="checkbox" name="needs_coach" id="needs_coach" value="1"
-                            class="w-5 h-5 accent-cyan-500  border-white/10 rounded">
-                        <label for="needs_coach"
-                            class="text-[10px]  uppercase font-black cursor-pointer tracking-wider">Requires
-                            Coach?</label>
-                    </div>
-
-                    <div class="lg:col-span-1">
-                        <button type="submit"
-                            class="w-full  hover:bg-cyan-400 text-slate-900 py-3 rounded-xl font-black uppercase text-[11px] transition transform hover:scale-[1.02] shadow-[0_4px_20px_rgba(34,211,238,0.4)]">
-                            + Add Segment
-                        </button>
+                <div class="md:col-span-2 space-y-1">
+                    <label class="admin-label">Description</label>
+                    <div class="custom-editor-container">
+                        <textarea name="description" id="editor_description"></textarea>
                     </div>
                 </div>
-            </form>
+
+                <div class="md:col-span-2 space-y-1">
+                    <label class="admin-label">Rules & Regulations</label>
+                    <input type="text" name="rules" class="admin-input">
+                </div>
+
+                <div class="md:col-span-2 space-y-1">
+                    <label class="admin-label accent">Event Images (Multiple)</label>
+                    <input type="file" name="images[]" multiple
+                        class="w-full rounded-xl px-4 py-2.5 text-xs cursor-pointer"
+                        style="background:var(--bg-elevated); border:1px solid var(--accent-border); color:var(--text-secondary)">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="admin-label">Result URL</label>
+                    <input type="text" name="result" class="admin-input">
+                </div>
+                <div class="space-y-1">
+                    <label class="admin-label">Seat Plan URL</label>
+                    <input type="text" name="seatplan" class="admin-input">
+                </div>
+
+                <div class="flex items-center space-x-3 lg:col-span-3">
+                    <input type="checkbox" name="needs_coach" id="needs_coach" value="1"
+                        class="w-5 h-5 accent-cyan-500 rounded">
+                    <label for="needs_coach" class="text-[10px] font-black cursor-pointer uppercase tracking-wider"
+                        style="color:var(--text-primary)">Requires Coach?</label>
+                </div>
+
+                <div class="lg:col-span-1">
+                    <button type="submit"
+                        class="w-full py-3 rounded-xl font-black uppercase text-[11px] transition transform hover:scale-[1.02] text-slate-900"
+                        style="background:var(--accent); box-shadow:0 4px 20px rgba(34,211,238,0.4)">
+                        + Add Segment
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {{-- Existing Segments Table --}}
+    <div class="admin-card p-8 rounded-3xl">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="heading-font text-xl uppercase font-black" style="color:var(--accent)">
+                Existing <span style="color:var(--text-primary)">Segments</span>
+            </h2>
+            <span class="text-[10px] uppercase tracking-widest" style="color:var(--text-muted)">Total: {{ count($events) }}</span>
         </div>
 
-        {{-- Table Section (Simplified for management) --}}
-        {{-- Existing Segments Table --}}
-        <div class="admin-card p-8 rounded-3xl border border-cyan-500/20 ">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="heading-font text-xl text-cyan-400 uppercase font-black">Existing <span
-                        class="">Segments</span></h2>
-                <span class="text-[10px] text-slate-500 uppercase tracking-widest">Total: {{ count($events) }}</span>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-separate border-spacing-y-2">
-                    <thead class="text-[10px] text-slate-400 uppercase">
-                        <tr>
-                            <th class="px-4 pb-2">Name & Slug</th>
-                            <th class="px-4 pb-2">Fee (BDT)</th>
-                            <th class="px-4 pb-2">Deadline</th>
-                            <th class="px-4 pb-2">Members (Min-Max)</th>
-                            <th class="px-4 pb-2 text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class=" text-sm">
-                        @foreach ($events as $event)
-                            <tr class="bg-white/5 hover:bg-white/10 transition group">
-
-                                <td class="p-4 rounded-l-xl">
-                                    <input type="text" name="" value="{{ $event->name }} " readonly
-                                        class=" border-b border-white/10 focus:border-cyan-500 outline-none w-full font-bold  mb-1">
-                                    <input type="text" name="" value="{{ $event->slug }}" readonly
-                                        class=" border-b border-white/10 focus:border-cyan-500 outline-none w-full text-[10px] text-cyan-500 uppercase tracking-widest">
-                                </td>
-                                <td class="p-4">
-                                    <input type="number" name="reg_fee" value="{{ $event->reg_fee }}" readonly
-                                        class="border border-white/10 rounded px-2 py-1.5 w-20 text-cyan-400 focus:border-cyan-500 outline-none">
-                                </td>
-                                <td class="p-4">
-                                    <input type="datetime-local" name="end_date"
-                                        value="{{ $event->end_date->format('Y-m-d\TH:i') }}" readonly
-                                        class="border border-white/10 rounded px-2 py-1.5 text-[10px] focus:border-cyan-500 outline-none">
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2">
-                                        <input type="number" name="min_members" value="{{ $event->min_members }}"
-                                            readonly
-                                            class="border border-white/10 rounded px-1 py-1 w-10 text-center text-xs">
-                                        <span class="text-slate-600">-</span>
-                                        <input type="number" name="max_members" value="{{ $event->max_members }}"
-                                            readonly
-                                            class="border border-white/10 rounded px-1 py-1 w-10 text-center text-xs">
-                                    </div>
-                                </td>
-                                <td>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-separate border-spacing-y-2">
+                <thead class="table-head">
+                    <tr>
+                        <th class="px-4 pb-2">Name & Slug</th>
+                        <th class="px-4 pb-2">Fee (BDT)</th>
+                        <th class="px-4 pb-2">Deadline</th>
+                        <th class="px-4 pb-2">Members (Min-Max)</th>
+                        <th class="px-4 pb-2 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    @foreach ($events as $event)
+                        <tr class="table-row-card">
+                            <td class="p-4 rounded-l-xl">
+                                <input type="text" value="{{ $event->name }}" readonly
+                                    class="readonly-input font-bold mb-1">
+                                <input type="text" value="{{ $event->slug }}" readonly
+                                    class="readonly-input text-[10px] uppercase tracking-widest" style="color:var(--accent)">
+                            </td>
+                            <td class="p-4">
+                                <input type="number" value="{{ $event->reg_fee }}" readonly
+                                    class="readonly-input w-20" style="color:var(--accent)">
+                            </td>
+                            <td class="p-4">
+                                <input type="datetime-local"
+                                    value="{{ $event->end_date->format('Y-m-d\TH:i') }}" readonly
+                                    class="readonly-input text-[10px]">
+                            </td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-2">
+                                    <input type="number" value="{{ $event->min_members }}" readonly
+                                        class="readonly-input w-10 text-center">
+                                    <span style="color:var(--text-muted)">-</span>
+                                    <input type="number" value="{{ $event->max_members }}" readonly
+                                        class="readonly-input w-10 text-center">
+                                </div>
+                            </td>
+                            <td class="p-4 rounded-r-xl">
+                                <div class="flex items-center gap-3 justify-end">
+                                    <a href="{{ route('events.edit', $event->id) }}"
+                                        class="text-[10px] font-bold uppercase transition"
+                                        style="color:var(--accent)">Full Edit</a>
                                     <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST"
                                         onsubmit="return confirm('Are you sure you want to delete this event?');"
                                         class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-
+                                        @csrf @method('DELETE')
                                         <button type="submit"
-                                            class="bg-red-500/10 hover:bg-red-500 border border-red-500/50 text-red-500 hover: px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition shadow-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
+                                            class="border px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition"
+                                            style="background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.5); color:rgb(248,113,113)"
+                                            onmouseover="this.style.background='rgba(239,68,68,0.8)'; this.style.color='white'"
+                                            onmouseout="this.style.background='rgba(239,68,68,0.1)'; this.style.color='rgb(248,113,113)'">
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
-
-                                </td>
-                                <td>
-                                    <a href="{{ route('events.edit', $event->id) }}"
-                                        class="text-cyan-400 hover:text-cyan-300">
-                                        Full Edit
-                                    </a>
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    {{-- CKEditor Custom Styling for Dark & Day Mode Compatibility --}}
-    <style>
-        /* এডিটরের কন্টেইনার স্টাইল */
-        .ck-editor__editable_inline {
-            min-height: 150px;
-            background-color: #1e2636 !important;
-            /* image_d3cd6d.png এর ইনপুট কালার */
-            color: #ffffff !important;
-            border-bottom-left-radius: 12px !important;
-            border-bottom-right-radius: 12px !important;
-            border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        }
-
-        /* টুলবার স্টাইল */
-        .ck-toolbar {
-            background-color: #2d3748 !important;
-            border-top-left-radius: 12px !important;
-            border-top-right-radius: 12px !important;
-            border: none !important;
-        }
-
-        /* ডে মোডে টেক্সট সিলেকশন ড্রপডাউনের কালার ঠিক করা */
-        .ck.ck-list__item,
-        .ck.ck-button {
-            color: #1a202c !important;
-            /* ড্রপডাউন লিস্ট আইটেমগুলো ডার্ক থাকবে যেন সাদা ব্যাকগ্রাউন্ডে পড়া যায় */
-        }
-
-        .ck.ck-toolbar .ck-button {
-            color: #ffffff !important;
-            /* টুলবার বাটনগুলো সাদা থাকবে */
-        }
-
-        .ck.ck-editor__main>.ck-editor__editable:focus {
-            border-color: #06b6d4 !important;
-            /* সায়ান ফোকাস বর্ডার */
-            box-shadow: none !important;
-        }
-    </style>
-
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            ClassicEditor
-                .create(document.querySelector('#editor_description'), {
-                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
-                        'blockQuote', 'undo', 'redo'
-                    ]
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        });
-    </script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        ClassicEditor
+            .create(document.querySelector('#editor_description'), {
+                toolbar: ['heading','|','bold','italic','link','bulletedList','numberedList','blockQuote','undo','redo']
+            })
+            .catch(error => console.error(error));
+    });
+</script>
 @endsection

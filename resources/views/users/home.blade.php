@@ -66,12 +66,12 @@
                 <div
                     class="flex flex-wrap justify-center gap-10 grayscale opacity-40 hover:opacity-90 hover:grayscale-0 transition duration-500">
                     
-                      <img src="{{ asset('duet-logo.png') }}" class="h-6"
+                      <img src="{{ asset('images/duet-logo.png') }}" class="h-6"
                         alt="DUET">
                     
-                    <img src="{{ asset('cs.png') }}" class="h-6"
+                    <img src="{{ asset('images/cs.png') }}" class="h-6"
                         alt="DUET CS">
-                    <img src="{{ asset('wi.png') }}" class="h-6"
+                    <img src="{{ asset('images/wi.png') }}" class="h-6"
                         alt="WI">
                   
                 </div>
