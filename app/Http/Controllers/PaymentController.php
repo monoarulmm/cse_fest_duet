@@ -270,91 +270,238 @@ class PaymentController extends Controller
     //    Route: POST /payment/iupc/update-and-pay
     //    name:  payment.iupc.updateAndPay
     // =========================================================================
-    public function iupc_updateAndPay(Request $request)
-    {
-        $team  = Registration::with('event')->findOrFail($request->team_id);
-        $event = $team->event;
+    // public function iupc_updateAndPay(Request $request)
+    // {
+    //     $team  = Registration::with('event')->findOrFail($request->team_id);
+    //     $event = $team->event;
 
-        $request->validate([
-            'coupon_code'  => 'required|string',
-            'coach_name'   => 'required|string',
-            'coach_email'  => 'required|email',
-            'coach_phone'  => 'required|string',
-            'm1_name'      => 'required|string',
-            'm1_phone'     => 'required|digits:11',
-            'm1_email'     => 'required|email',
-            'm1_prev_ex'   => 'required|string',
-            'm2_name'      => 'required|string',
-            'm2_email'     => 'required|email',
-            'm2_phone'     => 'required|digits:11',
-            'm2_tshirt'    => 'required|string',
-            'm2_prev_ex'   => 'required|string',
-            'm3_name'      => 'nullable|string',
-            'm3_email'     => 'nullable|email',
-            'm3_phone'     => 'nullable|digits:11',
-            'm3_tshirt'    => 'nullable|string',
-            'team_name'    => 'required|string|max:255',
-            'team_person'  => 'required|string',
-            'coach_tshirt' => 'required|string',
-            'm1_cf_handle' => 'required|string',
-            'm2_cf_handle' => 'required|string',
-            'm3_cf_handle' => 'nullable|string',
-            'm3_prev_ex'   => 'nullable|string',
+    //     $request->validate([
+    //         'coupon_code'  => 'required|string',
+    //         'coach_name'   => 'required|string',
+    //         'coach_email'  => 'required|email',
+    //         'coach_phone'  => 'required|string',
+    //         'm1_name'      => 'required|string',
+    //         'm1_phone'     => 'required|digits:11',
+    //         'm1_email'     => 'required|email',
+    //         'm1_prev_ex'   => 'required|string',
+    //         'm2_name'      => 'required|string',
+    //         'm2_email'     => 'required|email',
+    //         'm2_phone'     => 'required|digits:11',
+    //         'm2_tshirt'    => 'required|string',
+    //         'm2_prev_ex'   => 'required|string',
+    //         'm3_name'      => 'nullable|string',
+    //         'm3_email'     => 'nullable|email',
+    //         'm3_phone'     => 'nullable|digits:11',
+    //         'm3_tshirt'    => 'nullable|string',
+    //         'team_name'    => 'required|string|max:255',
+    //         'team_person'  => 'required|string',
+    //         'coach_tshirt' => 'required|string',
+    //         'm1_cf_handle' => 'required|string',
+    //         'm2_cf_handle' => 'required|string',
+    //         'm3_cf_handle' => 'nullable|string',
+    //         'm3_prev_ex'   => 'nullable|string',
+    //     ]);
+
+    //     $coupon = Coupon::where('code', $request->coupon_code)
+    //         ->where('event_id', $event->id)
+    //         ->where('is_used', false)
+    //         ->first();
+
+    //     if (!$coupon)
+    //         return back()->with('error', 'Invalid or already used coupon code!');
+
+    //     if (strtolower($coupon->university) !== strtolower($team->university_name))
+    //         return back()->with('error', 'This coupon does not belong to your university!');
+
+    //     if ($team->fresh()->payment_status === 'paid')
+    //         return redirect()->route('event.dashboard', 'iupc')->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
+
+    //     $team->update($request->except(['_token', 'team_id', 'amount', 'coupon_code']));
+
+    //     try {
+    //         $order_id = 'IUPC-' . $team->id . '-' . uniqid();
+
+    //         $team->update([
+    //             'order_id'       => $order_id,
+    //             'coupon_id'      => $coupon->id,
+    //             'payment_status' => 'pending',
+    //         ]);
+
+    //         $paymentRequest                  = new PaymentRequest();
+    //         $paymentRequest->currency        = 'BDT';
+    //         $paymentRequest->amount          = $event->reg_fee;
+    //         $paymentRequest->orderId         = $order_id;
+    //         $paymentRequest->customerName    = $team->team_name ?? $team->m1_name ?? 'Participant';
+    //         $paymentRequest->customerPhone   = $this->normalizePhone($team->coach_phone);
+    //         $paymentRequest->customerEmail   = $this->normalizeEmail($team->coach_email);
+    //         $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
+    //         $paymentRequest->customerCity    = 'Gazipur';
+    //         $paymentRequest->value1          = $team->id;
+    //         $paymentRequest->value2          = $coupon->id;
+
+    //         return $this->shurjopay->makePayment($paymentRequest);
+    //     } catch (Throwable $e) {
+    //         Log::error('IUPC Payment Error', [
+    //             'team_id' => $team->id,
+    //             'error'   => $e->getMessage() ?? 'Unknown',
+    //             'trace'   => $e->getTraceAsString(),
+    //         ]);
+    //         return $this->paymentErrorView($this->friendlyError($e), $team, 'gateway_error');
+    //     }
+    // }
+
+   
+
+   public function iupc_verifyCoupon(Request $request)
+{
+    $request->validate([
+        'team_id'     => 'required|integer',
+        'coupon_code' => 'required|string',
+    ]);
+
+    $team  = Registration::with('event')->findOrFail($request->team_id);
+    $event = $team->event;
+
+    $coupon = Coupon::where('code', $request->coupon_code)
+        ->where('event_id', $event->id)
+        ->where('is_used', false)
+        ->first();
+
+    if (!$coupon) {
+        return redirect()
+            ->route('iupc.final.reg.form', ['id' => $team->id])  // ✅ 'id' key
+            ->with('error', 'Invalid or already used coupon code!');
+    }
+
+    if (strtolower(trim($coupon->university)) !== strtolower(trim($team->university_name))) {
+        return redirect()
+            ->route('iupc.final.reg.form', ['id' => $team->id])  // ✅ 'id' key
+            ->with('error', 'This coupon does not belong to your university!');
+    }
+
+    // ✅ Session save
+    session([
+        'verified_coupon_code' => $coupon->code,
+        'verified_team_id'     => (int) $team->id,
+    ]);
+
+    // ✅ Redirect to GET route
+    return redirect()->route('iupc.final.reg.form', ['id' => $team->id]);  // ✅ 'id' key
+}
+
+public function iupc_updateAndPay(Request $request)
+{
+    $request->validate([
+        'team_id'      => 'required|integer',
+        'team_name'    => 'required|string|max:255',
+        'team_person'  => 'required|string',
+        'coach_name'   => 'required|string',
+        'coach_email'  => 'required|email',
+        'coach_phone'  => 'required|string',
+        'coach_tshirt' => 'required|string',
+        'm1_name'      => 'required|string',
+        'm1_phone'     => 'required|digits:11',
+        'm1_email'     => 'required|email',
+        'm1_cf_handle' => 'required|string',
+        'm1_tshirt'    => 'required|string',
+        'm1_prev_ex'   => 'required|string',
+        'm2_name'      => 'required|string',
+        'm2_email'     => 'required|email',
+        'm2_phone'     => 'required|digits:11',
+        'm2_cf_handle' => 'required|string',
+        'm2_tshirt'    => 'required|string',
+        'm2_prev_ex'   => 'required|string',
+        'm3_name'      => 'nullable|string',
+        'm3_email'     => 'nullable|email',
+        'm3_phone'     => 'nullable|digits:11',
+        'm3_cf_handle' => 'nullable|string',
+        'm3_tshirt'    => 'nullable|string',
+        'm3_prev_ex'   => 'nullable|string',
+    ]);
+
+    $team  = Registration::with('event')->findOrFail($request->team_id);
+    $event = $team->event;
+
+    // ✅ Session check — type cast করে compare
+    if (
+        !session()->has('verified_coupon_code') ||
+        (int) session('verified_team_id') !== (int) $team->id
+    ) {
+        return redirect()
+            ->route('iupc.final.reg.form', ['id' => $team->id])
+            ->with('error', 'Please verify your coupon code first!');
+    }
+
+    $couponCode = session('verified_coupon_code');
+
+    $coupon = Coupon::where('code', $couponCode)
+        ->where('event_id', $event->id)
+        ->where('is_used', false)
+        ->first();
+
+    if (!$coupon) {
+        // ✅ Session clear করে আবার verify করতে পাঠাও
+        session()->forget(['verified_coupon_code', 'verified_team_id']);
+        return redirect()
+            ->route('iupc.final.reg.form', ['id' => $team->id])
+            ->with('error', 'Coupon is no longer valid. Please verify again.');
+    }
+
+    if ($team->fresh()->payment_status === 'paid') {
+        return redirect()
+            ->route('event.dashboard', ['slug' => $event->slug])
+            ->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
+    }
+
+    // ✅ Team data update
+    $team->update($request->except(['_token', 'team_id', 'amount', 'coupon_code']));
+
+    try {
+        $order_id = 'IUPC-' . $team->id . '-' . uniqid();
+
+        $team->update([
+            'order_id'       => $order_id,
+            'coupon_id'      => $coupon->id,
+            'payment_status' => 'pending',
         ]);
 
-        $coupon = Coupon::where('code', $request->coupon_code)
-            ->where('event_id', $event->id)
-            ->where('is_used', false)
-            ->first();
+        // ✅ Fix: \shurjopay\Laravel\PaymentRequest → imported PaymentRequest
+        $paymentRequest                  = new PaymentRequest();
+        $paymentRequest->currency        = 'BDT';
+        $paymentRequest->amount          = $event->reg_fee;
+        $paymentRequest->orderId         = $order_id;
+        $paymentRequest->customerName    = $team->team_name ?? $team->m1_name ?? 'Participant';
+        $paymentRequest->customerPhone   = $this->normalizePhone($team->coach_phone);
+        $paymentRequest->customerEmail   = $this->normalizeEmail($team->coach_email);
+        $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
+        $paymentRequest->customerCity    = 'Gazipur';
+        $paymentRequest->value1          = $team->id;
+        $paymentRequest->value2          = $coupon->id;
 
-        if (!$coupon)
-            return back()->with('error', 'Invalid or already used coupon code!');
+        // ✅ Payment redirect করার আগে session clear
+        session()->forget(['verified_coupon_code', 'verified_team_id']);
 
-        if (strtolower($coupon->university) !== strtolower($team->university_name))
-            return back()->with('error', 'This coupon does not belong to your university!');
+        return $this->shurjopay->makePayment($paymentRequest);
 
-        if ($team->fresh()->payment_status === 'paid')
-            return redirect()->route('event.dashboard', 'iupc')->with('info', 'পেমেন্ট আগেই সম্পন্ন হয়েছে।');
-
-        $team->update($request->except(['_token', 'team_id', 'amount', 'coupon_code']));
-
-        try {
-            $order_id = 'IUPC-' . $team->id . '-' . uniqid();
-
-            $team->update([
-                'order_id'       => $order_id,
-                'coupon_id'      => $coupon->id,
-                'payment_status' => 'pending',
-            ]);
-
-            $paymentRequest                  = new PaymentRequest();
-            $paymentRequest->currency        = 'BDT';
-            $paymentRequest->amount          = $event->reg_fee;
-            $paymentRequest->orderId         = $order_id;
-            $paymentRequest->customerName    = $team->team_name ?? $team->m1_name ?? 'Participant';
-            $paymentRequest->customerPhone   = $this->normalizePhone($team->coach_phone);
-            $paymentRequest->customerEmail   = $this->normalizeEmail($team->coach_email);
-            $paymentRequest->customerAddress = $team->university_name ?? 'Gazipur';
-            $paymentRequest->customerCity    = 'Gazipur';
-            $paymentRequest->value1          = $team->id;
-            $paymentRequest->value2          = $coupon->id;
-
-            return $this->shurjopay->makePayment($paymentRequest);
-        } catch (Throwable $e) {
-            Log::error('IUPC Payment Error', [
-                'team_id' => $team->id,
-                'error'   => $e->getMessage() ?? 'Unknown',
-                'trace'   => $e->getTraceAsString(),
-            ]);
-            return $this->paymentErrorView($this->friendlyError($e), $team, 'gateway_error');
-        }
+    } catch (Throwable $e) {
+        Log::error('IUPC Payment Error', [
+            'team_id' => $team->id,
+            'error'   => $e->getMessage() ?? 'Unknown',
+            'trace'   => $e->getTraceAsString(),
+        ]);
+        return $this->paymentErrorView($this->friendlyError($e), $team, 'gateway_error');
     }
+}
+    
 
     // =========================================================================
     // 4. Project-Showcase / AI-Hackathon — direct pay
     //    Route: GET /payment/{slug}/final-pay/{id}
     //    name:  payment.finalRegDirectPay
     // =========================================================================
+
+
+    
     public function finalRegDirectPay($slug, $id)
     {
         $team  = Registration::with('event')->findOrFail($id);

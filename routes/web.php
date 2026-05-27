@@ -122,8 +122,8 @@ Route::get('/payment/retry/{registration_id}', [PaymentController::class, 'retry
 
 // ─── 2. IUPC — final form update + pay ───────────────────────────────────
 //  Dashboard থেকে POST করা হয়
-Route::post('/payment/iupc/update-and-pay', [PaymentController::class, 'iupc_updateAndPay'])
-    ->name('payment.iupc.updateAndPay');
+// Route::post('/payment/iupc/update-and-pay', [PaymentController::class, 'iupc_updateAndPay'])
+//     ->name('payment.iupc.updateAndPay');
 
 // ─── 3. Project-Showcase & AI-Hackathon — direct pay ─────────────────────
 //  slug: project-showcase অথবা ai-hackathon
@@ -210,7 +210,10 @@ Route::get('/event/{slug}/admit-card/{id}', [EventController::class, 'downloadAd
 Route::prefix('iupc')->name('iupc.')->group(function () {
     // কুপন ভেরিফিকেশন পেজ দেখার জন্য
     // কুপন ভেরিফাই করার প্রসেস (POST মেথড)
-    Route::post('/verify-coupon', [PaymentController::class, 'iupc_updateAndPay'])->name('verify.process');
+
+    Route::post('/verify-coupon/form', [PaymentController::class, 'iupc_updateAndPay'])->name('verify.process');
+    Route::post('/verify-coupon', [PaymentController::class, 'iupc_verifyCoupon'])->name('verify_coupon');
+
 });
 
 // Route::get('/event/{slug}/final-registration', [EventController::class, 'showFinalRegForm'])->name('iupc.final.reg.form');

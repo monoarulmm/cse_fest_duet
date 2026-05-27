@@ -339,7 +339,7 @@
                     <div>
                         <label class="reg-label">All-Female Team?*</label>
                         <select name="team_person" required class="reg-select">
-                            <option value="Mixed"  {{ old('team_person') == 'Mixed'  ? 'selected' : '' }}>No (Mixed)</option>
+                            <option value="Mixed"  {{ old('team_person') == 'Mixed'  ? 'selected' : '' }}>No</option>
                             <option value="Female" {{ old('team_person') == 'Female' ? 'selected' : '' }}>Yes (All-Female)</option>
                         </select>
                     </div>

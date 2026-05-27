@@ -191,16 +191,46 @@ class EventController extends Controller
         return view('users.events.dashboard', compact('event', 'counts', 'totalRegistered', 'judges', 'team', 'totalSlots'));
     }
 
-    public function showFinalRegForm($team_id)
-    {
-        // টিম এবং ইভেন্ট ডাটা লোড করা
-        $team = Registration::with('event')->findOrFail($team_id);
+    // public function showFinalRegForm($team_id)
+    // {
+    //     // টিম এবং ইভেন্ট ডাটা লোড করা
+    //     $team = Registration::with('event')->findOrFail($team_id);
 
-        // ইভেন্টের রেগুলার ফি
-        $finalAmount = $team->event->reg_fee;
+    //     // ইভেন্টের রেগুলার ফি
+    //     $finalAmount = $team->event->reg_fee;
 
-        return view('users.events.final_reg_form', compact('team', 'finalAmount'));
-    }
+    //     return view('users.events.final_reg_form', compact('team', 'finalAmount'));
+    // }
+
+    public function showFinalRegForm($id)  // ✅ $team_id → $id (route parameter match)
+{
+    $team = Registration::with('event')->findOrFail($id);
+    $finalAmount = $team->event->reg_fee;
+
+    return view('users.events.final_reg_form', compact('team', 'finalAmount'));
+}
+
+//     public function showFinalRegForm($team_id)
+// {
+//     // ১. টিম এবং ইভেন্ট ডাটা লোড করা
+//     $team = Registration::with('event')->findOrFail($team_id);
+
+//     // ⚠️ কারেকশন/সিকিউরিটি চেক: পেমেন্ট যদি অলরেডি সম্পন্ন হয়ে থাকে, তবে তাকে ড্যাশবোর্ডে ফেরত পাঠানো উচিত
+//     if ($team->payment_status === 'paid') {
+//         return redirect()->route('event.dashboard', $team->event->slug)
+//             ->with('info', 'Your final registration and payment have already been completed!');
+//     }
+
+//     // 💡 মেজিক কারেকশন: ইউজার এই পেজে প্রবেশ করা মাত্রই সেশন থেকে কুপনের ডাটা মুছে দেওয়া হলো।
+//     // এর ফলে ব্লেড ফাইলে সরাসরি ফাইনাল ফর্ম ওপেন হবে না, সবসময় "Coupon Verification" পেজটি আগে আসবে।
+//     session()->forget(['verified_coupon_code', 'verified_team_id']);
+
+//     // ইভেন্টের রেগুলার ফি
+//     $finalAmount = $team->event->reg_fee;
+
+//     // আপনার ভিউ ফাইলের পাথ অনুযায়ী রিটার্ন (আগের জবাবে আমি event.final_register ধরেছিলাম, এখানে আপনার পাথ ঠিক রাখা হলো)
+//     return view('users.events.final_reg_form', compact('team', 'finalAmount'));
+// }
 
 
 // =========================================================================

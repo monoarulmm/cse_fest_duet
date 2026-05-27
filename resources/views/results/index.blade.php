@@ -6,19 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result & Seat Plan | DUET CSE CARNIVAL 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
 
     @php
         $setting = \App\Models\Setting::first();
         $activeEvents = \App\Models\Event::where('is_active', true)->get();
     @endphp
 
-    @if ($setting && $setting->favicon)
+    @if ($setting && $setting->favicon && file_exists(public_path('storage/' . $setting->favicon)))
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
         <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
     @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/cse.jpg') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/cse.jpg') }}">
     @endif
+
 
     <style>
         *,
@@ -405,7 +409,8 @@
                 <div class="notice">
                     <i class="fa-solid fa-circle-exclamation notice-icon"></i>
                     <p class="notice-text">
-                        This is a verified live information node. Participants can monitor their results and allocated venue directly through this portal segment.
+                        This is a verified live information node. Participants can monitor their results and allocated
+                        venue directly through this portal segment.
                     </p>
                 </div>
 
@@ -413,7 +418,7 @@
 
             <div class="card-footer">
                 <span class="dev-tag">DUET CSE Community</span>
-                
+
                 <div class="secure-badge">
                     <i class="fa-solid fa-shield-halved"></i>
                     Verified Portal Data

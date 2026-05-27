@@ -18,7 +18,8 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm; /* মার্জিন অপ্টিমাইজ করা হয়েছে */
+                margin: 10mm;
+                /* মার্জিন অপ্টিমাইজ করা হয়েছে */
             }
 
             body {
@@ -37,9 +38,12 @@
                 box-shadow: none !important;
                 border: 1px solid #cbd5e1 !important;
                 border-radius: 1.5rem !important;
-                padding: 1.5rem !important; /* প্রিন্ট পেজে স্পেস বাঁচানোর জন্য প্যাডিং কমানো হয়েছে */
-                page-break-inside: avoid !important; /* ফোর্স সিঙ্গেল পেজ */
-                max-height: 270mm; /* A4 এর বাইরে যেন ডাটা না উপচে পড়ে */
+                padding: 1.5rem !important;
+                /* প্রিন্ট পেজে স্পেস বাঁচানোর জন্য প্যাডিং কমানো হয়েছে */
+                page-break-inside: avoid !important;
+                /* ফোর্স সিঙ্গেল পেজ */
+                max-height: 270mm;
+                /* A4 এর বাইরে যেন ডাটা না উপচে পড়ে */
                 overflow: hidden;
             }
         }
@@ -49,13 +53,8 @@
         $setting = \App\Models\Setting::first();
         $activeEvents = \App\Models\Event::where('is_active', true)->get();
     @endphp
-
-    @if ($setting && $setting->favicon)
-        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
-        <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
-    @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
-    @endif
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/cse.jpg') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/cse.jpg') }}">
 </head>
 
 <body class="antialiased text-slate-800 bg-slate-50 min-h-screen py-6 px-4 flex flex-col items-center justify-start">
@@ -64,16 +63,20 @@
 
         <div class="no-print space-y-3">
             @if ($message)
-                <div class="p-4 rounded-2xl flex items-center gap-3 border shadow-sm {{ $payment_status === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800' }}">
+                <div
+                    class="p-4 rounded-2xl flex items-center gap-3 border shadow-sm {{ $payment_status === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span class="text-sm font-semibold">{{ $message }}</span>
                 </div>
             @endif
 
-            <div class="flex flex-col sm:flex-row gap-3 justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                <a href="{{ url('/') }}" class="text-slate-600 hover:text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+            <div
+                class="flex flex-col sm:flex-row gap-3 justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <a href="{{ url('/') }}"
+                    class="text-slate-600 hover:text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
                     ← Back to Home
                 </a>
 
@@ -81,30 +84,38 @@
                     <a href="{{ route('event.admit_card', ['slug' => $registration->event->slug ?? ($registration->event_slug ?? 'iupc'), 'id' => $registration->id]) }}"
                         class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-extrabold text-xs px-6 py-2.5 rounded-xl uppercase tracking-wider transition-all shadow-md shadow-cyan-600/10 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
                         </svg>
                         Get Admit Card
                     </a>
 
-                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-6 py-2.5 rounded-xl uppercase tracking-wider transition-colors shadow-sm">
+                    <button onclick="window.print()"
+                        class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-6 py-2.5 rounded-xl uppercase tracking-wider transition-colors shadow-sm">
                         Print Money Receipt
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="print-shadow bg-white border border-slate-200 rounded-[2rem] p-6 md:p-10 shadow-xl shadow-slate-200/50 relative overflow-hidden">
+        <div
+            class="print-shadow bg-white border border-slate-200 rounded-[2rem] p-6 md:p-10 shadow-xl shadow-slate-200/50 relative overflow-hidden">
 
-            <div class="absolute top-0 right-0 bg-emerald-500 text-white font-black text-[10px] tracking-widest uppercase py-1 px-10 rotate-45 translate-x-8 translate-y-4 shadow-sm">
+            <div
+                class="absolute top-0 right-0 bg-emerald-500 text-white font-black text-[10px] tracking-widest uppercase py-1 px-10 rotate-45 translate-x-8 translate-y-4 shadow-sm">
                 PAID
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
+            <div
+                class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-100">
                 <div class="flex items-center gap-3">
                     @if ($setting && $setting->logo)
-                        <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}" class="w-8 h-8 md:w-10 md:h-10 object-contain">
+                        <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
+                            class="w-8 h-8 md:w-10 md:h-10 object-contain">
                     @else
-                        <img src="{{ asset('images/duet-logo.png') }}" alt="DUET Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain">
+                        <img src="{{ asset('images/duet-logo.png') }}" alt="DUET Logo"
+                            class="w-8 h-8 md:w-10 md:h-10 object-contain">
                     @endif
                     <div>
                         <h1 class="text-base md:text-lg font-black text-slate-900 tracking-tight uppercase">
@@ -125,7 +136,8 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 py-6 text-sm">
                 <div class="space-y-1">
-                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Billed To / Participant</span>
+                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Billed To /
+                        Participant</span>
                     <h3 class="text-sm font-extrabold text-slate-900 uppercase">
                         {{ $registration->team_name ?? $registration->m1_name }}
                     </h3>
@@ -139,12 +151,16 @@
 
                 <div class="space-y-2 sm:text-right flex flex-col sm:items-end justify-start">
                     <div>
-                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Participant ID Reference</span>
-                        <span class="text-sm font-mono font-black text-cyan-600">#{{ $registration->participant_id ?? 'N/A' }}</span>
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Participant ID
+                            Reference</span>
+                        <span
+                            class="text-sm font-mono font-black text-cyan-600">#{{ $registration->participant_id ?? 'N/A' }}</span>
                     </div>
                     <div>
-                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Gateway Transaction ID</span>
-                        <span class="text-xs font-mono font-bold text-slate-700">{{ $transaction->transaction_id ?? $registration->transaction_id }}</span>
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Gateway
+                            Transaction ID</span>
+                        <span
+                            class="text-xs font-mono font-bold text-slate-700">{{ $transaction->transaction_id ?? $registration->transaction_id }}</span>
                     </div>
                 </div>
             </div>
@@ -152,7 +168,8 @@
             <div class="border border-slate-100 rounded-xl overflow-hidden mt-2">
                 <table class="w-full text-left text-sm">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-100 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                        <tr
+                            class="bg-slate-50 border-b border-slate-100 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
                             <th class="p-3 pl-4">Event Details & Description</th>
                             <th class="p-3 text-right pr-4">Amount Paid</th>
                         </tr>
@@ -160,10 +177,12 @@
                     <tbody class="divide-y divide-slate-50 font-medium text-slate-700">
                         <tr>
                             <td class="p-3 pl-4">
-                                <span class="text-slate-900 font-bold uppercase text-xs block">{{ $registration->event->name ?? 'Event Registration' }}</span>
+                                <span
+                                    class="text-slate-900 font-bold uppercase text-xs block">{{ $registration->event->name ?? 'Event Registration' }}</span>
                             </td>
                             <td class="p-3 text-right pr-4 font-bold text-slate-900 font-mono text-xs">
-                                {{ number_format($transaction->amount ?? 0, 2) }} {{ $transaction->currency ?? 'BDT' }}
+                                {{ number_format($transaction->amount ?? 0, 2) }}
+                                {{ $transaction->currency ?? 'BDT' }}
                             </td>
                         </tr>
                     </tbody>
@@ -189,7 +208,8 @@
                 </div>
             </div>
 
-            <div class="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
+            <div
+                class="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
                 <p class="text-[9px] text-slate-400 font-semibold leading-relaxed max-w-sm">
                     * This is an automated electronic money receipt; no manual signature is required.
                 </p>

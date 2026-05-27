@@ -20,11 +20,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @if ($setting && $setting->favicon)
+    @if ($setting && $setting->favicon && file_exists(public_path('storage/' . $setting->favicon)))
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $setting->favicon) }}">
         <link rel="apple-touch-icon" href="{{ asset('storage/' . $setting->favicon) }}">
     @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('duet-logo.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/cse.jpg') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/cse.jpg') }}">
     @endif
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,38 +37,38 @@
         ═══════════════════════════════════════════════════ */
         :root,
         [data-theme="dark"] {
-            --bg-base:       #020617;
-            --bg-surface:    #0f172a;
-            --bg-elevated:   #1e293b;
-            --bg-card:       rgba(15, 23, 42, 0.8);
+            --bg-base: #020617;
+            --bg-surface: #0f172a;
+            --bg-elevated: #1e293b;
+            --bg-card: rgba(15, 23, 42, 0.8);
 
-            --text-primary:  #f1f5f9;
-            --text-secondary:#94a3b8;
-            --text-muted:    #475569;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #475569;
 
-            --accent:        #22d3ee;
-            --accent-dim:    rgba(34, 211, 238, 0.15);
+            --accent: #22d3ee;
+            --accent-dim: rgba(34, 211, 238, 0.15);
             --accent-border: rgba(34, 211, 238, 0.2);
-            --accent-glow:   0 0 20px rgba(34, 211, 238, 0.3);
+            --accent-glow: 0 0 20px rgba(34, 211, 238, 0.3);
 
-            --border-soft:   rgba(255, 255, 255, 0.06);
-            --border-mid:    rgba(255, 255, 255, 0.10);
+            --border-soft: rgba(255, 255, 255, 0.06);
+            --border-mid: rgba(255, 255, 255, 0.10);
             --border-accent: rgba(34, 211, 238, 0.25);
 
-            --nav-bg:        rgba(2, 6, 23, 0.82);
-            --nav-border:    rgba(34, 211, 238, 0.15);
-            --nav-shadow:    0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+            --nav-bg: rgba(2, 6, 23, 0.82);
+            --nav-border: rgba(34, 211, 238, 0.15);
+            --nav-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
-            --tab-bg:        rgba(2, 6, 23, 0.92);
-            --tab-border:    rgba(34, 211, 238, 0.2);
+            --tab-bg: rgba(2, 6, 23, 0.92);
+            --tab-border: rgba(34, 211, 238, 0.2);
 
-            --shadow-card:   0 4px 24px rgba(0,0,0,0.4);
-            --shadow-glow:   0 0 24px rgba(34,211,238,0.2);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 24px rgba(34, 211, 238, 0.2);
 
-            --matrix-fade:   rgba(2, 6, 23, 0.14);
+            --matrix-fade: rgba(2, 6, 23, 0.14);
 
-            --swal-bg:       #0f172a;
-            --swal-text:     #f8fafc;
+            --swal-bg: #0f172a;
+            --swal-text: #f8fafc;
 
             --scroll-btn-bg: rgba(15, 23, 42, 0.95);
         }
@@ -76,38 +77,38 @@
            DESIGN TOKENS — Light Mode
         ═══════════════════════════════════════════════════ */
         [data-theme="light"] {
-            --bg-base:       #f0f6ff;
-            --bg-surface:    #ffffff;
-            --bg-elevated:   #e8f0fe;
-            --bg-card:       rgba(255, 255, 255, 0.9);
+            --bg-base: #f0f6ff;
+            --bg-surface: #ffffff;
+            --bg-elevated: #e8f0fe;
+            --bg-card: rgba(255, 255, 255, 0.9);
 
-            --text-primary:  #0f172a;
-            --text-secondary:#334155;
-            --text-muted:    #64748b;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
 
-            --accent:        #0891b2;
-            --accent-dim:    rgba(8, 145, 178, 0.10);
+            --accent: #0891b2;
+            --accent-dim: rgba(8, 145, 178, 0.10);
             --accent-border: rgba(8, 145, 178, 0.25);
-            --accent-glow:   0 0 20px rgba(8, 145, 178, 0.2);
+            --accent-glow: 0 0 20px rgba(8, 145, 178, 0.2);
 
-            --border-soft:   rgba(0, 0, 0, 0.06);
-            --border-mid:    rgba(0, 0, 0, 0.10);
+            --border-soft: rgba(0, 0, 0, 0.06);
+            --border-mid: rgba(0, 0, 0, 0.10);
             --border-accent: rgba(8, 145, 178, 0.25);
 
-            --nav-bg:        rgba(240, 246, 255, 0.90);
-            --nav-border:    rgba(8, 145, 178, 0.20);
-            --nav-shadow:    0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
+            --nav-bg: rgba(240, 246, 255, 0.90);
+            --nav-border: rgba(8, 145, 178, 0.20);
+            --nav-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
-            --tab-bg:        rgba(255, 255, 255, 0.95);
-            --tab-border:    rgba(8, 145, 178, 0.2);
+            --tab-bg: rgba(255, 255, 255, 0.95);
+            --tab-border: rgba(8, 145, 178, 0.2);
 
-            --shadow-card:   0 2px 16px rgba(0,0,0,0.08);
-            --shadow-glow:   0 0 16px rgba(8,145,178,0.15);
+            --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.08);
+            --shadow-glow: 0 0 16px rgba(8, 145, 178, 0.15);
 
-            --matrix-fade:   rgba(240, 246, 255, 0.18);
+            --matrix-fade: rgba(240, 246, 255, 0.18);
 
-            --swal-bg:       #ffffff;
-            --swal-text:     #0f172a;
+            --swal-bg: #ffffff;
+            --swal-text: #0f172a;
 
             --scroll-btn-bg: rgba(255, 255, 255, 0.95);
         }
@@ -115,9 +116,15 @@
         /* ═══════════════════════════════════════════════════
            BASE
         ═══════════════════════════════════════════════════ */
-        *, *::before, *::after { box-sizing: border-box; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             background-color: var(--bg-base);
@@ -131,7 +138,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .heading-font { font-family: 'Orbitron', sans-serif; }
+        .heading-font {
+            font-family: 'Orbitron', sans-serif;
+        }
 
         /* ═══════════════════════════════════════════════════
            MATRIX BACKGROUND
@@ -144,30 +153,40 @@
             pointer-events: none;
             transition: opacity 0.4s;
         }
-        [data-theme="light"] #matrix-bg { opacity: 0.05; }
+
+        [data-theme="light"] #matrix-bg {
+            opacity: 0.05;
+        }
 
 
         @keyframes loading-slide {
-    0%   { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
+            0% {
+                transform: translateX(-100%);
+            }
 
-#preloader {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-base);
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-#preloader.loader-hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-base);
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #preloader.loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         /* ═══════════════════════════════════════════════════
            GLASS NAV
         ═══════════════════════════════════════════════════ */
@@ -185,12 +204,14 @@
         #mobile-menu {
             transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
         }
+
         #mobile-menu.menu-closed {
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
             pointer-events: none;
         }
+
         #mobile-menu.menu-open {
             opacity: 1;
             visibility: visible;
@@ -202,12 +223,13 @@
            MOBILE SEARCH PANEL
         ═══════════════════════════════════════════════════ */
         #mobile-search-panel {
-            transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1),
-                        opacity 0.25s ease;
+            transition: max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease;
             overflow: hidden;
             max-height: 0;
             opacity: 0;
         }
+
         #mobile-search-panel.search-open {
             max-height: 80px;
             opacity: 1;
@@ -220,12 +242,14 @@
             transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
             transform-origin: top right;
         }
+
         #profile-menu.dropdown-hidden {
             opacity: 0;
             visibility: hidden;
             transform: scale(0.95) translateY(-6px);
             pointer-events: none;
         }
+
         #profile-menu.dropdown-visible {
             opacity: 1;
             visibility: visible;
@@ -242,7 +266,11 @@
             color: var(--text-primary);
             transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
-        .nav-input::placeholder { color: var(--text-muted); }
+
+        .nav-input::placeholder {
+            color: var(--text-muted);
+        }
+
         .nav-input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 2px var(--accent-dim);
@@ -258,10 +286,11 @@
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--tab-border);
-            box-shadow: 0 -4px 32px rgba(0,0,0,0.25), var(--shadow-glow);
+            box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.25), var(--shadow-glow);
         }
+
         [data-theme="light"] .tab-bar {
-            box-shadow: 0 -2px 20px rgba(0,0,0,0.08), 0 -1px 0 rgba(8,145,178,0.1);
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.08), 0 -1px 0 rgba(8, 145, 178, 0.1);
         }
 
         .tab-link {
@@ -269,8 +298,15 @@
             transition: color 0.25s ease, transform 0.2s ease;
             position: relative;
         }
-        .tab-link:hover { color: var(--text-secondary); }
-        .tab-link.tab-active { color: var(--accent); }
+
+        .tab-link:hover {
+            color: var(--text-secondary);
+        }
+
+        .tab-link.tab-active {
+            color: var(--accent);
+        }
+
         .tab-link.tab-active::after {
             content: '';
             position: absolute;
@@ -291,7 +327,10 @@
             background: var(--bg-surface);
             border: 1px solid var(--border-accent);
         }
-        [data-theme="light"] .mobile-menu-card { background: rgba(255,255,255,0.97); }
+
+        [data-theme="light"] .mobile-menu-card {
+            background: rgba(255, 255, 255, 0.97);
+        }
 
         /* ═══════════════════════════════════════════════════
            DROPDOWN CARD
@@ -300,7 +339,10 @@
             background: var(--bg-surface);
             border: 1px solid var(--border-accent);
         }
-        [data-theme="light"] .dropdown-card { background: rgba(255,255,255,0.98); }
+
+        [data-theme="light"] .dropdown-card {
+            background: rgba(255, 255, 255, 0.98);
+        }
 
         /* ═══════════════════════════════════════════════════
            HAMBURGER ANIMATION
@@ -314,19 +356,43 @@
             transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
             transform-origin: center;
         }
-        .ham-open .ham-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .ham-open .ham-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .ham-open .ham-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .ham-open .ham-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .ham-open .ham-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .ham-open .ham-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
 
         /* ═══════════════════════════════════════════════════
            THEME TOGGLE ICON SWAP
         ═══════════════════════════════════════════════════ */
         .theme-icon-dark,
-        .theme-icon-light { transition: opacity 0.2s, transform 0.3s; }
-        [data-theme="dark"]  .theme-icon-light { display: none; }
-        [data-theme="dark"]  .theme-icon-dark  { display: block; }
-        [data-theme="light"] .theme-icon-dark  { display: none; }
-        [data-theme="light"] .theme-icon-light { display: block; }
+        .theme-icon-light {
+            transition: opacity 0.2s, transform 0.3s;
+        }
+
+        [data-theme="dark"] .theme-icon-light {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-icon-dark {
+            display: block;
+        }
+
+        [data-theme="light"] .theme-icon-dark {
+            display: none;
+        }
+
+        [data-theme="light"] .theme-icon-light {
+            display: block;
+        }
 
         /* ═══════════════════════════════════════════════════
            SEARCH PANEL BG
@@ -339,7 +405,10 @@
         /* ═══════════════════════════════════════════════════
            MOBILE MENU LINK HOVER
         ═══════════════════════════════════════════════════ */
-        .menu-item:hover { background: var(--accent-dim); }
+        .menu-item:hover {
+            background: var(--accent-dim);
+        }
+
         .menu-event-item:hover {
             border-color: var(--accent-border);
             background: var(--accent-dim);
@@ -360,10 +429,12 @@
             transition: opacity 0.35s ease;
             pointer-events: none;
         }
+
         #scroll-navigator.nav-visible {
             opacity: 1;
             pointer-events: auto;
         }
+
         .scroll-btn {
             width: 40px;
             height: 40px;
@@ -379,20 +450,37 @@
             transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, opacity 0.25s ease;
             font-size: 11px;
         }
+
         .scroll-btn:hover {
             background: var(--accent);
             color: #020617;
             transform: scale(1.08);
         }
-        .scroll-btn:active { transform: scale(0.93); }
-        .scroll-btn.btn-dim { opacity: 0.3; pointer-events: none; }
+
+        .scroll-btn:active {
+            transform: scale(0.93);
+        }
+
+        .scroll-btn.btn-dim {
+            opacity: 0.3;
+            pointer-events: none;
+        }
 
         /* ═══════════════════════════════════════════════════
            SCROLLBAR
         ═══════════════════════════════════════════════════ */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: var(--accent-border); border-radius: 99px; }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-border);
+            border-radius: 99px;
+        }
     </style>
 
     @yield('custom_css')
@@ -403,26 +491,26 @@
 
 
     <div id="preloader">
-    <div class="relative">
-        <div class="w-24 h-24 border-4 rounded-full animate-spin"
-            style="border-color: var(--accent-border); border-top-color: var(--accent)"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-12 h-12 rounded-xl border animate-pulse flex items-center justify-center"
-                style="border-color: var(--border-accent); background: var(--accent-dim)">
-                <span class="font-black text-[10px] heading-font" style="color:var(--accent)">CSE</span>
+        <div class="relative">
+            <div class="w-24 h-24 border-4 rounded-full animate-spin"
+                style="border-color: var(--accent-border); border-top-color: var(--accent)"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-12 h-12 rounded-xl border animate-pulse flex items-center justify-center"
+                    style="border-color: var(--border-accent); background: var(--accent-dim)">
+                    <span class="font-black text-[10px] heading-font" style="color:var(--accent)">CSE</span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 text-center">
+            <div class="text-[10px] uppercase tracking-[0.5em] animate-pulse" style="color:var(--accent)">
+                System_Initializing...
+            </div>
+            <div class="mt-4 w-56 h-px rounded-full overflow-hidden relative" style="background:var(--border-soft)">
+                <div class="absolute inset-0 animate-[loading-slide_1.5s_ease-in-out_infinite]"
+                    style="background: linear-gradient(90deg, transparent, var(--accent), transparent)"></div>
             </div>
         </div>
     </div>
-    <div class="mt-10 text-center">
-        <div class="text-[10px] uppercase tracking-[0.5em] animate-pulse" style="color:var(--accent)">
-            System_Initializing...
-        </div>
-        <div class="mt-4 w-56 h-px rounded-full overflow-hidden relative" style="background:var(--border-soft)">
-            <div class="absolute inset-0 animate-[loading-slide_1.5s_ease-in-out_infinite]"
-                style="background: linear-gradient(90deg, transparent, var(--accent), transparent)"></div>
-        </div>
-    </div>
-</div>
     {{-- ═══════════ NAVBAR ═══════════ --}}
     <nav class="fixed top-4 md:top-5 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl">
 
@@ -430,14 +518,17 @@
         <div class="glass-nav rounded-full px-3 sm:px-4 md:px-6 py-2.5 flex justify-between items-center gap-2">
 
             {{-- Logo --}}
-            <a href="{{ url('/') }}" class="group flex items-center gap-2 sm:gap-3 transition-all duration-300 shrink-0">
+            <a href="{{ url('/') }}"
+                class="group flex items-center gap-2 sm:gap-3 transition-all duration-300 shrink-0">
                 <div class="relative">
                     <div class="absolute inset-0 rounded-xl blur-md transition-all duration-500"
                         style="background: var(--accent-dim)"></div>
                     <div class="relative w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-xl overflow-hidden transition-all shadow-lg"
                         style="background: var(--bg-base); border: 1px solid var(--border-mid)">
                         @if ($setting && $setting->logo)
-                            <img src="{{ asset('storage/' . $setting->logo) }}" alt="{{ $setting->site_name ?? 'Logo' }}"
+                            <img src="{{ asset('storage/' . $setting->logo) }}"
+                                onerror="this.onerror=null; this.src='{{ asset('images/logo.png') }}';"
+                                alt="{{ $setting->site_name ?? 'Logo' }}"
                                 class="w-7 h-7 md:w-8 md:h-8 object-contain transition-transform duration-500 group-hover:scale-110">
                         @else
                             <span class="font-black text-lg md:text-xl heading-font" style="color:var(--accent)">
@@ -448,12 +539,14 @@
                 </div>
                 <div class="flex flex-col justify-center pl-2 sm:pl-3 border-l transition-colors duration-300"
                     style="border-color: var(--border-mid)">
-                    <span class="heading-font font-black text-base sm:text-lg md:text-xl tracking-tighter uppercase leading-none"
+                    <span
+                        class="heading-font font-black text-base sm:text-lg md:text-xl tracking-tighter uppercase leading-none"
                         style="color: var(--text-primary)">
                         DUET <span style="color:var(--accent)">CSE</span>
                     </span>
                     <div class="flex items-center gap-1.5 mt-0.5">
-                        <span class="text-[6px] sm:text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase leading-none"
+                        <span
+                            class="text-[6px] sm:text-[7px] md:text-[8px] font-black tracking-[0.3em] uppercase leading-none"
                             style="color: var(--accent); opacity: 0.6">CARNIVAL</span>
                         <span class="w-1 h-1 rounded-full animate-pulse" style="background:var(--accent)"></span>
                     </div>
@@ -463,26 +556,26 @@
             {{-- Desktop Nav Links --}}
             <div class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.18em] uppercase"
                 style="color: var(--text-primary)">
-                <a href="/" class="transition-colors duration-200"
-                    style="color:var(--text-secondary)"
+                <a href="/" class="transition-colors duration-200" style="color:var(--text-secondary)"
                     onmouseover="this.style.color='var(--accent)'"
                     onmouseout="this.style.color='var(--text-secondary)'">Home</a>
 
-                <a href="/about" style="color:var(--text-secondary)"
-                    onmouseover="this.style.color='var(--accent)'"
+                <a href="/about" style="color:var(--text-secondary)" onmouseover="this.style.color='var(--accent)'"
                     onmouseout="this.style.color='var(--text-secondary)'"
                     class="transition-colors duration-200">About</a>
 
                 {{-- Segment Dropdown --}}
                 <div class="relative group">
-                    <button class="flex items-center gap-1.5 transition-colors duration-200 font-bold text-[11px] tracking-[0.18em] uppercase focus:outline-none"
-                        style="color:var(--text-secondary)"
-                        onmouseover="this.style.color='var(--accent)'"
+                    <button
+                        class="flex items-center gap-1.5 transition-colors duration-200 font-bold text-[11px] tracking-[0.18em] uppercase focus:outline-none"
+                        style="color:var(--text-secondary)" onmouseover="this.style.color='var(--accent)'"
                         onmouseout="this.style.color='var(--text-secondary)'">
                         Segment
-                        <i class="fa-solid fa-chevron-down text-[9px] transition-transform duration-300 group-hover:rotate-180"></i>
+                        <i
+                            class="fa-solid fa-chevron-down text-[9px] transition-transform duration-300 group-hover:rotate-180"></i>
                     </button>
-                    <div class="absolute left-0 top-full pt-3 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-250 z-50 translate-y-1 group-hover:translate-y-0">
+                    <div
+                        class="absolute left-0 top-full pt-3 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-250 z-50 translate-y-1 group-hover:translate-y-0">
                         <div class="dropdown-card rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl">
                             @forelse ($activeEvents as $event)
                                 <a href="{{ route('event.dashboard', $event->slug) }}"
@@ -490,11 +583,13 @@
                                     style="color:var(--text-secondary); border-color:var(--border-soft)"
                                     onmouseover="this.style.background='var(--accent-dim)'; this.style.color='var(--accent)'"
                                     onmouseout="this.style.background=''; this.style.color='var(--text-secondary)'">
-                                    <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:var(--accent); box-shadow: 0 0 6px var(--accent)"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0"
+                                        style="background:var(--accent); box-shadow: 0 0 6px var(--accent)"></span>
                                     {{ $event->name }}
                                 </a>
                             @empty
-                                <span class="block px-5 py-4 text-[10px] italic" style="color:var(--text-muted)">No Active Events</span>
+                                <span class="block px-5 py-4 text-[10px] italic" style="color:var(--text-muted)">No
+                                    Active Events</span>
                             @endforelse
                         </div>
                     </div>
@@ -505,8 +600,7 @@
                     onmouseout="this.style.color='var(--text-secondary)'"
                     class="transition-colors duration-200">Schedule</a>
 
-                <a href="/contact" style="color:var(--text-secondary)"
-                    onmouseover="this.style.color='var(--accent)'"
+                <a href="/contact" style="color:var(--text-secondary)" onmouseover="this.style.color='var(--accent)'"
                     onmouseout="this.style.color='var(--text-secondary)'"
                     class="transition-colors duration-200">Contact</a>
             </div>
@@ -518,13 +612,10 @@
                 <div class="hidden lg:block relative w-52 xl:w-60">
                     <form action="{{ route('check.result') }}" method="POST">
                         @csrf
-                        <input type="text" name="participant_id"
-                            placeholder="Find Seat-plan & Result..."
+                        <input type="text" name="participant_id" placeholder="Find Seat-plan & Result..."
                             class="nav-input w-full pl-4 pr-9 py-2 rounded-full text-[11px] font-mono">
-                        <button type="submit"
-                            class="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                            style="color:var(--accent); opacity:0.7"
-                            onmouseover="this.style.opacity='1'"
+                        <button type="submit" class="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
+                            style="color:var(--accent); opacity:0.7" onmouseover="this.style.opacity='1'"
                             onmouseout="this.style.opacity='0.7'">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         </button>
@@ -558,26 +649,24 @@
                             </div>
                             <div class="hidden lg:block text-left">
                                 <p class="text-[9px] leading-none" style="color:var(--text-muted)">Welcome,</p>
-                                <p class="text-[11px] font-bold truncate w-20" style="color:var(--text-primary)">{{ Auth::user()->name }}</p>
+                                <p class="text-[11px] font-bold truncate w-20" style="color:var(--text-primary)">
+                                    {{ Auth::user()->name }}</p>
                             </div>
                         </button>
 
-                        <div id="profile-menu" class="dropdown-hidden dropdown-card absolute right-0 mt-3 w-56 rounded-2xl backdrop-blur-2xl p-2 z-[100] shadow-2xl">
+                        <div id="profile-menu"
+                            class="dropdown-hidden dropdown-card absolute right-0 mt-3 w-56 rounded-2xl backdrop-blur-2xl p-2 z-[100] shadow-2xl">
                             <div class="px-4 py-3 mb-2 lg:hidden" style="border-bottom:1px solid var(--border-soft)">
-                                <p class="text-[9px] font-black uppercase tracking-widest" style="color:var(--accent)">Account</p>
-                                <p class="text-xs font-bold truncate mt-0.5" style="color:var(--text-primary)">{{ Auth::user()->name }}</p>
+                                <p class="text-[9px] font-black uppercase tracking-widest" style="color:var(--accent)">
+                                    Account</p>
+                                <p class="text-xs font-bold truncate mt-0.5" style="color:var(--text-primary)">
+                                    {{ Auth::user()->name }}</p>
                             </div>
 
-                            @php $menuItems = [
-                                ['route' => route('dashboard'), 'icon' => 'fa-gauge-high', 'label' => 'Dashboard'],
-                            ]; @endphp
+                            @php $menuItems = [['route' => route('dashboard'), 'icon' => 'fa-gauge-high', 'label' => 'Dashboard']]; @endphp
 
                             @if (Auth::user()->role === 'admin')
-                                @php array_push($menuItems,
-                                    ['route' => route('admin.dashboard'), 'icon' => 'fa-user-shield',  'label' => 'Admin Panel'],
-                                    ['route' => url('settings'),          'icon' => 'fa-sliders',      'label' => 'Settings'],
-                                    ['route' => url('events'),            'icon' => 'fa-calendar-star','label' => 'Segments'],
-                                ); @endphp
+                                @php array_push($menuItems, ['route' => route('admin.dashboard'), 'icon' => 'fa-user-shield', 'label' => 'Admin Panel'], ['route' => url('settings'), 'icon' => 'fa-sliders', 'label' => 'Settings'], ['route' => url('events'), 'icon' => 'fa-calendar-star', 'label' => 'Segments']); @endphp
                             @endif
 
                             @foreach ($menuItems as $item)
@@ -586,7 +675,8 @@
                                     style="color:var(--text-secondary)"
                                     onmouseover="this.style.background='var(--accent-dim)'; this.style.color='var(--text-primary)'"
                                     onmouseout="this.style.background=''; this.style.color='var(--text-secondary)'">
-                                    <i class="fa-solid {{ $item['icon'] }} w-4 text-center" style="color:var(--accent)"></i>
+                                    <i class="fa-solid {{ $item['icon'] }} w-4 text-center"
+                                        style="color:var(--accent)"></i>
                                     {{ $item['label'] }}
                                 </a>
                             @endforeach
@@ -614,10 +704,10 @@
                 {{-- Hamburger Menu Button --}}
                 <button id="mobile-btn"
                     class="lg:hidden w-8 h-8 sm:w-10 sm:h-10 flex flex-col items-center justify-center gap-[4px] sm:gap-[5px] rounded-xl transition-all focus:outline-none shrink-0"
-                    style="background:var(--accent-dim); border:1px solid var(--border-accent)"
-                    aria-label="Menu">
+                    style="background:var(--accent-dim); border:1px solid var(--border-accent)" aria-label="Menu">
                     <span class="w-4 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"></span>
-                    <span class="w-3 h-[2px] bg-cyan-400 rounded-full transition-all duration-300" style="margin-right: -2px;"></span>
+                    <span class="w-3 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"
+                        style="margin-right: -2px;"></span>
                     <span class="w-4 h-[2px] bg-cyan-400 rounded-full transition-all duration-300"></span>
                 </button>
             </div>
@@ -651,9 +741,9 @@
 
                     @php
                         $navLinks = [
-                            ['href' => '/',        'icon' => 'fa-house-chimney', 'label' => 'Home'],
-                            ['href' => '/about',   'icon' => 'fa-circle-info',   'label' => 'About Us'],
-                            ['href' => '/schedule','icon' => 'fa-calendar-days', 'label' => 'Schedule'],
+                            ['href' => '/', 'icon' => 'fa-house-chimney', 'label' => 'Home'],
+                            ['href' => '/about', 'icon' => 'fa-circle-info', 'label' => 'About Us'],
+                            ['href' => '/schedule', 'icon' => 'fa-calendar-days', 'label' => 'Schedule'],
                         ];
                     @endphp
 
@@ -744,17 +834,19 @@
                         @forelse ($activeEvents as $event)
                             <li>
                                 <a href="{{ route('event.dashboard', $event->slug) }}"
-                                   class="transition-all duration-200 flex items-center gap-2 group"
-                                   style="color:var(--text-secondary)"
-                                   onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                                   onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                                   <span class="w-1 h-1 rounded-full bg-current transition-all group-hover:scale-125"></span>
-                                   {{ $event->name }}
+                                    class="transition-all duration-200 flex items-center gap-2 group"
+                                    style="color:var(--text-secondary)"
+                                    onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
+                                    onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
+                                    <span
+                                        class="w-1 h-1 rounded-full bg-current transition-all group-hover:scale-125"></span>
+                                    {{ $event->name }}
                                 </a>
                             </li>
                         @empty
                             <li>
-                                <span class="block py-1 text-[10px] italic font-normal normal-case" style="color:var(--text-muted)">
+                                <span class="block py-1 text-[10px] italic font-normal normal-case"
+                                    style="color:var(--text-muted)">
                                     No Active Events
                                 </span>
                             </li>
@@ -773,21 +865,19 @@
                         </li>
                         <li>
                             <a href="mailto:{{ $setting->email ?? 'carnival.cse@duet.ac.bd' }}"
-                               class="hover:underline transition-all flex items-center"
-                               style="color:var(--text-muted)"
-                               onmouseover="this.style.color='var(--text-primary)'"
-                               onmouseout="this.style.color='var(--text-muted)'">
+                                class="hover:underline transition-all flex items-center"
+                                style="color:var(--text-muted)" onmouseover="this.style.color='var(--text-primary)'"
+                                onmouseout="this.style.color='var(--text-muted)'">
                                 <i class="fa-solid fa-envelope mr-2 shrink-0" style="color:var(--accent)"></i>
                                 {{ $setting->email ?? 'info@carnival.cse.duet.ac.bd' }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ $setting->fb_link ?? 'https://facebook.com/csecarnivalduet' }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="hover:underline transition-all flex items-center"
-                               style="color:var(--text-muted)"
-                               onmouseover="this.style.color='var(--text-primary)'"
-                               onmouseout="this.style.color='var(--text-muted)'">
+                                target="_blank" rel="noopener noreferrer"
+                                class="hover:underline transition-all flex items-center"
+                                style="color:var(--text-muted)" onmouseover="this.style.color='var(--text-primary)'"
+                                onmouseout="this.style.color='var(--text-muted)'">
                                 <i class="fa-brands fa-facebook mr-2 shrink-0" style="color:var(--accent)"></i>
                                 DUET CSE CARNIVAL
                             </a>
@@ -800,23 +890,18 @@
                     <h4 class="heading-font text-[9px] tracking-[0.3em] uppercase mb-5 font-bold"
                         style="color:var(--accent)">Navigation</h4>
                     <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
-                        @foreach ([
-                            ['url' => '/',            'icon' => 'fa-house',        'label' => 'Home'],
-                            ['url' => '/about',       'icon' => 'fa-circle-info',  'label' => 'About'],
-                            ['url' => '/schedule',    'icon' => 'fa-calendar-days','label' => 'Schedule'],
-                            ['url' => '/cse-gallery', 'icon' => 'fa-images',       'label' => 'Gallery'],
-                            ['url' => '/contact',     'icon' => 'fa-phone',        'label' => 'Contact'],
-                        ] as $nav)
-                        <li>
-                            <a href="{{ url($nav['url']) }}"
-                               class="transition-all duration-200 flex items-center gap-2 group"
-                               style="color:var(--text-secondary)"
-                               onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
-                               onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
-                               <i class="fa-solid {{ $nav['icon'] }} text-[9px] opacity-50 group-hover:opacity-100" style="color:var(--accent)"></i>
-                               {{ $nav['label'] }}
-                            </a>
-                        </li>
+                        @foreach ([['url' => '/', 'icon' => 'fa-house', 'label' => 'Home'], ['url' => '/about', 'icon' => 'fa-circle-info', 'label' => 'About'], ['url' => '/schedule', 'icon' => 'fa-calendar-days', 'label' => 'Schedule'], ['url' => '/cse-gallery', 'icon' => 'fa-images', 'label' => 'Gallery'], ['url' => '/contact', 'icon' => 'fa-phone', 'label' => 'Contact']] as $nav)
+                            <li>
+                                <a href="{{ url($nav['url']) }}"
+                                    class="transition-all duration-200 flex items-center gap-2 group"
+                                    style="color:var(--text-secondary)"
+                                    onmouseover="this.style.color='var(--accent)'; this.style.transform='translateX(4px)'"
+                                    onmouseout="this.style.color='var(--text-secondary)'; this.style.transform='translateX(0)'">
+                                    <i class="fa-solid {{ $nav['icon'] }} text-[9px] opacity-50 group-hover:opacity-100"
+                                        style="color:var(--accent)"></i>
+                                    {{ $nav['label'] }}
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -833,34 +918,35 @@
 
     {{-- ═══════════ MOBILE BOTTOM TAB BAR ═══════════ --}}
     <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3">
-        <nav class="tab-bar rounded-[1.75rem] flex items-center px-2 py-2 bg-slate-950/90 backdrop-blur-md border border-slate-800 shadow-2xl">
+        <nav
+            class="tab-bar rounded-[1.75rem] flex items-center px-2 py-2 bg-slate-950/90 backdrop-blur-md border border-slate-800 shadow-2xl">
 
             <a href="{{ url('/') }}"
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('/') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('/') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-house-chimney text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Home</span>
             </a>
 
             <a href="/schedule"
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('schedule*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('schedule*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-calendar-days text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Schedule</span>
             </a>
 
             <a href="/cse-gallery"
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('cse-gallery*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('cse-gallery*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-images text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Gallery</span>
             </a>
 
             <a href="{{ url('/about') }}"
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('about*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('about*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-circle-info text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">About</span>
             </a>
 
             <a href="{{ url('/contact') }}"
-               class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('contact*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
+                class="tab-link flex flex-col items-center justify-center flex-1 py-1.5 gap-1 rounded-2xl transition-all {{ request()->is('contact*') ? 'tab-active text-cyan-400' : 'text-slate-400' }}">
                 <i class="fa-solid fa-address-book text-[18px]"></i>
                 <span class="text-[8px] font-black uppercase tracking-wider">Contact</span>
             </a>
@@ -870,19 +956,18 @@
 
     {{-- ═══════════ SCROLL NAVIGATOR ═══════════ --}}
     <div id="scroll-navigator" aria-label="Page navigation">
-        <button id="scroll-up-btn"
-            class="scroll-btn"
-            aria-label="Scroll to top"
+        <button id="scroll-up-btn" class="scroll-btn" aria-label="Scroll to top"
             onclick="window.scrollTo({top:0,behavior:'smooth'})">
             <i class="fa-solid fa-chevron-up"></i>
         </button>
-        <button id="scroll-down-btn"
-            class="scroll-btn"
-            aria-label="Scroll to bottom"
+        <button id="scroll-down-btn" class="scroll-btn" aria-label="Scroll to bottom"
             onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">
             <i class="fa-solid fa-chevron-down"></i>
         </button>
     </div>
+
+
+    @yield('custom_js')
 
     {{-- ═══════════ SCRIPTS ═══════════ --}}
 
@@ -899,186 +984,218 @@
             }
         });
         @if (session('success'))
-            customSwal.fire({ icon:'success', iconColor:'#06b6d4', title:'SUCCESSFUL!', text:"{{ session('success') }}", confirmButtonText:'OK' });
+            customSwal.fire({
+                icon: 'success',
+                iconColor: '#06b6d4',
+                title: 'SUCCESSFUL!',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
         @endif
         @if (session('error'))
-            customSwal.fire({ icon:'error', iconColor:'#ef4444', title:'ERROR!', text:"{{ session('error') }}", confirmButtonText:'TRY AGAIN' });
+            customSwal.fire({
+                icon: 'error',
+                iconColor: '#ef4444',
+                title: 'ERROR!',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'TRY AGAIN'
+            });
         @endif
         @if ($errors->any())
-            customSwal.fire({ icon:'warning', iconColor:'#eab308', title:'VALIDATION FAILED!',
-                html:`<div style="text-align:left;font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.05em">• {!! implode('<br>• ', $errors->all()) !!}</div>`,
-                confirmButtonText:'GOT IT' });
+            customSwal.fire({
+                icon: 'warning',
+                iconColor: '#eab308',
+                title: 'VALIDATION FAILED!',
+                html: `<div style="text-align:left;font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.05em">• {!! implode('<br>• ', $errors->all()) !!}</div>`,
+                confirmButtonText: 'GOT IT'
+            });
         @endif
     </script>
 
     {{-- Core JS --}}
     <script>
-    (function () {
-        'use strict';
+        (function() {
+            'use strict';
 
-        /* ── Theme ─────────────────────────────────────────── */
-        const root     = document.documentElement;
-        const themeBtn = document.getElementById('theme-toggle');
-        const stored   = localStorage.getItem('cse-theme') || 'dark';
-        root.setAttribute('data-theme', stored);
+            /* ── Theme ─────────────────────────────────────────── */
+            const root = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            const stored = localStorage.getItem('cse-theme') || 'dark';
+            root.setAttribute('data-theme', stored);
 
-        themeBtn?.addEventListener('click', () => {
-            const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            root.setAttribute('data-theme', next);
-            localStorage.setItem('cse-theme', next);
-        });
+            themeBtn?.addEventListener('click', () => {
+                const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                localStorage.setItem('cse-theme', next);
+            });
 
-        /* ── Mobile hamburger ──────────────────────────────── */
-        const mobileBtn  = document.getElementById('mobile-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        let menuOpen = false;
+            /* ── Mobile hamburger ──────────────────────────────── */
+            const mobileBtn = document.getElementById('mobile-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            let menuOpen = false;
 
-        function setMenu(open) {
-            menuOpen = open;
-            mobileMenu?.classList.toggle('menu-open',   open);
-            mobileMenu?.classList.toggle('menu-closed', !open);
-            mobileBtn?.classList.toggle('ham-open', open);
-        }
+            function setMenu(open) {
+                menuOpen = open;
+                mobileMenu?.classList.toggle('menu-open', open);
+                mobileMenu?.classList.toggle('menu-closed', !open);
+                mobileBtn?.classList.toggle('ham-open', open);
+            }
 
-        mobileBtn?.addEventListener('click', e => { e.stopPropagation(); setMenu(!menuOpen); });
+            mobileBtn?.addEventListener('click', e => {
+                e.stopPropagation();
+                setMenu(!menuOpen);
+            });
 
-        /* ── Mobile search ─────────────────────────────────── */
-        const searchBtn   = document.getElementById('mobile-search-btn');
-        const searchPanel = document.getElementById('mobile-search-panel');
-        const searchInput = document.getElementById('mobile-search-input');
-        let searchOpen = false;
+            /* ── Mobile search ─────────────────────────────────── */
+            const searchBtn = document.getElementById('mobile-search-btn');
+            const searchPanel = document.getElementById('mobile-search-panel');
+            const searchInput = document.getElementById('mobile-search-input');
+            let searchOpen = false;
 
-        function setSearch(open) {
-            searchOpen = open;
-            searchPanel?.classList.toggle('search-open', open);
-            if (open) {
+            function setSearch(open) {
+                searchOpen = open;
+                searchPanel?.classList.toggle('search-open', open);
+                if (open) {
+                    setMenu(false);
+                    setTimeout(() => searchInput?.focus(), 200);
+                }
+            }
+
+            searchBtn?.addEventListener('click', e => {
+                e.stopPropagation();
+                setSearch(!searchOpen);
+            });
+
+            /* ── Profile dropdown ──────────────────────────────── */
+            const profileBtn = document.getElementById('profile-dropdown-btn');
+            const profileMenu = document.getElementById('profile-menu');
+            let dropOpen = false;
+
+            function setDrop(open) {
+                dropOpen = open;
+                profileMenu?.classList.toggle('dropdown-visible', open);
+                profileMenu?.classList.toggle('dropdown-hidden', !open);
+            }
+
+            profileBtn?.addEventListener('click', e => {
+                e.stopPropagation();
+                setDrop(!dropOpen);
+            });
+
+            /* ── Close all on outside click ────────────────────── */
+            document.addEventListener('click', () => {
                 setMenu(false);
-                setTimeout(() => searchInput?.focus(), 200);
-            }
-        }
+                setDrop(false);
+                setSearch(false);
+            });
 
-        searchBtn?.addEventListener('click', e => { e.stopPropagation(); setSearch(!searchOpen); });
+            [mobileMenu, profileMenu, searchPanel].forEach(el =>
+                el?.addEventListener('click', e => e.stopPropagation())
+            );
 
-        /* ── Profile dropdown ──────────────────────────────── */
-        const profileBtn  = document.getElementById('profile-dropdown-btn');
-        const profileMenu = document.getElementById('profile-menu');
-        let dropOpen = false;
+            /* ── Tab bar active state ──────────────────────────── */
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const path = window.location.pathname;
+            tabLinks.forEach(link => {
+                link.classList.remove('tab-active');
+                const href = link.getAttribute('href');
+                if (href === path || (path !== '/' && href !== '/' && path.startsWith(href))) {
+                    link.classList.add('tab-active');
+                }
+            });
 
-        function setDrop(open) {
-            dropOpen = open;
-            profileMenu?.classList.toggle('dropdown-visible', open);
-            profileMenu?.classList.toggle('dropdown-hidden',  !open);
-        }
+            /* ── Prevent pinch zoom ────────────────────────────── */
+            document.addEventListener('touchstart', e => {
+                if (e.touches.length > 1) e.preventDefault();
+            }, {
+                passive: false
+            });
 
-        profileBtn?.addEventListener('click', e => { e.stopPropagation(); setDrop(!dropOpen); });
+            /* ── Scroll Navigator ──────────────────────────────── */
+            const scrollNav = document.getElementById('scroll-navigator');
+            const scrollUpBtn = document.getElementById('scroll-up-btn');
+            const scrollDnBtn = document.getElementById('scroll-down-btn');
 
-        /* ── Close all on outside click ────────────────────── */
-        document.addEventListener('click', () => {
-            setMenu(false);
-            setDrop(false);
-            setSearch(false);
-        });
+            function updateScrollNav() {
+                const y = window.scrollY;
+                const max = document.body.scrollHeight - window.innerHeight;
 
-        [mobileMenu, profileMenu, searchPanel].forEach(el =>
-            el?.addEventListener('click', e => e.stopPropagation())
-        );
+                if (y > 120) {
+                    scrollNav.classList.add('nav-visible');
+                } else {
+                    scrollNav.classList.remove('nav-visible');
+                }
 
-        /* ── Tab bar active state ──────────────────────────── */
-        const tabLinks = document.querySelectorAll('.tab-link');
-        const path = window.location.pathname;
-        tabLinks.forEach(link => {
-            link.classList.remove('tab-active');
-            const href = link.getAttribute('href');
-            if (href === path || (path !== '/' && href !== '/' && path.startsWith(href))) {
-                link.classList.add('tab-active');
-            }
-        });
-
-        /* ── Prevent pinch zoom ────────────────────────────── */
-        document.addEventListener('touchstart', e => {
-            if (e.touches.length > 1) e.preventDefault();
-        }, { passive: false });
-
-        /* ── Scroll Navigator ──────────────────────────────── */
-        const scrollNav   = document.getElementById('scroll-navigator');
-        const scrollUpBtn = document.getElementById('scroll-up-btn');
-        const scrollDnBtn = document.getElementById('scroll-down-btn');
-
-        function updateScrollNav() {
-            const y   = window.scrollY;
-            const max = document.body.scrollHeight - window.innerHeight;
-
-            if (y > 120) {
-                scrollNav.classList.add('nav-visible');
-            } else {
-                scrollNav.classList.remove('nav-visible');
+                scrollUpBtn?.classList.toggle('btn-dim', y < 50);
+                scrollDnBtn?.classList.toggle('btn-dim', max > 0 && y >= max - 10);
             }
 
-            scrollUpBtn?.classList.toggle('btn-dim', y < 50);
-            scrollDnBtn?.classList.toggle('btn-dim', max > 0 && y >= max - 10);
-        }
+            window.addEventListener('scroll', updateScrollNav, {
+                passive: true
+            });
+            updateScrollNav();
 
-        window.addEventListener('scroll', updateScrollNav, { passive: true });
-        updateScrollNav();
-
-    })();
+        })();
     </script>
 
     {{-- Matrix Background --}}
     <script>
-    (function () {
-        const canvas = document.getElementById('matrix-bg');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let drops = [];
-        const letters = "01";
-        const fs = 14;
+        (function() {
+            const canvas = document.getElementById('matrix-bg');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let drops = [];
+            const letters = "01";
+            const fs = 14;
 
-        function resize() {
-            canvas.width  = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drops = Array(Math.ceil(canvas.width / fs)).fill(1);
-        }
-        window.addEventListener('resize', resize);
-        resize();
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                drops = Array(Math.ceil(canvas.width / fs)).fill(1);
+            }
+            window.addEventListener('resize', resize);
+            resize();
 
-        let last = 0;
-        function draw(ts) {
-            if (ts - last >= 45) {
-                last = ts;
-                const light = document.documentElement.getAttribute('data-theme') === 'light';
-                ctx.fillStyle = light ? 'rgba(240,246,255,0.18)' : 'rgba(2,6,23,0.14)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = light ? '#0891b2' : '#22d3ee';
-                ctx.font = fs + 'px monospace';
-                drops.forEach((y, i) => {
-                    ctx.fillText(letters[Math.floor(Math.random() * 2)], i * fs, y * fs);
-                    if (y * fs > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                    drops[i]++;
-                });
+            let last = 0;
+
+            function draw(ts) {
+                if (ts - last >= 45) {
+                    last = ts;
+                    const light = document.documentElement.getAttribute('data-theme') === 'light';
+                    ctx.fillStyle = light ? 'rgba(240,246,255,0.18)' : 'rgba(2,6,23,0.14)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = light ? '#0891b2' : '#22d3ee';
+                    ctx.font = fs + 'px monospace';
+                    drops.forEach((y, i) => {
+                        ctx.fillText(letters[Math.floor(Math.random() * 2)], i * fs, y * fs);
+                        if (y * fs > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                        drops[i]++;
+                    });
+                }
+                requestAnimationFrame(draw);
             }
             requestAnimationFrame(draw);
-        }
-        requestAnimationFrame(draw);
-    })();
+        })();
     </script>
-<script>
-(function () {
-    function hide() {
-        const el = document.getElementById('preloader');
-        if (!el || el.classList.contains('loader-hidden')) return;
-        el.classList.add('loader-hidden');
-        document.body.classList.remove('loading');
-        setTimeout(() => el.remove(), 600);
-    }
-    if (document.readyState === 'complete') {
-        setTimeout(hide, 300);
-    } else {
-        window.addEventListener('load', () => setTimeout(hide, 300));
-    }
-    setTimeout(hide, 3500); // max fallback
-})();
-</script>
-    @yield('custom_js')
+    <script>
+        (function() {
+            function hide() {
+                const el = document.getElementById('preloader');
+                if (!el || el.classList.contains('loader-hidden')) return;
+                el.classList.add('loader-hidden');
+                document.body.classList.remove('loading');
+                setTimeout(() => el.remove(), 600);
+            }
+            if (document.readyState === 'complete') {
+                setTimeout(hide, 300);
+            } else {
+                window.addEventListener('load', () => setTimeout(hide, 300));
+            }
+            setTimeout(hide, 3500); // max fallback
+        })();
+    </script>
+    @section('custom_js')
+    @endsection
 </body>
+
 </html>
